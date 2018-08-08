@@ -5,11 +5,8 @@ Tools for RHO-Lang smart contracts formal verification (with Namespace/Spatial/H
 
 ### LST syntax
 
-Base classes:
-- net.golovach.verification.LTSLib.LTS
-- net.golovach.verification.LTSLib.LTSState
-- net.golovach.verification.LTSLib.LTSAction
-- net.golovach.verification.LTSLib.LTSEdge
+Core classes:
+- net.golovach.verification.LTSLib.{LTS, LTSState, LTSAction, LTSEdge
 
 Base import:
 - import net.golovach.verification.LTSLib._
