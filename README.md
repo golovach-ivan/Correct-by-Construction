@@ -214,6 +214,163 @@ Or one-liner
 val CM = "initA".↑ :: ("initB".↑ |: ("$".↑ :: "☕".↓ :: ⟲))
 ```
 
+**3) Alternative/Choise/Sum (+) syntax**
+```scala
+import LTSLib._
+import CCSLib._
 
+val CS = ("$".↓ :: "☕".↑ :: "✉".↓ :: ⟲) + ("☕".↑ :: "✉".↓ :: ⟲)
+println(dump(toLTS(CS)))
+```
+```
+>> ports:   {✉, ☕, $}
+>> actions: {↓✉, ↑☕, ↓$}
+>> states:  {'s0, 's1, 's2, 's3}
+>> init:    's2
+>> edges:   
+>>     's1 × ↑☕ → 's0
+>>     's2 × ↓$ → 's1
+>>     's0 × ↓✉ → 's2
+>>     's3 × ↓✉ → 's2
+>>     's2 × ↑☕ → 's3
+```
+
+**4) Parallel Composition (|) syntax**
+
+With silent τ-action generation
+
+```scala
+import LTSLib._
+import CCSLib._
+
+val A_IN  = "A".↑ :: ⟲
+val A_OUT = "A".↓ :: ⟲
+
+println(dump(toLTS(A_IN | A_OUT)))
+```
+```
+>> ports:   {A}
+>> actions: {↑A, ↓A, τ}
+>> states:  {'s0}
+>> init:    's0
+>> edges:   
+>>     's0 × ↑A → 's0
+>>     's0 × ↓A → 's0
+>>     's0 × τ → 's0
+```
+
+More complex example
+```scala
+import LTSLib._
+import CCSLib._
+
+val CM = "$".↑ :: "☕".↓ :: ⟲
+val CS = "$".↓ :: "☕".↑ :: "✉".↓ :: ⟲
+
+println(dump(toLTS(CM | CS)))
+```
+```
+>> ports:   {☕, $, ✉}
+>> actions: {↓☕, ↑☕, ↓✉, τ, ↑$, ↓$}
+>> states:  {'s0, 's1, 's2, 's3, 's4, 's5}
+>> init:    's5
+>> edges:   
+>>     's1 × τ → 's3
+>>     's3 × ↓✉ → 's5
+>>     's3 × ↑$ → 's0
+>>     's1 × ↑☕ → 's0
+>>     's4 × ↑☕ → 's3
+>>     's2 × ↓$ → 's1
+>>     's2 × ↓☕ → 's5
+>>     's5 × ↑$ → 's2
+>>     's4 × ↑$ → 's1
+>>     's0 × ↓☕ → 's3
+>>     's5 × τ → 's1
+>>     's5 × ↓$ → 's4
+>>     's0 × ↓✉ → 's2
+>>     's1 × ↓☕ → 's4
+```
+
+**5) Restriction (|) syntax**
+```scala
+import LTSLib._
+import CCSLib._
+
+val CM = ("$".↑ :: "☕".↓ :: ⟲) \ "$"
+println(dump(toLTS(CM)))
+```
+```
+>> ports:   {☕}
+>> actions: {↓☕}
+>> states:  {'s0, 's1}
+>> init:    's1
+>> edges:   
+>>     's0 × ↓☕ → 's1
+```
+
+Or
+```scala
+val CM = ("$".↑ :: "☕".↓ :: ⟲) \ "$" \ "✉"
+```
+
+Or
+```scala
+val CM = ("$".↑ :: "☕".↓ :: ⟲) \ ("$", "✉")
+```
+
+**6) Rename (∘) syntax**
+```scala
+import LTSLib._
+import CCSLib._
+
+val CM = ("$".↑ :: "☕".↓ :: ⟲) ∘ ("$" -> "A")
+println(dump(toLTS(CM)))
+```
+```
+>> ports:   {☕, A}
+>> actions: {↓☕, ↑A}
+>> states:  {'s0, 's1}
+>> init:    's1
+>> edges:   
+>>     's0 × ↓☕ → 's1
+>>     's1 × ↑A → 's0
+```
+
+Or
+```scala
+val CM = ("$".↑ :: "☕".↓ :: ⟲) ∘ ("$" -> "A", "☕" -> "B")
+```
+
+
+
+
+```scala
+import LTSLib._
+import CCSLib._
+```
+
+
+```scala
+import LTSLib._
+import CCSLib._
+```
+
+
+```scala
+import LTSLib._
+import CCSLib._
+```
+
+
+```scala
+import LTSLib._
+import CCSLib._
+```
+
+
+```scala
+import LTSLib._
+import CCSLib._
+```
 
 ## Hennessy-Milner Logic (HML)
