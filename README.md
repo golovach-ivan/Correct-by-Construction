@@ -61,28 +61,24 @@ val e1 = 's0 × τ ➝ 's1    // syntax sugar
 #### LTS operations
 Simple cyclic Coffee Machine definition
 ```scala
-import LTSLib._ 
-
-val $ = "$"
-val ☕ = "☕"
-
 val lts = LTS(
-  ports = ($, ☕),
-  actions = (↑($), ↓(☕)),
+  ports = ("$", "☕"),
+  actions = ("$".↑, "☕".↓),
   states = ('s0, 's1),
   init = 's0,
   edges = Set(
-    's0 × ↑($) ➝ 's1,
-    's1 × ↓(☕) ➝ 's0
+    's0 × "$".↑ ➝ 's1,
+    's1 × "☕".↓ ➝ 's0
   ))  
 ```
 
 Print to console
 ```scala
-import LTSLib._ 
-
 println(dump(lts))
 ```
+<details><summary>CONSOLE</summary>
+<p>
+  
 ```
 >> ports:   {$, ☕}
 >> actions: {↑$, ↓☕}
@@ -92,6 +88,8 @@ println(dump(lts))
 >>     's0 × ↑$ → 's1
 >>     's1 × ↓☕ → 's0
 ```
+</p>
+</details>
 
 ## Calculus of Communication Systems (CCS)
 
