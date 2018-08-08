@@ -83,7 +83,7 @@ println(dump(lts))
 >>     's1 × ↓☕ → 's0
 ```
 </p>
-</details>
+</details><br/>
 
 ## Calculus of Communication Systems (CCS)
 
@@ -122,7 +122,7 @@ println(dump(toLTS(CM)))
 >>     's2 × ↑$ → 's1
 ```  
 </p>
-</details>
+</details><br/>
 
 Or states can be named explicitly
 ```scala
@@ -142,7 +142,7 @@ val CM = ↑("$") :: ↓("☕") :: ∅("CM")
 >>     'CM2 × ↑$ → 'CM1
 ```
 </p>
-</details>
+</details><br/>
 
 **2) Loop/Recursion (⟲) syntax**
 
@@ -165,7 +165,7 @@ println(dump(toLTS(CM)))
 >>     's1 × ↑$ → 's0
 ```
 </p>
-</details>
+</details><br/>
 
 Or states can be named explicitly
 ```scala
@@ -194,7 +194,7 @@ println(dump(toLTS(CM)))
 >>     's0 × ↓☕ → 's1
 ```
 </p>
-</details>
+</details><br/>
 
 Or one-liner
 ```scala
@@ -224,7 +224,7 @@ println(dump(toLTS(CM)))
 >>     's0 × ↓☕ → 's1
 ```
 </p>
-</details>
+</details><br/>
 
 Or one-liner
 ```scala
@@ -253,7 +253,7 @@ println(dump(toLTS(CS)))
 >>     's2 × ↑☕ → 's3
 ```
 </p>
-</details>
+</details><br/>
 
 **4) Parallel Composition (|) syntax**
 
@@ -280,7 +280,7 @@ println(dump(toLTS(A_IN | A_OUT)))
 >>     's0 × τ → 's0
 ```
 </p>
-</details>
+</details><br/>
 
 More complex example
 ```scala
@@ -315,7 +315,8 @@ println(dump(toLTS(CM | CS)))
 >>     's1 × ↓☕ → 's4
 ``` 
 </p>
-</details>
+</details><br/>
+
 
 **5) Restriction (|) syntax**
 ```scala
@@ -335,7 +336,7 @@ println(dump(toLTS(CM)))
 >>     's0 × ↓☕ → 's1
 ```  
 </p>
-</details>
+</details><br/>
 
 Or
 ```scala
@@ -366,7 +367,7 @@ println(dump(toLTS(CM)))
 >>     's1 × ↑A → 's0
 ```
 </p>
-</details>
+</details><br/>
 
 Or
 ```scala
