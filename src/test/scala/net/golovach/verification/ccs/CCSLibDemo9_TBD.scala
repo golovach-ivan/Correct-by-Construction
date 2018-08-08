@@ -1,13 +1,13 @@
 package net.golovach.verification.ccs
 
-import CCSLib._
-import LTSLib._
+import net.golovach.verification.LTSLib._
+import net.golovach.verification.ccs.CCSLib._
 
-object CCSDemo_ extends App {
+object CCSLibDemo9_TBD extends App {
 
-  val $ = "coin"
-  val ☕ = "coffee"
-  val ✉ = "pub"
+  val $ = "$"
+  val ☕ = "☕"
+  val ✉ = "✉"
 
   def CM: Process = $.↑ :: ☕.↓ :: ⟲("CM")
   def CSh = $.↓ :: ☕.↑ :: ✉.↓ :: ⟲("CSh")

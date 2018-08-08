@@ -1,10 +1,10 @@
 package net.golovach.verification.ccs
 
-import LTSLib._
-import CCSLib._
-import HMLLib._
+import net.golovach.verification.LTSLib._
+import net.golovach.verification.ccs.CCSLib._
+import net.golovach.verification.ccs.HMLLib._
 
-object HMLLibDemo extends App {
+object HMLLibDemo1 extends App {
   val $ = "coin"
   val ☕ = "coffee"
 

@@ -1,8 +1,15 @@
 package net.golovach.verification.ccs
 
-import LTSLib._
+import net.golovach.verification.LTSLib._
 import CCSLib._
 
+/**
+  * Minimal interpretations of formulas are useful for expressing
+  * eventual/liveness properties of processes.
+  *
+  * Maximal interpretations are useful for expressing
+  * invariant/safety properties.
+  */
 object HMLLib extends App {
 
   // Standard Hennessy-Milner Logic
@@ -19,10 +26,7 @@ object HMLLib extends App {
   final case class possible(action: LTSAction, next: HML) extends HML
   final case class necessary(action: LTSAction, next: HML) extends HML
   // Recursion tail
-  case object ↶ extends HML
-
-  // todo: add \neg
-  // todo: add [-]
+  case object ↶ extends HML // todo: choose = ⤺↶↺⟲⥀
 
   sealed trait LTSActionExt
   case object Act extends LTSActionExt {
@@ -53,10 +57,11 @@ object HMLLib extends App {
     def ⊨(φ: HML): Boolean = φ match {
       case `tt` => true
       case `ff` => false
-      case and(a, b) => (p ⊨ a) & (p ⊨ b)
-      case or(a, b) => (p ⊨ a) | (p ⊨ b)
+      case and(a, b) => (p ⊨ a) && (p ⊨ b)
+      case or(a, b) => (p ⊨ a) || (p ⊨ b)
       case possible(action, next) => ???
       case necessary(action, next) => ???
+      case `↶` => ???
     }
   }
 }
