@@ -105,6 +105,7 @@ Process = ∅ | ⟲ | Prefix | Sum | Par | Restriction | Renaming
 CM ≡ Coffee Machine
 
 **1) Prefix and ∅ syntaxes with transformation to LTS**
+
 Simple disposable (acyclic) Coffee Machine
 ```scala
 import LTSLib._
@@ -138,6 +139,7 @@ val CM = ↑("$") :: ↓("☕") :: ∅("CM")
 ```
 
 **2) Loop/Recursion (⟲) syntax**
+
 Simple cyclic Coffee Machine
 ```scala
 import LTSLib._
