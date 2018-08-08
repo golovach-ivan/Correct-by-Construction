@@ -375,3 +375,5 @@ val CM = ("$".↑ :: "☕".↓ :: ⟲) ∘ ("$" -> "A", "☕" -> "B")
 ```
 
 ## Hennessy-Milner Logic (HML)
+
+
