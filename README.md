@@ -6,10 +6,10 @@ Tools for RHO-Lang smart contracts formal verification (with Namespace/Spatial/H
 ### LST syntax
 
 Base classes:
+- net.golovach.verification.LTSLib.LTS
 - net.golovach.verification.LTSLib.LTSState
 - net.golovach.verification.LTSLib.LTSAction
 - net.golovach.verification.LTSLib.LTSEdge
-- net.golovach.verification.LTSLib.LTS
 
 Base import:
 - import net.golovach.verification.LTSLib._
@@ -39,12 +39,12 @@ val s2: ⌾ = 's2          // or
 import LTSLib._
 
 // Input actions
-val a_in = ↑("a")
-val b_in = "b".↑
+val a_in = ↑("a") // or
+val b_in = "b".↑  // or
 
 // Output actions
-val a_out  = ↓("a")
-val b_out = "b".↓
+val a_out  = ↓("a") // or
+val b_out = "b".↓   // or
 
 // Silent action
 val tau = τ
@@ -97,5 +97,33 @@ println(dump(lts))
 ```
 
 ## Calculus of Communication Systems (CCS)
+
+Base classes
+- net.golovach.verification.ccs.CCSLib
+- net.golovach.verification.ccs.CCSLib.Process
+- net.golovach.verification.ccs.CCSLib.{∅, ⟲, Prefix, Sum, Par, Restriction, Renaming}
+
+Process = ∅ | ⟲ | Prefix | Sum | Par | Restriction | Renaming
+
+CM ≡ Coffee Machine
+
+**1) Prefix and ∅ syntaxes with transformation to LTS**
+```scala
+import LTSLib._
+import CCSLib._
+
+val CM = ↑("$") :: ↓("☕") :: ∅
+println(dump(toLTS(CM)))
+```
+```
+>> ports:   {☕, $}
+>> actions: {↓☕, ↑$}
+>> states:  {'s0, 's1, 's2}
+>> init:    's2
+>> edges:   
+>>     's1 × ↓☕ → 's0
+>>     's2 × ↑$ → 's1
+```
+
 
 ## Hennessy-Milner Logic (HML)
