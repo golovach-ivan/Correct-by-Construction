@@ -8,7 +8,7 @@ Tools for RHO-Lang smart contracts formal verification (with Namespace/Spatial/H
 Core classes:
 - net.golovach.verification.LTSLib.{LTS, LTSState, LTSAction, LTSEdge}
 
-Base import:
+Base imports:
 - import net.golovach.verification.LTSLib._
 
 Nota bene:
@@ -24,8 +24,6 @@ type ➝ = Edge
 
 #### State syntax
 ```scala
-import LTSLib._
-
 val s0 = LTSState("s", 0) // or
 val s1: LTSState = 's1    // or
 val s2: ⌾ = 's2          // or
@@ -33,8 +31,6 @@ val s2: ⌾ = 's2          // or
 
 #### Action syntax
 ```scala
-import LTSLib._
-
 // Input actions
 val a_in = ↑("a") // or
 val b_in = "b".↑  // or
@@ -52,8 +48,6 @@ val x: Boolean = a_in ⇅ a_out // true
 
 #### Edge syntax
 ```scala
-import LTSLib._ 
-
 val e0 = Edge('s0, τ, 's1) // standard syntax
 val e1 = 's0 × τ ➝ 's1    // syntax sugar
 ```
@@ -94,11 +88,16 @@ println(dump(lts))
 ## Calculus of Communication Systems (CCS)
 
 Base classes
-- net.golovach.verification.ccs.CCSLib
 - net.golovach.verification.ccs.CCSLib.Process
 - net.golovach.verification.ccs.CCSLib.{∅, ⟲, Prefix, Sum, Par, Restriction, Renaming}
 
 Process = ∅ | ⟲ | Prefix | Sum | Par | Restriction | Renaming
+
+Base imports:
+- import net.golovach.verification.LTSLib._
+- import net.golovach.verification.ccs.CCSLib._
+
+
 
 CM ≡ Coffee Machine
 
@@ -106,12 +105,13 @@ CM ≡ Coffee Machine
 
 Simple disposable (acyclic) Coffee Machine
 ```scala
-import LTSLib._
-import CCSLib._
-
 val CM = ↑("$") :: ↓("☕") :: ∅
 println(dump(toLTS(CM)))
 ```
+
+<details><summary>CONSOLE</summary>
+<p>
+  
 ```
 >> ports:   {☕, $}
 >> actions: {↓☕, ↑$}
@@ -120,12 +120,18 @@ println(dump(toLTS(CM)))
 >> edges:   
 >>     's1 × ↓☕ → 's0
 >>     's2 × ↑$ → 's1
-```
+```  
+</p>
+</details>
 
 Or states can be named explicitly
 ```scala
 val CM = ↑("$") :: ↓("☕") :: ∅("CM")
 ```
+
+<details><summary>CONSOLE</summary>
+<p>
+
 ```
 >> ports:   {☕, $}
 >> actions: {↓☕, ↑$}
@@ -135,17 +141,20 @@ val CM = ↑("$") :: ↓("☕") :: ∅("CM")
 >>     'CM1 × ↓☕ → 'CM0
 >>     'CM2 × ↑$ → 'CM1
 ```
+</p>
+</details>
 
 **2) Loop/Recursion (⟲) syntax**
 
 Simple cyclic Coffee Machine
 ```scala
-import LTSLib._
-import CCSLib._
-
 val CM = ↑("$") :: ↓("☕") :: ⟲
 println(dump(toLTS(CM)))
 ```
+
+<details><summary>CONSOLE</summary>
+<p>
+
 ```
 >> ports:   {☕, $}
 >> actions: {↓☕, ↑$}
@@ -155,6 +164,8 @@ println(dump(toLTS(CM)))
 >>     's0 × ↓☕ → 's1
 >>     's1 × ↑$ → 's0
 ```
+</p>
+</details>
 
 Or states can be named explicitly
 ```scala
@@ -163,14 +174,15 @@ val CM = "$".↑ :: "☕".↓ :: ⟲("CM")
 
 Or sequence with loop at the end
 ```scala
-import LTSLib._
-import CCSLib._
-
 val LOOP = "$".↑ :: "☕".↓ :: ⟲
 val CM = "init".↑ |: LOOP
 
 println(dump(toLTS(CM)))
 ```
+
+<details><summary>CONSOLE</summary>
+<p>
+
 ```
 >> ports:   {☕, $, init}
 >> actions: {↓☕, ↑$, ↑init}
@@ -181,6 +193,8 @@ println(dump(toLTS(CM)))
 >>     's1 × ↑$ → 's0
 >>     's0 × ↓☕ → 's1
 ```
+</p>
+</details>
 
 Or one-liner
 ```scala
@@ -189,14 +203,15 @@ val CM = "init".↑ |: ("$".↑ :: "☕".↓ :: ⟲)
 
 Another sequence with loop at the end
 ```scala
-import LTSLib._
-import CCSLib._
-
 val LOOP = "$".↑ :: "☕".↓ :: ⟲
 val CM = "initA".↑ :: ("initB".↑ |: LOOP)
 
 println(dump(toLTS(CM)))
 ```
+
+<details><summary>CONSOLE</summary>
+<p>
+
 ```
 >> ports:   {☕, $, initB, initA}
 >> actions: {↓☕, ↑$, ↑initB, ↑initA}
@@ -208,6 +223,8 @@ println(dump(toLTS(CM)))
 >>     's1 × ↑$ → 's0
 >>     's0 × ↓☕ → 's1
 ```
+</p>
+</details>
 
 Or one-liner
 ```scala
@@ -216,12 +233,13 @@ val CM = "initA".↑ :: ("initB".↑ |: ("$".↑ :: "☕".↓ :: ⟲))
 
 **3) Alternative/Choise/Sum (+) syntax**
 ```scala
-import LTSLib._
-import CCSLib._
-
 val CS = ("$".↓ :: "☕".↑ :: "✉".↓ :: ⟲) + ("☕".↑ :: "✉".↓ :: ⟲)
 println(dump(toLTS(CS)))
 ```
+
+<details><summary>CONSOLE</summary>
+<p>
+
 ```
 >> ports:   {✉, ☕, $}
 >> actions: {↓✉, ↑☕, ↓$}
@@ -234,20 +252,23 @@ println(dump(toLTS(CS)))
 >>     's3 × ↓✉ → 's2
 >>     's2 × ↑☕ → 's3
 ```
+</p>
+</details>
 
 **4) Parallel Composition (|) syntax**
 
 With silent τ-action generation
 
 ```scala
-import LTSLib._
-import CCSLib._
-
 val A_IN  = "A".↑ :: ⟲
 val A_OUT = "A".↓ :: ⟲
 
 println(dump(toLTS(A_IN | A_OUT)))
 ```
+
+<details><summary>CONSOLE</summary>
+<p>
+
 ```
 >> ports:   {A}
 >> actions: {↑A, ↓A, τ}
@@ -258,17 +279,20 @@ println(dump(toLTS(A_IN | A_OUT)))
 >>     's0 × ↓A → 's0
 >>     's0 × τ → 's0
 ```
+</p>
+</details>
 
 More complex example
 ```scala
-import LTSLib._
-import CCSLib._
-
 val CM = "$".↑ :: "☕".↓ :: ⟲
 val CS = "$".↓ :: "☕".↑ :: "✉".↓ :: ⟲
 
 println(dump(toLTS(CM | CS)))
 ```
+
+<details><summary>CONSOLE</summary>
+<p>
+ 
 ```
 >> ports:   {☕, $, ✉}
 >> actions: {↓☕, ↑☕, ↓✉, τ, ↑$, ↓$}
@@ -289,16 +313,19 @@ println(dump(toLTS(CM | CS)))
 >>     's5 × ↓$ → 's4
 >>     's0 × ↓✉ → 's2
 >>     's1 × ↓☕ → 's4
-```
+``` 
+</p>
+</details>
 
 **5) Restriction (|) syntax**
 ```scala
-import LTSLib._
-import CCSLib._
-
 val CM = ("$".↑ :: "☕".↓ :: ⟲) \ "$"
 println(dump(toLTS(CM)))
 ```
+
+<details><summary>CONSOLE</summary>
+<p>
+  
 ```
 >> ports:   {☕}
 >> actions: {↓☕}
@@ -306,7 +333,9 @@ println(dump(toLTS(CM)))
 >> init:    's1
 >> edges:   
 >>     's0 × ↓☕ → 's1
-```
+```  
+</p>
+</details>
 
 Or
 ```scala
@@ -320,12 +349,13 @@ val CM = ("$".↑ :: "☕".↓ :: ⟲) \ ("$", "✉")
 
 **6) Rename (∘) syntax**
 ```scala
-import LTSLib._
-import CCSLib._
-
 val CM = ("$".↑ :: "☕".↓ :: ⟲) ∘ ("$" -> "A")
 println(dump(toLTS(CM)))
 ```
+
+<details><summary>CONSOLE</summary>
+<p>
+
 ```
 >> ports:   {☕, A}
 >> actions: {↓☕, ↑A}
@@ -335,42 +365,12 @@ println(dump(toLTS(CM)))
 >>     's0 × ↓☕ → 's1
 >>     's1 × ↑A → 's0
 ```
+</p>
+</details>
 
 Or
 ```scala
 val CM = ("$".↑ :: "☕".↓ :: ⟲) ∘ ("$" -> "A", "☕" -> "B")
-```
-
-
-
-
-```scala
-import LTSLib._
-import CCSLib._
-```
-
-
-```scala
-import LTSLib._
-import CCSLib._
-```
-
-
-```scala
-import LTSLib._
-import CCSLib._
-```
-
-
-```scala
-import LTSLib._
-import CCSLib._
-```
-
-
-```scala
-import LTSLib._
-import CCSLib._
 ```
 
 ## Hennessy-Milner Logic (HML)
