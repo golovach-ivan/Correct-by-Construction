@@ -7,4 +7,4 @@ The modal μ-calculus (Lμ, μ-calculus) is an extension of propositional [modal
 The (propositional, modal) μ-calculus originates with Dana Scott and Jaco de Bakker,[1] and was further developed by Dexter Kozen.
 
 ### Position
-Many temporal logics can be encoded in the μ-calculus, including CTL* and its widely used fragments—linear temporal logic and computational tree logic.
+Many [temporal logics](temporal-logics.md) can be encoded in the μ-calculus, including [CTL*](CTL-star.md) and its widely used fragments—[linear temporal logic (LTL)](LTL.md) and [computational tree logic (CTL)](CTL.md).
