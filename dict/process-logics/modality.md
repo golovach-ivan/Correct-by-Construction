@@ -1,0 +1,3 @@
+Modality (linguistic) is a feature of language that allows for communicating things about, or based on, situations which need not be actual. More precisely, modality is signaled by grammatical expressions (moods) that express a speaker's general intentions as well as the speaker's commitment to how believable, obligatory, desirable, or actual an expressed proposition is.
+  
+Example: necessary, possible, must, can, usually, ...
