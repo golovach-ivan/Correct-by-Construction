@@ -1,5 +1,13 @@
 ## Session types
 
+Session types are a rich type discipline, based on linear types.
+
+session types in Links, Scribble, and Singularity OS.
+
+We formulate a typed formalism for concurrency where types denote freely composable structure of dyadic interaction in the symmetric scheme.
+
+===
+
 Session types are a formalism used to model structured communication-based programming. A binary session type describes communication by specifying the type and direction of data exchanged between two parties. 
 
 In complex distributed systems, participants willing to communicate should previously agree on a protocol to follow. The specified protocol describes the types of messages that are exchanged as well as their direction. In this context session types came into play: they describe a protocol as a type abstraction. 
