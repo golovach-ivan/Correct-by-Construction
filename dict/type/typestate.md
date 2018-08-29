@@ -6,5 +6,7 @@ Whereas the type of a data object determines the set of operations over permitte
 
 Typestates were introduced by Strom and Yemini in 1986, who applied typestates as abstractions over the states of data structures to control the initialization of variables (with the two typestates "uninitialized" and "initialized").
 
+Strom and Yemini observe that although unrestricted aliasing and concurrency make the static checking of typestates impossible.
+
 ### Links
 - STROM, R. E., AND YEMINI, S. 1986. Typestate: A programming language concept for enhancing software reliability. IEEE Trans. Softw. Eng. SE-12, 1 (Jan.), 157-171
