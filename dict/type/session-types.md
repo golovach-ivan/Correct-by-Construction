@@ -42,3 +42,9 @@ The branching process *x▻{Li:Pi},i∈I* on *x* offers a range of alternatives 
 ? 31
 
 dedicated 14 12 23
+
+### Links
+- Kohei Honda. 1993. Types for Dyadic Interaction. In International Conference on Concurrency Theory (CONCUR) (LNCS), Vol. 715. Springer, 509-523.
+- Kohei Honda, Vasco Vasconcelos, and Makoto Kubo. 1998. Language Primitives and Type Discipline for Structured Communication-Based Programming. In European Symposium on Programming (ESOP) (LNCS). Springer, 122-138.
+- Nobuko Yoshida and Vasco Vasconcelos. 2007. Language primitives and type discipline for structured communication-based programming revisited: Two systems for higher-order session communication. ENTCS 171, 4 (2007), 73-93.
+- Simon J. Gay and Vasco T. Vasconcelos. Linear type theory for asynchronous session types. Journal of Functional Programming, 20(1):19–50, 2010.
