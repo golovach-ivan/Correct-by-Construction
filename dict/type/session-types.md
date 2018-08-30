@@ -1,6 +1,5 @@
 ## Session types
-
-Session types describe entities (channel endpoints) whose type may change after each usage.
+Session types describe entities (channel endpoints) whose type may change after each usage.  This feature is at odds with the conventional notion of type used in functional languages, which is meant to statically describe the nature of values.
 
 Session types are a rich type discipline, based on linear types.
 
