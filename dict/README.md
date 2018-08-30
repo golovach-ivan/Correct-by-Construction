@@ -48,3 +48,6 @@
 - Domain Theory
 - Category Theory
 - LADL
+
+
+An early driving force in process calculi was the desire to establish basic calculi for communication and concurrency, sufficient to express many phenomena and examples, and to play a role analogous to that of the lambda calculus for functional computation.
