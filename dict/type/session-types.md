@@ -1,5 +1,7 @@
 ## Session types
 
+Session types describe entities (channel endpoints) whose type may change after each usage.
+
 Session types are a rich type discipline, based on linear types.
 
 session types in Links, Scribble, and Singularity OS.
