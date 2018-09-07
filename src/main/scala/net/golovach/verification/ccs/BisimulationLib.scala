@@ -1,148 +1,192 @@
 package net.golovach.verification.ccs
 
 import net.golovach.verification.LTSLib._
+import net.golovach.verification.ccs.CCSLib._
 
-import scala.collection.immutable
-import scala.collection.immutable.Stream.iterate
+import scala.collection.Iterator.iterate
+
+trait BisimulationSyntax {
+
+  def isStronglyBisimilar(xLTS: LTS, yLTS: LTS): Boolean
+
+  def isWeaklyBisimilar(xLTS: LTS, yLTS: LTS): Boolean
+
+  implicit class ltsBisimilarityOps(self: LTS) {
+    /**
+      * Check two LTS Strong Bisimilar
+      */
+    def ~(that: LTS): Boolean = isStronglyBisimilar(self, that)
+
+    /**
+      * Check two LTS not Strong Bisimilar
+      */
+    def ≁(that: LTS): Boolean = !isStronglyBisimilar(self, that)
+
+    /**
+      * Check two LTS Weak Bisimilar
+      */
+    def ≈(that: LTS): Boolean = isWeaklyBisimilar(self, that)
+
+    /**
+      * Check two LTS not Weak Bisimilar
+      */
+    def ≉(that: LTS): Boolean = !isWeaklyBisimilar(self, that)
+  }
+
+  implicit class ccsBisimilarityOps(self: Process) {
+    /**
+      * Check two CCP Processes Strong Bisimilar
+      */
+    def ~(that: Process): Boolean = self.asLTS ~ that.asLTS
+
+    /**
+      * Check two CCP Processes not Strong Bisimilar
+      */
+    def ≁(that: Process): Boolean = self.asLTS ≁ that.asLTS
+
+    /**
+      * Check two CCP Processes Weak Bisimilar
+      */
+    def ≈(that: Process): Boolean = self.asLTS ≈ that.asLTS
+
+    /**
+      * Check two CCP Processes not Weak Bisimilar
+      */
+    def ≉(that: Process): Boolean = self.asLTS ≉ that.asLTS
+  }
+
+}
 
 /**
-  * - Kanellakis and Smolka (Kanellakis and Smolka, 1983)
-  * (see also the journal version (Kanellakis and Smolka, 1990))
-  * - Paige and Tarjan (Paige and Tarjan, 1987)
+
+  *
+  * Weak bisimilarity (observational equivalence)
+  *
+  * Observational congruence (rooted weak bisimilarity) (Milner, 1989)
+  * ===
+  * ???
+  *
+  * Branching bisimilarity (a variation of weak bisimilarity) (Glabbeek and Weijland, 1996)
+  * ===
+  * ???
+  *
+  *
   */
-object BisimulationLib {
+object BisimulationLib extends BisimulationSyntax {
 
-  type BinRel = Map[(LTSState, LTSState), Boolean]
+  case class State(lts: LTS, st: ⌾) // todo: lts: LTS - ok? ot tag @@? or label {L,R}?
+  type Block = Set[State]
+  type Partition = Set[Block]
 
-  object BinRel {
-    def apply(): BinRel = Map[(LTSState, LTSState), Boolean]()
+  /**
+    * The algorithms for computing bisimilarity due to Kanellakis and Smolka,
+    * and Paige and Tarjan, compute successive refinements of
+    * an initial partition π-init and converge to the largest strong bisimulation
+    * over the input finite labelled transition system. Algorithms that compute
+    * strong bisimilarity in this fashion are often called partition-refinement
+    * algorithms and reduce the problem of computing bisimilarity to that of
+    * solving the so-called relational coarsest partitioning problem
+    * (Kanellakis and Smolka, 1990; Paige and Tarjan, 1987).
+    *
+    * The basic idea underlying the algorithm by Kanellakis and Smolka is
+    * to iterate the splitting of some block Bi by some block Bj with respect to
+    * some action a until no further refinement of the current partition is possible.
+    * The resulting partition is often called the coarsest stable partition
+    * and coincides with strong bisimilarity over the input labelled transition
+    * system when the initial partition π-init is chosen to be {Pr}.
+    *
+    * - Kanellakis and Smolka (Kanellakis and Smolka, 1983)
+    * (see also the journal version (Kanellakis and Smolka, 1990))
+    * - Paige and Tarjan (Paige and Tarjan, 1987)
+    */
+  def isStronglyBisimilar(xLTS: LTS, yLTS: LTS): Boolean = {
+
+    val π: Partition = {
+      val initPartition: Partition = Set(
+        xLTS.states.map(State(xLTS, _)) ++ yLTS.states.map(State(yLTS, _))
+      )
+      unfold(initPartition)(tryRefine(_, xLTS.actions ++ yLTS.actions)).last
+    }
+
+    val whereXInit: Block = π.find(_.contains(State(xLTS, xLTS.init))).get
+    val whereYInit: Block = π.find(_.contains(State(yLTS, yLTS.init))).get
+
+    whereXInit == whereYInit
   }
 
-  def strongBisimilarity(xLTS: LTS, yLTS: LTS): Boolean = {
-    if (xLTS.actions != yLTS.actions)
-      return false
+  /**
+    * The problem of checking weak bisimilarity (observational equivalence)
+    * over finite labelled transition systems can be reduced to that
+    * of checking strong bisimilarity using a technique called saturation.
+    */
+  def isWeaklyBisimilar(xLTS: LTS, yLTS: LTS): Boolean =
+    isStronglyBisimilar(saturate(xLTS), saturate(yLTS))
 
-    def generateAll(xss: Set[LTSState], yss: Set[LTSState]): Seq[BinRel] =
-      for (k <- 0 until BigInt(2).pow(xss.size * yss.size).toInt)
-        yield (for {
-          (xs, xk) <- xss.zipWithIndex
-          (ys, yk) <- yss.zipWithIndex
-        } yield (xs, ys) -> (((k >> (xk * yss.size + yk)) & 1) > 0)).toMap
+  def splitBlock(block: Block, splitByBlock: Block, splitByAct: ⒜): (Block, Block) =
+    block.partition({
+      case State(lts: LTS, st: ⌾) =>
+        val outgoingEdges: Set[➝] = lts.edgesFromWithAct(st, splitByAct)
+        val reachableStates: Set[State] = outgoingEdges.map(x => State(lts, x.dst))
+        (splitByBlock & reachableStates).nonEmpty
+    })
 
-    def isBisimulation(r: BinRel): Boolean = {
-      if (!r(xLTS.init, yLTS.init)) return false
-
-      // ∀ (xSrc, ySrc): (xSrc ~ ySrc) ⇒
-      for (((xSrc, ySrc), true) <- r) {
-        // ∀ xAct ∈ xLTS.edges(xSrc, _, _).act
-        for (Edge(_, xAct, xDst) <- xLTS.edgesFrom(xSrc)) {
-          // ∃ yAct ∈ yLTS.edges(ySrc, ?, _)
-          if (!(yLTS.edgesFromWithAct(ySrc, xAct) exists { case Edge(_, _, yDst) => r(xDst, yDst) }))
-          // xDst ~ yDst
-            return false
-        }
-        for (Edge(_, yAct, yDst) <- yLTS.edgesFrom(ySrc)) {
-          if (!(xLTS.edgesFromWithAct(xSrc, yAct) exists { case Edge(_, _, xDst) => r(xDst, yDst) }))
-            return false
-        }
+  // todo: optimize, calculate first not all!
+  def tryRefine(π: Partition, acts: Set[⒜]): Option[Partition] =
+    (for {
+      block: Block <- π
+      splitByBlock: Block <- π
+      splitByAct: ⒜ <- acts
+      newPartition: Partition <- splitBlock(block, splitByBlock, splitByAct) match {
+        case (reachable, unreachable) =>
+          if (reachable.isEmpty || unreachable.isEmpty)
+            Set.empty
+          else
+            Set(π.filter(_ != block) + reachable + unreachable)
       }
+    } yield newPartition).headOption
 
-      true
+
+  def unfold[A](a: A)(f: A => Option[A]): Stream[A] =
+    a #:: (f(a) map (x => x #:: unfold(x)(f))).getOrElse(Stream.empty)
+
+  /**
+    * Strong Transition Relation -> Weak Transition Relation
+    * pre-computing the weak transition relation
+    */
+  def saturate(lts: LTS): LTS = {
+    type Arcs = Set[(⌾, ⌾)]
+
+    val initTauArcs: Arcs = {
+      val oldTauArcs = lts.edges.filter(_.act == τ).map(e => (e.src, e.dst))
+      val selfTauArcs = lts.states.map(s => (s, s))
+      oldTauArcs ++ selfTauArcs
     }
 
-    generateAll(xLTS.states, yLTS.states) exists isBisimulation
-  }
+    // <src →τ→ *> + <* →τ→ dst> => <src →τ→ dst>
+    def connectTauArcs(arcs: Arcs): Arcs =
+      for { //todo: rename 'tmp'
+        (src, tmp) <- arcs
+        (`tmp`, dst) <- arcs
+      } yield (src, dst)
 
-  def weakBisimilarity(xLTS: LTS, yLTS: LTS): Boolean = {
-    ???
-  }
+    // (→τ→)∗
+    val tauArcs: Arcs =
+      iterate(initTauArcs)(connectTauArcs).drop(lts.states.size).next // todo: lts.states.size or more?
 
-  implicit class opsBisimilarity(self: LTS) {
-    /**
-      * Strong Bisimilarity
-      */
-    def ~(that: LTS): Boolean = strongBisimilarity(self, that)
+    // (→τ→)∗ => ➝*
+    val newTauEdges: Set[➝] =
+      tauArcs.map({ case (src, dst) => src × τ ➝ dst })
 
-    /**
-      * Weak Bisimilarity
-      */
-    def ≈(that: LTS): Boolean = weakBisimilarity(self, that)
-  }
+    // (→τ→)∗ ◦ →a→ ◦ (→τ→)∗
+    val newNotTauEdges: Set[➝] = for {
+      Edge(oldSrc, act, oldDts) <- lts.edges // todo: remove tau?
+      newSrc <- lts.states.filter(tauArcs.contains(_, oldSrc))
+      newDst <- lts.states.filter(tauArcs.contains(oldDts, _))
+    } yield Edge(newSrc, act, newDst)
 
-  def strong2Bisimilarity(xLTS: LTS, yLTS: LTS): Boolean = {
-
-    val xGroups: Map[Set[LTSAction], Set[LTSState]] =
-      xLTS.states.groupBy(xLTS.edgesFrom(_).map(_.act))
-    val yGroups: Map[Set[LTSAction], Set[LTSState]] =
-      yLTS.states.groupBy(yLTS.edgesFrom(_).map(_.act))
-
-    if (xGroups.keys != yGroups.keys) return false
-
-    //    val sss: Seq[Seq[BinRel]] = for {
-    //      key <- xGroups.keys.toSeq
-    //    } yield generateAll(xGroups(key), yGroups(key))
-
-    def prod[A](xss: Seq[Seq[A]]): Seq[Seq[A]] = xss match {
-      case head :: Nil => head.map(Seq(_))
-      case head :: tail =>
-        for {
-          h <- head
-          t <- prod(tail)
-        } yield h +: t
-    }
-
-    def generateAll(xss: Set[LTSState], yss: Set[LTSState]): Seq[BinRel] = {
-      val xxx: Seq[Map[(LTSState, LTSState), Boolean]] =
-        for (k <- (0 until BigInt(2).pow(xss.size * yss.size).toInt).toSeq)
-          yield (for {
-            (xs, xk) <- xss.zipWithIndex
-            (ys, yk) <- yss.zipWithIndex
-          } yield (xs, ys) -> (((k >> (xk * yss.size + yk)) & 1) > 0)).toMap
-
-      xxx
-    }
-
-    //    val v: Seq[Seq[BinRel]] = prod(sss)
-
-    //    def foldd(x: Seq[BinRel]): BinRel = {
-    //      (x /: BinRel())(_ ++ _)
-    //      ???
-    //    }
-    //
-    //    (v /: ???)
-    //
-    ???
-  }
-
-  def strong3Bisimilarity(xLTS: LTS, yLTS: LTS): Boolean = {
-
-    def oneWay(aSrc: LTSState, aLTS: LTS, bSrc: LTSState, bLTS: LTS, rel: BinRel): Boolean =
-      aLTS.edgesFrom(aSrc).forall({
-        case Edge(_, aAct, aDst) =>
-          bLTS.edgesFromWithAct(bSrc, aAct) exists {
-            case Edge(_, _, bDst) => rel(aDst, bDst)
-          }
-      })
-
-    def recalc(prev: BinRel): BinRel = {
-      val saveFalse = prev.collect({ case kv@((_, _), false) => kv })
-      val recalcTrue =
-        for (((xSrc, ySrc), true) <- prev)
-          yield (xSrc, ySrc) ->
-            (oneWay(xSrc, xLTS, ySrc, yLTS, prev)
-              &&
-              oneWay(ySrc, yLTS, xSrc, xLTS, prev))
-
-      saveFalse ++ recalcTrue
-    }
-
-    var rel0 = (for {
-      xState <- xLTS.states
-      yState <- yLTS.states
-    } yield (xState, yState) -> true).toMap
-
-    val r = iterate(rel0)(recalc)
-
-    ???
+    lts.copy(
+      actions = lts.actions + τ,
+      edges = lts.edges ++ newTauEdges ++ newNotTauEdges
+    )
   }
 }
