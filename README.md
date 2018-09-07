@@ -2,6 +2,8 @@
 Tools for RHO-Lang smart contracts formal verification (with Namespace/Spatial/Hennessy-Milner Logics)
 
 - [Labeled Transition System (LTS)](#labeled-transition-system-lts)
+- [Calculus of Communication Systems (CCS)](#calculus-of-communication-systems-ccs)
+- [Hennessy-Milner Logic (HML)](#hennessy-milner-logic-hml)
 
 ## Labeled Transition System (LTS)
 
