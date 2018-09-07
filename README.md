@@ -1,6 +1,8 @@
 # Correct-by-Construction
 Tools for RHO-Lang smart contracts formal verification (with Namespace/Spatial/Hennessy-Milner Logics)
 
+- [Labeled Transition System (LTS)](/#labeled-transition-system-lts)
+
 ## Labeled Transition System (LTS)
 
 ### LST syntax
