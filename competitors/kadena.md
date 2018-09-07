@@ -8,19 +8,33 @@ The JPM team behind Juno saw the potential that a Tangaroa-like approach represe
 Kadena was spawned from the open source code of the Juno project and was built by the two key developers who built Juno: Will Martino and Stuart Popejoy.
 
 ### Kadena links
+- [Project Summary Whitepaper](http://kadena.io/docs/KadenaPublic.pdf)
 - [github.com/kadena-io](https://github.com/kadena-io)
 - [Ex-J.P. Morgan Heads’ Multi-Chain Smart Contract Platform Kadena](https://medium.com/theblock1/ex-jp-morgan-heads-multi-chain-smart-contract-platform-kadena-4d3be4cedf0)
 
 ### Pact
+
+We strongly disagree with the use of virtual machines that require the storage and invocation of illegible bytecode and instead designed Pact as an interpreted language where the code is always available.
+
 Main facts
 - Pact sources saved in ??blockchain?? (no compilation step) and interpreted during ???
 - is Turing-incomplete
 - Pact is database-focused
 - every transaction is a smart contract
+- Pact prohibits recursion and unterminated loops
 
 Secondary facts
 - Pact interpreter is written in Haskell
 - Pact uses unbounded integers which don’t overflow ()
+
+Languages like Ethereum’s Solidity lack critical features that are part of the day-to-day operation of business applications: 
+- enforcing business rules (with unambiguous error messages on failure); 
+- modeling and maintaining database schemas; and 
+- authorizing users to perform sensitive operations.
+
+The Yoke formal verification system starts by compiling Pact smart contract code directly into the SMT-LIB2 language. This code can then be loaded into the Z3 theorem prover, yielding a system usable by experts in SMT techniques. 
+
+Yoke offers a simple domain specific language (DSL) that can be inserted directly into Pact code to express inviolable business rules.
 
 To write safe smart contracts you need a safe language. Pact is immutable, deterministic, and Turing-incomplete, fighting bugs and exploits while offering the full power of a high-level language. Atomic transactions keep your data sane.
 
