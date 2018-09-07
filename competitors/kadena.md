@@ -21,7 +21,7 @@ Main facts
 - is Turing-incomplete
 - Pact is database-focused
 - every transaction is a smart contract
-- Pact prohibits recursion and unterminated loops
+- Pact prohibits recursion and unterminated loops (recursion is detected when smart-contract modules are loaded into the blockchain)
 
 Secondary facts
 - Pact interpreter is written in Haskell
@@ -31,6 +31,12 @@ Languages like Ethereum’s Solidity lack critical features that are part of the
 - enforcing business rules (with unambiguous error messages on failure); 
 - modeling and maintaining database schemas; and 
 - authorizing users to perform sensitive operations.
+
+### Formal verification
+
+As a general rule, invariants have vocabulary for talking about the shape of data, whereas properties also add vocabulary for talking about function inputs and outputs, and database interactions. 
+
+With Pact’s system, you can specify particular properties in order to prove they are true for all possible inputs and states, but unlike full specification, you don’t need to specify every detail of your program.
 
 The Yoke formal verification system starts by compiling Pact smart contract code directly into the SMT-LIB2 language. This code can then be loaded into the Z3 theorem prover, yielding a system usable by experts in SMT techniques. 
 
