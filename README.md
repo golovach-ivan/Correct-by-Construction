@@ -378,7 +378,7 @@ Or
 val CM = ("$".↑ :: "☕".↓ :: ⟲) ∘ ("$" -> "A", "☕" -> "B")
 ```
 
-## Strong/Weak Bisimulation
+## Strong / Weak Bisimulation
 
 ## Hennessy-Milner Logic (HML)
   
