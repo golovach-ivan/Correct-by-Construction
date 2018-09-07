@@ -381,6 +381,65 @@ val CM = ("$".↑ :: "☕".↓ :: ⟲) ∘ ("$" -> "A", "☕" -> "B")
 
 ## Strong / Weak Bisimulation
 
+### CCS syntax
+```scala
+import net.golovach.verification.LTSLib._
+import net.golovach.verification.ccs.BisimulationLib._
+import net.golovach.verification.ccs.CCSLib._
+
+val A = "a".↓
+
+val x = A :: ∅
+val y = (A :: ∅) + (A :: ∅)
+
+val isStrongBisimilar:    Boolean = x ~ y
+val isNotStrongBisimilar: Boolean = x ≁ y
+val isWeakBisimilar:      Boolean = x ≈ y
+val isNotWeakBisimilar:   Boolean = x ≉ y
+```
+
+### LTS syntax
+```scala
+import net.golovach.verification.LTSLib._
+import net.golovach.verification.ccs.BisimulationLib._
+import net.golovach.verification.ccs.CCSLib._
+
+val A = "a".↓
+
+val x = (A :: ∅).asLTS
+val y = ((A :: ∅) + (A :: ∅)).asLTS
+
+val isStrongBisimilar:    Boolean = x ~ y
+val isNotStrongBisimilar: Boolean = x ≁ y
+val isWeakBisimilar:      Boolean = x ≈ y
+val isNotWeakBisimilar:   Boolean = x ≉ y
+```
+
+### Strong Bisimulation algorithm
+The algorithms for computing bisimilarity due to Kanellakis and Smolka,
+(without Paige and Tarjan optimizations), compute successive refinements of
+an initial partition π-init and converge to the largest strong bisimulation
+over the input finite labelled transition system. Algorithms that compute
+strong bisimilarity in this fashion are often called partition-refinement
+algorithms and reduce the problem of computing bisimilarity to that of
+solving the so-called relational coarsest partitioning problem.
+    
+The basic idea underlying the algorithm by Kanellakis and Smolka is
+to iterate the splitting of some block Bi by some block Bj with respect to
+some action a until no further refinement of the current partition is possible.
+The resulting partition is often called the coarsest stable partition
+and coincides with strong bisimilarity over the input labelled transition
+system when the initial partition π-init is chosen to be Proc.
+
+- [Kanellakis, Smolka, 1983/1990, "CCS expressions, finite state processes, and three problems of equivalence"](https://www.sciencedirect.com/science/article/pii/089054019090025D)
+- [Robert Paige and Robert E. Tarjan, 1987, "Three Partition Refinement Algorithms"](https://epubs.siam.org/doi/pdf/10.1137/0216062)
+
+### Weak Bisimulation algorithm
+The problem of checking weak bisimilarity (observational equivalence)
+over finite labelled transition systems can be reduced to that
+of checking strong bisimilarity using a technique called **saturation**.
+
+
 ## Hennessy-Milner Logic (HML)
   
 
