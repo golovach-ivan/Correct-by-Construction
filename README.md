@@ -418,34 +418,34 @@ val isNotWeakBisimilar:   Boolean = x ≉ y
 ### Example: University
 [Source code](https://github.com/golovach-ivan/Correct-by-Construction/blob/master/src/test/scala/net/golovach/verification/ccs/BisimulationDemo0_university.scala):
 ```scala
-import net.golovach.verification.LTSLib._
-import net.golovach.verification.ccs.CCSLib._
-import net.golovach.verification.ccs.BisimulationLib._
-
 // CM ≡ Cofee Machine
 // CSh ≡ Computer Scientist (honest)
 // CSr ≡ Computer Scientist (real)
 // Univ ≡ University (implementation)
 // Spec ≡ Specification
-object BisimulationDemo0_university extends App {
 
-  val $ = "$"
-  val ☕ = "☕"
-  val ✉ = "✉"
+// === impl
+val CM = ↑($) :: ↓(☕) :: ⟲
+val CSh = ↓($) :: ↑(☕) :: ↓(✉) :: ⟲
+val CSr = (↓($) :: ↑(☕) :: ↓(✉) :: ⟲) + (↑(☕) :: ↓(✉) :: ⟲)
+val Univ = (CSh | CM | CSr) \ ($, ☕)
 
-  // === impl
-  val CM = ↑($) :: ↓(☕) :: ⟲
-  val CSh = ↓($) :: ↑(☕) :: ↓(✉) :: ⟲
-  val CSr = (↓($) :: ↑(☕) :: ↓(✉) :: ⟲) + (↑(☕) :: ↓(✉) :: ⟲)
-  val Univ = (CSh | CM | CSr) \ ($, ☕)
+// === spec
+val Spec = ↓(✉) :: ⟲
 
-  // === spec
-  val Spec = ↓(✉) :: ⟲
-
-  println(Univ ~ Spec)
-  println(Univ ≈ Spec)
-}
+println(Univ ~ Spec)
+println(Univ ≈ Spec)
 ```
+<details><summary>CONSOLE</summary>
+<p>
+  
+```
+>> false
+>> true
+```
+</p>
+</details>
+
 
 ### Strong Bisimulation algorithm
 The algorithms for computing bisimilarity due to Kanellakis and Smolka,
