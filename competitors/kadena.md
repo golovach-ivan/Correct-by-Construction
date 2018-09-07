@@ -1,14 +1,24 @@
 ## Kadena
 
+### Kadena history
+Kadena is a continuation of the JP Morgan project Juno, which was forked from Tangaroa, which was developed based on the Raft consensus algorithm, none of which are longer under active development.
+
+The JPM team behind Juno saw the potential that a Tangaroa-like approach represented — a high performance private blockchain. They iterated on the idea for a year and open sourced the project in February of 2016, adding Pact, fixing mistakes and succeeding in achieving a significant performance increase.
+
+Kadena was spawned from the open source code of the Juno project and was built by the two key developers who built Juno: Will Martino and Stuart Popejoy.
+
 ### Kadena links
 - [github.com/kadena-io](https://github.com/kadena-io)
+- [Ex-J.P. Morgan Heads’ Multi-Chain Smart Contract Platform Kadena](https://medium.com/theblock1/ex-jp-morgan-heads-multi-chain-smart-contract-platform-kadena-4d3be4cedf0)
 
 ### Pact
+Main facts
 - Pact sources saved in ??blockchain?? (no compilation step) and interpreted during ???
 - is Turing-incomplete
 - Pact is database-focused
 - every transaction is a smart contract
 
+Secondary facts
 - Pact interpreter is written in Haskell
 - Pact uses unbounded integers which don’t overflow ()
 
