@@ -1,6 +1,12 @@
 ## SML-LIB
+SMT-LIB is an international initiative, coordinated by team and endorsed by a large number of research groups world-wide, aimed at facilitating research and development in [SMT](SMT.md). The main motivation of the SMT-LIB initiative was the expectation that the availability of **common standards** and of **a library of benchmarks** would greatly facilitate the evaluation and the comparison of SMT systems.
 
-SMT-LIB is an international initiative, coordinated by team and endorsed by a large number of research groups world-wide, aimed at facilitating research and development in [SMT](SMT.md).
+### ???
+Like Version 2.0 and later versions, Version 2.6 defines:
+- a language for writing **terms and formulas** in a sorted (i.e., typed) version of first-order logic;
+- a language for specifying **background theories** and fixing a standard vocabulary of sort, function, and predicate symbols for them;
+- a language for specifying **logics**, suitably restricted classes of formulas to be checked for satisfiability with respect to a specific background theory;
+- a **command** language for interacting with SMT solvers via a textual interface that allows asserting and retracting formulas, querying about their satisfiability, examining their models or their unsatisfiability proofs, and so on.
 
 #### Boolean algebra
 ????????????????????????????????????????????????????????
