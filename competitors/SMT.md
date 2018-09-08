@@ -4,6 +4,10 @@
 
 > While SMT techniques have been traditionally used to support deductive software verification, they have found applications in other areas of computer science such as, for instance, planning, model checking and automated test generation. Typical theories of interest in these applications include **formalizations of various forms of arithmetic, arrays, finite sets, bit vectors, algebraic datatypes, strings, floating point numbers, equality with uninterpreted functions, and various combinations of these**.
 
+> The defining problem of Satisfiability Modulo Theories is checking whether a given (closed) logical formula ϕ is satisfiable, not in general but in the context of some background theory T which constrains the interpretation of the symbols used in ϕ. Technically, the SMT problem for ϕ and T is the question of whether there is a model of T that makes ϕ true.
+
+
+
 ### SMT solvers
 
 #### SMT solver competition (SMT-COMP)
