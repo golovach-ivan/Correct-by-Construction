@@ -1,4 +1,4 @@
-## SML-LIB
+## SMT-LIB
 SMT-LIB is an international initiative, coordinated by team and endorsed by a large number of research groups world-wide, aimed at facilitating research and development in [SMT](SMT.md). The main motivation of the SMT-LIB initiative was the expectation that the availability of **common standards** and of **a library of benchmarks** would greatly facilitate the evaluation and the comparison of SMT systems.
 
 ### ???
