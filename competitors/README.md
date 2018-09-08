@@ -4,7 +4,14 @@
 
 **Formal Specification** is not **Requirements**: has a formal syntax + semantics fall within one domain.
 
-**Testing** is checking FEW test cases. Formal Verification is checking spec/property in ALL cases (whole state space, all behaviours).
+#### Formal Verification VS Testing
+
+**Testing** is checking few test cases (sin(0)==0, sin(pi/2)==1). 
+Formal Verification is checking spec/property in all cases (∀x ∊ ℝ: -1 ≤ sin(x) ≤ 1).
+
+#### Formal Verification VS Type Systems
+
+
 
 Formal Verification Aproaches
 - [Assertion Skeleton](#assertion-skeleton)
