@@ -13,6 +13,8 @@
 > 3. **input formulas**, the class of formulas the solver accepts as input, and
 > 4. **interface**, the set of functionalities provided by the solver.
 
+> For instance, in a solver for linear arithmetic the underlying logic is first-order logic with equality, the background theory is the theory of real numbers, and the input language may be limited to conjunctions of inequations between linear polynomials. The interface may be as simple as accepting a system of inequations and returning a binary response indicating whether the system is satisfiable or not. More sophisticated interfaces include the ability to return concrete solutions for satisfiable inputs, return proofs for unsatisfiable ones, allow incremental and backtrackable input, and so on.
+
 #### SMT solver competition (SMT-COMP)
 
 ### Links
