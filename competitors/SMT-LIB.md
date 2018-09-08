@@ -16,6 +16,12 @@ Like Version 2.0 and later versions, Version 2.6 defines:
 
 > This version of the SMT-LIB standard distinguishes between **basic theories** and **combined theories**. Basic theories, such as the theory of real numbers, the theory of arrays, the theory of fixed-size bit vectors and so on, are those explicitly defined in the SMT-LIB catalog. Combined theories are defined implicitly in terms of basic theories by means of a general modular combination operator.
 
+> The signature of a theory (essentially, its set of sort symbols and sorted function symbols) be specified formally — provided it is finite. By “formally” here we mean written in a machine-readable and processable format, as opposed to written in free text, no matter how rigorously. By this definition, theories themselves are defined informally, in natural language. Some theories, such as the theory of bit vectors, have an infinite signature. For them, the signature too is specified informally in English.
+
+### Input Formulas
+
+
+### Interface
 
 #### Boolean algebra
 ????????????????????????????????????????????????????????
