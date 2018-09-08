@@ -6,9 +6,13 @@
 
 > The defining problem of Satisfiability Modulo Theories is checking whether a given (closed) logical formula ϕ is satisfiable, not in general but in the context of some background theory T which constrains the interpretation of the symbols used in ϕ. Technically, the SMT problem for ϕ and T is the question of whether there is a model of T that makes ϕ true.
 
-
-
 ### SMT solvers
+
+SMT solver is any software system that implements a procedure for satisfiability modulo some given theory. In general, one can distinguish among a solver’s
+1. **underlying logic**, e.g., first-order, modal, temporal, second-order, and so on,
+2. **background theory**, the theory against which satisfiability is checked,
+3. **input formulas**, the class of formulas the solver accepts as input, and
+4. **interface**, the set of functionalities provided by the solver.
 
 #### SMT solver competition (SMT-COMP)
 
