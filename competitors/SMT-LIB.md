@@ -8,6 +8,15 @@ Like Version 2.0 and later versions, Version 2.6 defines:
 - a language for specifying **logics**, suitably restricted classes of formulas to be checked for satisfiability with respect to a specific background theory;
 - a **command** language for interacting with SMT solvers via a textual interface that allows asserting and retracting formulas, querying about their satisfiability, examining their models or their unsatisfiability proofs, and so on.
 
+### Underlying Logic
+> SMT-LIB adopts as its underlying logic a version of many-sorted first-order logic with equality. Finally, in addition to the usual existential and universal quantifiers, the logic includes a **let** binder and a **match** binder analogous to constructs with the same name found in functional programming languages. The concrete syntax of the logic is part of the SMT-LIB language of formulas and theories.
+
+### Background Theories
+> One of the goals of the SMT-LIB initiative is to clearly define a catalog of background theories, starting with a small number of popular ones, and adding new ones as solvers for them are developed.
+
+> This version of the SMT-LIB standard distinguishes between **basic theories** and **combined theories**. Basic theories, such as the theory of real numbers, the theory of arrays, the theory of fixed-size bit vectors and so on, are those explicitly defined in the SMT-LIB catalog. Combined theories are defined implicitly in terms of basic theories by means of a general modular combination operator.
+
+
 #### Boolean algebra
 ????????????????????????????????????????????????????????
 ????????????????????????????????????????????????????????
@@ -30,7 +39,7 @@ Like Version 2.0 and later versions, Version 2.6 defines:
 
 ### Links
 - [The SMT-LIB Standard: Version 2.6](http://smtlib.cs.uiowa.edu/papers/smt-lib-reference-v2.6-r2017-07-18.pdf)
-- []()
+- [The SMT-LIB website](www.smt-lib.org)
 - []()
 - []()
 - []()
