@@ -46,19 +46,23 @@ Pact 2.4 introduces a powerful new system to allow developers to specify **prope
 
 The big difference here is that these properties and invariants, along with the Pact code itself, are directly compiled into **SMT-LIB2** to be verified by the **Z3** theorem prover, an extremely powerful tool that can test the entire universe of inputs and database states with lightning speed, ensuring that the code can never violate these rules. 
 
-#### Properties
+### Formal verification: Properties
 
 **Properties** has vocabulary for talking about function inputs and outputs, and database interactions. 
 
 **Properties** are used on functions to establish behavior that must be enforced no matter what inputs are provided, or what state the blockchain database is in, and resemble “contracts” from languages like Racket or Eiffel. 
 
-#### Invariants
+### Formal verification: Invariants
 
 **Invariants** have vocabulary for talking about the shape of data. 
 
 Pact’s **invariants** correspond to a simplified initial step towards refinement types, from the world of formal verification.
 
 **Invariants** are rules governing database columns, ensuring that no code that ever writes to the database can ever violate those rules, resembling database constraints in traditional RDBMSs.
+
+### Formal verification: currect state
+
+For this initial release we don’t yet support 100% of the Pact language, and the implementation of the property checker itself has not yet been formally verified, but this is only the first step. We’re excited to continue broadening support for every possible Pact program, eventually prove correctness of the property checker, and continually enable authors to express ever more sophisticated properties about their smart contracts over time.
 
 ### Pact Links
 #### Info
