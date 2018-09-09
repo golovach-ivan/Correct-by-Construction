@@ -45,7 +45,7 @@ Like Version 2.0 and later versions, Version 2.6 defines:
 
 ### Links
 - [The SMT-LIB Standard: Version 2.6](http://smtlib.cs.uiowa.edu/papers/smt-lib-reference-v2.6-r2017-07-18.pdf)
-- [The SMT-LIB website](www.smt-lib.org)
+- [The SMT-LIB website](http://www.smt-lib.org)
 - []()
 - []()
 - []()
