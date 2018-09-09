@@ -24,6 +24,7 @@ Main facts
 - Pact is database-focused
 - every transaction is a smart contract
 - Pact prohibits recursion and unterminated loops (recursion is detected when smart-contract modules are loaded into the blockchain)
+- For any function definition in a Pact module, any subsequent call to another function is inlined (??? before typecheck/verify/exec)
 
 Secondary facts
 - Pact interpreter is written in Haskell
@@ -46,6 +47,12 @@ Pact 2.4 introduces a powerful new system to allow developers to specify **prope
 
 The big difference here is that these properties and invariants, along with the Pact code itself, are directly compiled into **SMT-LIB2** to be verified by the **Z3** theorem prover, an extremely powerful tool that can test the entire universe of inputs and database states with lightning speed, ensuring that the code can never violate these rules. 
 
+Pact’s property checker works by realizing the language’s semantics in an SMT (“Satisfiability Modulo Theories”) solver – by building a formula for a program, and testing the validity of that formula. The SMT solver can prove that there is no possible assignment of values to variables which can falsify a provided proposition about some Pact code. Pact currently uses Microsoft’s Z3 theorem prover to power its property checking system.
+
+Such a formula is built from the combination of the functions in a Pact module, the properties provided for those functions, and invariants declared on schemas in the module.
+
+For any function definition in a Pact module, any subsequent call to another function is inlined. Before any properties are tested, this inlined code must pass typechecking.
+
 ### Formal verification: Properties
 
 **Properties** has vocabulary for talking about function inputs and outputs, and database interactions. 
@@ -60,7 +67,11 @@ Pact’s **invariants** correspond to a simplified initial step towards refineme
 
 **Invariants** are rules governing database columns, ensuring that no code that ever writes to the database can ever violate those rules, resembling database constraints in traditional RDBMSs.
 
-### Formal verification: currect state
+### Formal Verification: Schema Invariants
+
+For schema invariants, the property checker takes an inductive approach: it assumes that the schema invariants hold for the data currently in the database, and checks that all functions in the module maintain those invariants for any possible DB modification.
+
+### Formal verification: current state
 
 For this initial release we don’t yet support 100% of the Pact language, and the implementation of the property checker itself has not yet been formally verified, but this is only the first step. We’re excited to continue broadening support for every possible Pact program, eventually prove correctness of the property checker, and continually enable authors to express ever more sophisticated properties about their smart contracts over time.
 
