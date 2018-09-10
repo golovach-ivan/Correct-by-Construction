@@ -1,13 +1,19 @@
-## Kadena
+## Kadena (blockchain)
 
 ### Kadena history
-Kadena is a continuation of the JP Morgan project Juno, which was developed based on the Raft consensus algorithm. Kadena was built by the two key developers who built Juno: Will Martino and Stuart Popejoy that iterated on the idea for a year and open sourced the project in February of 2016, adding **Pact**.
+[Kadena](http://kadena.io/) is a continuation of the **JP Morgan** project Juno/Tangaroa, which was developed based on the **Raft consensus algorithm**. Kadena was built by the two key developers who built Juno: Will Martino and Stuart Popejoy, that iterated on the idea for a year and open sourced the project in February of 2016, adding Pact.
 
-### Pact
+### Topology of Blockchain (Chainweb)
+Chainweb is a parallel-chain architecture which can combine hundreds to thousands of Proof-of-Work blockchains, increasing throughput to 10,000 transactions per second and beyond. The Chainweb network transacts a single currency using trustless Simple Payment Verification (SPV) cross-chain transfers. Chains incorporate the Merkle roots of each other to enforce a single super chain offering an effective hash power that is the sum of each individual chain’s hash rate.
+
+### Concensus protocol (ScalableBFT / Tangaroa)
+ScalableBFT is Byzantine Fault Tolerant (BFT) variant of the Raft consensus algorithm inspired by the original Raft algorithm and the Practical Byzantine Fault Tolerance (PBFT) algorithm.
+
+### Pact (language)
 
 **Pact is an interpreted language**. Pact sources saved in ??blockchain?? (no compilation step) and interpreted during ???. For any function definition in a Pact module, any subsequent call to another function is inlined (???when???: before typecheck/verify/exec). Pact module loading to resolve all references in advance, meaning that instead of addressing functions in a lookup table, the function definition is directly injected (or “inlined”) into the callsite. where the code is always available.
 
-**Pact is Turing-incomplete language**. Pact prohibits recursion and unterminated loops (recursion is detected when smart-contract modules are loaded into the blockchain). there is no recursion (recursion is detected before execution and results in an error) and no ability to loop indefinitely. Pact does support operation on list structures via *map*, *fold* and *filter*, but since there is no ability to define infinite lists, these are necessarily bounded.
+**Pact is Turing-incomplete language**. Pact prohibits recursion and unterminated loops (recursion is detected when smart-contract modules are loaded into the blockchain). Pact does support operation on list structures via *map*, *fold* and *filter*, but since there is no ability to define infinite lists, these are necessarily bounded.
 
 **Pact is database-focused language**. modeling and maintaining database schemas.
 
@@ -81,9 +87,12 @@ For this initial release we don’t yet support 100% of the Pact language, and t
 ### Links
 
 #### Kadena links
+- Martino, Popejoy, Quaintance, Jan2018, [ChainWeb White Paper](http://kadena.io/docs/chainweb-v15.pdf)
+- Quaintance, Martino, Jan2018, ["ChainWeb Protocol Security Calculations"](http://kadena.io/docs/chainweb_calculations_v7.pdf)
 - [Project Summary Whitepaper](http://kadena.io/docs/KadenaPublic.pdf)
 - [github.com/kadena-io](https://github.com/kadena-io)
 - [Ex-J.P. Morgan Heads’ Multi-Chain Smart Contract Platform Kadena](https://medium.com/theblock1/ex-jp-morgan-heads-multi-chain-smart-contract-platform-kadena-4d3be4cedf0)
+- Jan2017, ["Kadena Blockchain Uses ScalableBFT Consensus Protocol, Offering 8-12,000 TPS"](https://www.chainofthings.com/news/2017/1/16/kadena-blockchain-uses-scalablebft-consensus-protocol-to-offer-8000-tps)
 
 #### Pact Info
 - [github.com/kadena-io/pact](https://github.com/kadena-io/pact)
