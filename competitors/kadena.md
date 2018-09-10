@@ -1,6 +1,6 @@
 - [Kadena (blockchain)](#kadena-blockchain)
   - [Kadena history](#kadena-history)
-  - [Blockchain Topology (Chainweb)](#topology-of-blockchain-chainweb)
+  - [Blockchain Topology (Chainweb)](#blockchain-topology-chainweb)
   - [Concensus protocol (ScalableBFT / Tangaroa)](#concensus-protocol-scalablebft--tangaroa)
 - Pact (language)
   - Pact ???Entities
