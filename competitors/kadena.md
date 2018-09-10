@@ -9,7 +9,7 @@ Chainweb is a parallel-chain architecture which can combine hundreds to thousand
 ### Concensus protocol (ScalableBFT / Tangaroa)
 ScalableBFT is Byzantine Fault Tolerant (BFT) variant of the Raft consensus algorithm inspired by the original Raft algorithm and the Practical Byzantine Fault Tolerance (PBFT) algorithm.
 
-### Pact (language)
+## Pact (language)
 
 **Pact is an interpreted language**. Pact sources saved in ??blockchain?? (no compilation step) and interpreted during ???. For any function definition in a Pact module, any subsequent call to another function is inlined (???when???: before typecheck/verify/exec). Pact module loading to resolve all references in advance, meaning that instead of addressing functions in a lookup table, the function definition is directly injected (or “inlined”) into the callsite. where the code is always available.
 
@@ -23,7 +23,7 @@ ScalableBFT is Byzantine Fault Tolerant (BFT) variant of the Raft consensus algo
 
 Т.е. перед выполнение любого смарт контракта среда исполнения имеет один файл (inline) исходного не компилированного кода на Pact, упрощенного (нет циклов, рекурсии, гарантированная остановка). Этот код используя keysets модифицирует blockchain, представленный как база данных. Код имеет врапления ?invarians and ?properties, до исполнения ?SMT-prover (например ?Z3) осуществляет ???.
 
-====================
+### Pact ???Entities
 
 Execution Modes
 1. **Contract definition**. 
@@ -44,7 +44,7 @@ Secondary facts
 - Pact uses unbounded integers which don’t overflow
 - Variables are immutable: they cannot be re-assigned, or modified in-place
 
-### Formal verification
+## Formal verification
 
 With Pact’s system, you can specify particular properties in order to prove they are true for all possible inputs and states, but unlike full specification, you don’t need to specify every detail of your program.
 
@@ -62,13 +62,13 @@ Such a formula is built from the combination of the functions in a Pact module, 
 
 For any function definition in a Pact module, any subsequent call to another function is inlined. Before any properties are tested, this inlined code must pass typechecking.
 
-### Formal verification: Properties
+### Properties
 
 **Properties** has vocabulary for talking about function inputs and outputs, and database interactions. 
 
 **Properties** are used on functions to establish behavior that must be enforced no matter what inputs are provided, or what state the blockchain database is in, and resemble “contracts” from languages like Racket or Eiffel. 
 
-### Formal verification: Invariants
+### Invariants
 
 **Invariants** have vocabulary for talking about the shape of data. 
 
@@ -76,11 +76,11 @@ Pact’s **invariants** correspond to a simplified initial step towards refineme
 
 **Invariants** are rules governing database columns, ensuring that no code that ever writes to the database can ever violate those rules, resembling database constraints in traditional RDBMSs.
 
-### Formal Verification: Schema Invariants
+### Schema Invariants
 
 For schema invariants, the property checker takes an inductive approach: it assumes that the schema invariants hold for the data currently in the database, and checks that all functions in the module maintain those invariants for any possible DB modification.
 
-### Formal verification: current state
+### Current state
 
 For this initial release we don’t yet support 100% of the Pact language, and the implementation of the property checker itself has not yet been formally verified, but this is only the first step. We’re excited to continue broadening support for every possible Pact program, eventually prove correctness of the property checker, and continually enable authors to express ever more sophisticated properties about their smart contracts over time.
 
