@@ -3,9 +3,9 @@
 ### Kadena history
 Kadena is a continuation of the JP Morgan project Juno, which was forked from Tangaroa, which was developed based on the Raft consensus algorithm, none of which are longer under active development.
 
-The JPM team behind Juno saw the potential that a Tangaroa-like approach represented — a high performance private blockchain. They iterated on the idea for a year and open sourced the project in February of 2016, adding Pact, fixing mistakes and succeeding in achieving a significant performance increase.
+The JP Morgan team iterated on the idea for a year and open sourced the project in February of 2016, adding Pact.
 
-Kadena was spawned from the open source code of the Juno project and was built by the two key developers who built Juno: Will Martino and Stuart Popejoy.
+Kadena was built by the two key developers who built Juno: Will Martino and Stuart Popejoy.
 
 ### Kadena links
 - [Project Summary Whitepaper](http://kadena.io/docs/KadenaPublic.pdf)
@@ -13,6 +13,28 @@ Kadena was spawned from the open source code of the Juno project and was built b
 - [Ex-J.P. Morgan Heads’ Multi-Chain Smart Contract Platform Kadena](https://medium.com/theblock1/ex-jp-morgan-heads-multi-chain-smart-contract-platform-kadena-4d3be4cedf0)
 
 ### Pact
+
+Pact is Turing-incomplete language.
+
+Pact is database-focused language.
+
+Pact is an interpreted language.
+
+Pact is ???authorizing language.
+
+Pact has Formal verification support in design.
+
+Execution Modes
+1. **Contract definition**. 
+Code is sent into the blockchain to establish the smart contract, as comprised of code (modules), tables (data), and keysets (authorization). This can also include database-modifying code, for instance to initialize data.
+2. **Transaction execution**.
+Refer to business events enacted on the blockchain, like a payment, a sale, or a workflow step of a complex contractual agreement. A transaction is generally a single call to a module function.
+3. **Queries and local execution**. 
+Querying data is carried out as a local execution on the node receiving the message. Pact code has no ability to distinguish between transactional and local execution.
+
+Contract Definition components
+1. **Keyset definition**. Definition stores in the global keyset database.
+2. **Module declaration**. Functions, Schema definitions, Table definitions.
 
 To write safe smart contracts you need a safe language. Pact is immutable, deterministic, and Turing-incomplete, fighting bugs and exploits while offering the full power of a high-level language. Atomic transactions keep your data sane.
 
