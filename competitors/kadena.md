@@ -1,9 +1,22 @@
+- [Kadena (blockchain)](#kadena-blockchain)
+  - [Kadena history](#kadena-history)
+  - [Blockchain Topology (Chainweb)](#topology-of-blockchain-chainweb)
+  - [Concensus protocol (ScalableBFT / Tangaroa)](#concensus-protocol-scalablebft--tangaroa)
+- Pact (language)
+  - Pact ???Entities
+  - ???
+- Formal verification
+  - Properties
+  - Invariants
+  - Schema Invariants
+  - Current State
+
 ## Kadena (blockchain)
 
 ### Kadena history
 [Kadena](http://kadena.io/) is a continuation of the **JP Morgan** project Juno/Tangaroa, which was developed based on the **Raft consensus algorithm**. Kadena was built by the two key developers who built Juno: Will Martino and Stuart Popejoy, that iterated on the idea for a year and open sourced the project in February of 2016, adding Pact.
 
-### Topology of Blockchain (Chainweb)
+### Blockchain Topology (Chainweb)
 Chainweb is a parallel-chain architecture which can combine hundreds to thousands of Proof-of-Work blockchains, increasing throughput to 10,000 transactions per second and beyond. The Chainweb network transacts a single currency using trustless Simple Payment Verification (SPV) cross-chain transfers. Chains incorporate the Merkle roots of each other to enforce a single super chain offering an effective hash power that is the sum of each individual chain’s hash rate.
 
 ### Concensus protocol (ScalableBFT / Tangaroa)
