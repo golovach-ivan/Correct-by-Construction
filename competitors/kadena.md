@@ -2,14 +2,18 @@
   - [Kadena history](#kadena-history)
   - [Blockchain Topology (Chainweb)](#blockchain-topology-chainweb)
   - [Concensus protocol (ScalableBFT / Tangaroa)](#concensus-protocol-scalablebft--tangaroa)
-- Pact (language)
-  - Pact ???Entities
+- [Pact (language)](#pact-language)
+  - [Pact ???Entities](#pact-entities)
   - ???
-- Formal verification
-  - Properties
-  - Invariants
-  - Schema Invariants
-  - Current State
+- [Formal verification](#formal-verification)
+  - [Properties](#properties)
+  - [Invariants](#invariants)
+  - [Schema Invariants](#schema-invariants)
+  - [Current State](#current-state)
+- [Links](#links)
+  - ???
+  - ???
+  - ???
 
 ## Kadena (blockchain)
 
