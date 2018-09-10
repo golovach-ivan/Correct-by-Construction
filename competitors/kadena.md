@@ -1,16 +1,7 @@
 ## Kadena
 
 ### Kadena history
-Kadena is a continuation of the JP Morgan project Juno, which was forked from Tangaroa, which was developed based on the Raft consensus algorithm, none of which are longer under active development.
-
-The JP Morgan team iterated on the idea for a year and open sourced the project in February of 2016, adding Pact.
-
-Kadena was built by the two key developers who built Juno: Will Martino and Stuart Popejoy.
-
-### Kadena links
-- [Project Summary Whitepaper](http://kadena.io/docs/KadenaPublic.pdf)
-- [github.com/kadena-io](https://github.com/kadena-io)
-- [Ex-J.P. Morgan Heads’ Multi-Chain Smart Contract Platform Kadena](https://medium.com/theblock1/ex-jp-morgan-heads-multi-chain-smart-contract-platform-kadena-4d3be4cedf0)
+Kadena is a continuation of the JP Morgan project Juno, which was developed based on the Raft consensus algorithm. Kadena was built by the two key developers who built Juno: Will Martino and Stuart Popejoy that iterated on the idea for a year and open sourced the project in February of 2016, adding **Pact**.
 
 ### Pact
 
@@ -97,13 +88,20 @@ For schema invariants, the property checker takes an inductive approach: it assu
 
 For this initial release we don’t yet support 100% of the Pact language, and the implementation of the property checker itself has not yet been formally verified, but this is only the first step. We’re excited to continue broadening support for every possible Pact program, eventually prove correctness of the property checker, and continually enable authors to express ever more sophisticated properties about their smart contracts over time.
 
-### Pact Links
-#### Info
+### Links
+
+#### Kadena links
+- [Project Summary Whitepaper](http://kadena.io/docs/KadenaPublic.pdf)
+- [github.com/kadena-io](https://github.com/kadena-io)
+- [Ex-J.P. Morgan Heads’ Multi-Chain Smart Contract Platform Kadena](https://medium.com/theblock1/ex-jp-morgan-heads-multi-chain-smart-contract-platform-kadena-4d3be4cedf0)
+
+#### Pact Info
 - [github.com/kadena-io/pact](https://github.com/kadena-io/pact)
 - [Pact Whitepaper](http://kadena.io/docs/Kadena-PactWhitepaper.pdf)
 - [Pact Reference Docs](http://pact-language.readthedocs.io/)
 - [Try Pact is in the browser](http://kadena.io/try-pact/)
 - [Syntax and linter for the Pact](https://github.com/kadena-io/pact-atom)
-#### News
+
+#### Pact News
 - [Pact 2.4 Is Out! ("The Pact Property Checker" section)](https://medium.com/kadena-io/pact-2-4-is-out-dd88a3e7ca31)
 - [Pact Formal Verification: Making Blockchain Smart Contracts Safer](https://medium.com/kadena-io/pact-formal-verification-for-blockchain-smart-contracts-done-right-889058bd8c3f)
