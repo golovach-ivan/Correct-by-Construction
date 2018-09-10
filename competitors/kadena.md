@@ -5,15 +5,19 @@ Kadena is a continuation of the JP Morgan project Juno, which was developed base
 
 ### Pact
 
-Pact is Turing-incomplete language.
+**Pact is an interpreted language**. Pact sources saved in ??blockchain?? (no compilation step) and interpreted during ???. For any function definition in a Pact module, any subsequent call to another function is inlined (???when???: before typecheck/verify/exec). Pact module loading to resolve all references in advance, meaning that instead of addressing functions in a lookup table, the function definition is directly injected (or “inlined”) into the callsite. where the code is always available.
 
-Pact is database-focused language.
+**Pact is Turing-incomplete language**. Pact prohibits recursion and unterminated loops (recursion is detected when smart-contract modules are loaded into the blockchain). there is no recursion (recursion is detected before execution and results in an error) and no ability to loop indefinitely. Pact does support operation on list structures via *map*, *fold* and *filter*, but since there is no ability to define infinite lists, these are necessarily bounded.
 
-Pact is an interpreted language.
+**Pact is database-focused language**. modeling and maintaining database schemas.
 
-Pact is ???authorizing language.
+**Pact is ???authorizing language**. authorizing users to perform sensitive operations.
 
-Pact has Formal verification support in design.
+**Pact has Formal verification support in design**.
+
+Т.е. перед выполнение любого смарт контракта среда исполнения имеет один файл (inline) исходного не компилированного кода на Pact, упрощенного (нет циклов, рекурсии, гарантированная остановка). Этот код используя keysets модифицирует blockchain, представленный как база данных. Код имеет врапления ?invarians and ?properties, до исполнения ?SMT-prover (например ?Z3) осуществляет ???.
+
+====================
 
 Execution Modes
 1. **Contract definition**. 
@@ -27,26 +31,12 @@ Contract Definition components
 1. **Keyset definition**. Definition stores in the global keyset database.
 2. **Module declaration**. Functions, Schema definitions, Table definitions.
 
-To write safe smart contracts you need a safe language. Pact is immutable, deterministic, and Turing-incomplete, fighting bugs and exploits while offering the full power of a high-level language. Atomic transactions keep your data sane.
 
-We strongly disagree with the use of virtual machines that require the storage and invocation of illegible bytecode and instead designed Pact as an interpreted language where the code is always available.
-
-Main facts
-- Pact sources saved in ??blockchain?? (no compilation step) and interpreted during ???
-- is Turing-incomplete
-- Pact is database-focused
-- every transaction is a smart contract
-- Pact prohibits recursion and unterminated loops (recursion is detected when smart-contract modules are loaded into the blockchain)
-- For any function definition in a Pact module, any subsequent call to another function is inlined (??? before typecheck/verify/exec)
 
 Secondary facts
 - Pact interpreter is written in Haskell
-- Pact uses unbounded integers which don’t overflow ()
-
-Languages like Ethereum’s Solidity lack critical features that are part of the day-to-day operation of business applications: 
-- enforcing business rules (with unambiguous error messages on failure); 
-- modeling and maintaining database schemas; and 
-- authorizing users to perform sensitive operations.
+- Pact uses unbounded integers which don’t overflow
+- Variables are immutable: they cannot be re-assigned, or modified in-place
 
 ### Formal verification
 
