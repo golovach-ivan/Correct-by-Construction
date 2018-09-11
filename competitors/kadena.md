@@ -32,7 +32,28 @@ ScalableBFT is Byzantine Fault Tolerant (BFT) variant of the Raft consensus algo
 
 **Pact is Turing-incomplete language**. Pact prohibits recursion and unterminated loops (recursion is detected when smart-contract modules are loaded into the blockchain). Pact does support operation on list structures via *map*, *fold* and *filter*, but since there is no ability to define infinite lists, these are necessarily bounded.
 
-**Pact is database-focused language**. modeling and maintaining database schemas.
+**Pact is database-focused language**. 
+
+modeling and maintaining database schemas.
+
+Pact presents a database metaphor.
+
+**Atomic execution**. A single message sent into the blockchain to be evaluated by Pact is atomic: the transaction succeeds as a unit, or does not succeed at all.
+
+**Key-Row Model**. Blockchain execution can be likened to OLTP (online transaction processing) database workloads, which favor denormalized data written to a single table. Pact’s data-access API reflects this by presenting a key-row model, where a row of column values is accessed by a single key. Pact does not support joining tables.
+
+**Queries**.  Pact offers a query mechanism for selecting rows from a table. While visually similar to SQL, the *select*, *where* and *filter* operations offer a streaming interface to a table
+```
+(reverse (sort ['age]
+  (select 'employees ['first-name,'last-name,'age]
+    (and? (where 'title (= "Programmer"))
+          (where 'salary (< 90000))))))
+```
+
+
+
+
+
 
 **Pact is ???authorizing language**. authorizing users to perform sensitive operations.
 
