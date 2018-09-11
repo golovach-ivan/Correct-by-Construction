@@ -30,13 +30,15 @@ ScalableBFT is Byzantine Fault Tolerant (BFT) variant of the Raft consensus algo
 
 **Pact is an interpreted language**. Pact sources saved in ??blockchain?? (no compilation step) and interpreted during ???. For any function definition in a Pact module, any subsequent call to another function is inlined (???when???: before typecheck/verify/exec). Pact module loading to resolve all references in advance, meaning that instead of addressing functions in a lookup table, the function definition is directly injected (or “inlined”) into the callsite. where the code is always available.
 
-**Pact is Turing-incomplete language**. Pact prohibits recursion and unterminated loops (recursion is detected when smart-contract modules are loaded into the blockchain). Pact does support operation on list structures via *map*, *fold* and *filter*, but since there is no ability to define infinite lists, these are necessarily bounded.
+**Pact is Turing-incomplete language**. Pact prohibits recursion and unterminated loops (recursion is detected when smart-contract modules are loaded into the blockchain). Pact does support operation on list structures via *map*, *fold* and *filter*, but since there is no ability to define infinite lists, these are necessarily bounded. Bitcoin Script is Turing-incomplete too.
+
+Pact does not need to employ any kind of cost model like Ethereum’s "gas" to limit computation. The lack of recursion also means Pact	can	aggressively	inline	function	calls	at	module	load	time,	 boosting	performance.
 
 **Pact is database-focused language**. 
 
-modeling and maintaining database schemas.
+Blockchain data	in	Pact	interpreted as	named tables,	which	have	a key-row structure,	support	 schemas,	and	support	a	versioned,	columnar	history. Smart Contracts are like stored procedures over database that save checked invariants and .
 
-Pact presents a database metaphor.
+In Pact, tables can be guarded by a module, preventing direct access to the table, and allowing the module to define a coherent and safe data-access API.
 
 **Atomic execution**. A single message sent into the blockchain to be evaluated by Pact is atomic: the transaction succeeds as a unit, or does not succeed at all.
 
@@ -75,7 +77,7 @@ Contract Definition components
 1. **Keyset definition**. Definition stores in the global keyset database.
 2. **Module declaration**. Functions, Schema definitions, Table definitions.
 
-
+A	smart	contract	in	Pact	is	comprised	of	three	core	elements:	tables,	keysets,	and	a	code	module.	
 
 Secondary facts
 - Pact interpreter is written in Haskell
