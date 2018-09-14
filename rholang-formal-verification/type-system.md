@@ -30,23 +30,42 @@ new ping in {
     ping!(*ret) | for(_ <- ret) {stdout!("Ping - OK")}  
   }
 }
+```
 
->> 
+```
+new ping in {
+  // ping Server
+  contract ping(ret) = { ret!([]) } |
+  
+  // ping Client
+  new ack in {
+    ping!(*ack) | for(@resp <- ack) {
+      match resp {
+        [] => stdout!("A")
+      }      
+    }  
+  }
+}
 ```
 
 ### Errors
-Incorrect use of *ret*
+Incorrect use of *ret*:
 - **A0**: write instance of another type: ```contract ping(ret) = { ret!(0) }```
 - **B0**: read not write: ```contract ping(ret) = { for (_ <- ret) {Nil} }```
 - **B1**: write 0 times: ```contract ping(ret) = { Nil }```
 - **B2**: write 1+ times: ```contract ping(ret) = { ret!([]) | ret!([]) }```
 
-Incorrect use of *ping*
+Incorrect use of *ping*:
 - **B**: write to another channel: ```contract ping(ret) = { ping!(0) }```
-
 - стартовать контракт на ret: ```contract ping(ret) = { ret!([]) | contract ret(_) = {Nil} }```
 - стартовать второй контракт на ping: ```contract ping(ret) = { ret!([]) | contract ping(_) = {Nil} }```
+
+Open new ports:
 - стартовать каждый раз новый контракт на новом приватном канале: ```contract ping(ret) = { ret!([]) | new x in {contract x(_) = {Nil} }}```
+- ???
+
+Deadlocks:
+- ???
 
 #### A Simple Type System
 ```
