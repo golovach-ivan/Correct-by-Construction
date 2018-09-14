@@ -40,6 +40,7 @@ Incorrect use of *ret*
 - **B0**: read not write: ```contract ping(ret) = { for (_ <- ret) {Nil} }```
 - **B1**: write 0 times: ```contract ping(ret) = { Nil }```
 - **B2**: write 1+ times: ```contract ping(ret) = { ret!([]) | ret!([]) }```
+
 Incorrect use of *ping*
 - **B**: write to another channel: ```contract ping(ret) = { ping!(0) }```
 
