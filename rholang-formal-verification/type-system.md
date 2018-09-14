@@ -67,6 +67,26 @@ Open new ports:
 Deadlocks:
 - ???
 
+### Correct
+```
+contract ping(ret) = { 
+  new x in { 
+    x!(*ret) | for (ret2 <- x) { ret2!([]) } 
+  } 
+}
+```
+```
+contract ping(ret) = { 
+  new x in { 
+    x!(*ret) | for (ret2 <- x) { 
+      new y in { 
+        y!(*ret2) | for (ret3 <- y) { ret3!([]) } 
+      }      
+    }
+  } 
+}
+```
+
 #### A Simple Type System
 ```
 type R = [] chan
@@ -85,7 +105,7 @@ new ping: P in {
 type T0 = [[] chan!] chan?
 type T1 = [] chan!
 
-new ping: T0 in {
+new ping:  in {
   contract ping(ret: T1) = { ret!([]) }
 }
 ```
@@ -93,3 +113,11 @@ new ping: T0 in {
 #### A Linear Type System
 
 #### A Type System with Channel Usage
+
+#### A Type System for Deadlock-Freedom
+
+#### A Type System for Lock-Freedom
+
+#### A Type System for Termination
+
+#### Session Types
