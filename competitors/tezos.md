@@ -22,11 +22,23 @@ Coq, one of the most advanced proof checking software is able to extract OCaml c
 
 ### Michelson (low-level languages)
 
-Michelson is the domain-specific language used to write smart contracts on the Tezos blockchain. Michelson is a stack-based language, it doesn't have any variables. Stack-oriented languages operate on one or more stacks, each of which may serve a different purpose.
+Michelson is the domain-specific language used to write smart contracts on the Tezos blockchain. 
 
-The language is stack based, with high level data types and primitives and strict static type checking. Its design cherry picks traits from several language families. Vigilant readers will notice direct references to Forth, Scheme, ML and Cat.
+Michelson
+- Michelson is a stack-based language, it doesn't have any variables
+- a program is a series of instructions that are run in sequence
+- each instruction receives as input the stack resulting of the previous instruction, and rewrites it for the next one
+- the stack contains both immediate values and heap allocated structures
+- all values are immutable and garbage collected
+- Michelson has primitives, high level data types and strict static type checkin
 
-A Michelson program is a series of instructions that are run in sequence: each instruction receives as input the stack resulting of the previous instruction, and rewrites it for the next one. The stack contains both immediate values and heap allocated structures. All values are immutable and garbage collected.
+- there is no standard library
+- is designed as a compilation target, though it can be hand written (even the output of a compiler can be understood)
+- a way to implement pieces of business logic than as a generic “world computer” (like Ethereum)
+
+Programs written in Michelson can be reasonably analyzed by SMT solvers and formalized in Coq without the need for more complicated techniques like separation logic.
+
+- [The Michelson Language (michelson-lang.com/)](https://www.michelson-lang.com/)
 
 ### Liquidity (high-level languages)
 
