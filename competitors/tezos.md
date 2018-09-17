@@ -9,8 +9,16 @@ OCaml’s semantic is fairly rigorous and a very large subset has been formalize
 
 Coq, one of the most advanced proof checking software is able to extract OCaml code from proofs. As Tezos matures, it will be possible to automatically extract key parts of the protocol’s code from mathematical proofs of correctness.
 
+
 - High-level language Liquidity with OCaml syntax
 - Low-level stack oriented language Michelson 
+- Liquidity-to-Michelson compiler with formal semantics - ???
+- Michelson working based on OCaml semantics (interpreter validated by the use of OCaml GADTs)
+- Tezos developed by OCamlPro that developed SMT Solver ??? too - ???
+
+
+- contracts will be stored on the blockchain in Michelson format
+
 
 - [Sources: gitlab.com/tezos (1300 stars, OCalml)](https://github.com/tezos/tezos/)
 
@@ -79,11 +87,14 @@ parameter unit;
 ### Liquidity (high-level languages)
 
 - It uses the syntax of OCaml
+- Syntax is a subset of OCaml
 - Local variables instead of stack manipulations
 
 Liquidity is a high-level language to program Smart Contracts for Tezos. It is a fully typed functional language, it uses the syntax of OCaml, and strictly complies with Michelson security restrictions. Liquidity already covers 100% of the Michelson features. 
 
 Liquidity is compiled back to Michelson. It is easier to approach as it has local variables instead of stack manipulations and high-level types.
+
+ - ["Liquidity: OCaml for the Blockchain" (slides)](http://www.ocamlpro.com/wp-content/uploads/2018/02/liquidity_slides.en_.pdf)
 
 ### Formal verification
 
