@@ -1,3 +1,12 @@
+### Tezos
+Сотрудничают с Inria, в составе есть разработчики OCaml и Coq.
+В составе есть сотрудники Inria и сотрудничает с Inria (Inria - ???, develop functional language OCaml and proof assistant Coq).
+Язык высокого уровня Liquidity является подмножеством OCaml имеет формально определенную схему трансляции в Michelson, bytecode-oriented stack based low-level lang. Michelson spec written in english. The Mickelson interpreter is implemented in OCaml as follows: typing rules and rewriting rules is basically the direct transcription of lang spec., формальная семантика OCaml была описана средствами ??? с трансляцией/доказательством в HOL. Разрабатывают свой ???proof-assistnce, форм верификация не закончена, не могут продемонстрировать.
+
+
+
+
+
 ## Formal Verification for Blockchain
 
 **Formal Verification** is the act of proving or disproving the correctness of algorithm with respect to a certain formal specification or property, using formal methods of mathematics.
