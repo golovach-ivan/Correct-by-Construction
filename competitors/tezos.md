@@ -1,3 +1,35 @@
+Based on Inria researchers
+
+### Organization: Tezos Foundation Council
+
+- [Twitter (18k+ followers)](https://twitter.com/tezosfoundation?lang=en)
+- [Site: tezos.foundation](https://tezos.foundation/)
+
+#### Project: Tezos
+
+Tezos is a self-amending cryptographic ledger. It achieves consensus not just about the state of a ledger, but about the state of its own protocol. Tezos is a blockchain that can evolve through self-amendment. Tezos allows token holders to reach consensus on protocol upgrades, including upgrades to the governance mechanism itself.
+
+- Site: [tezos.com](https://tezos.com)
+- Blog (2K followers): [medium.com/tezos](https://medium.com/tezos)
+- Position Paper (Aug2014), ["Tezos: A Self-Amending Crypto-Ledger"](https://tezos.com/static/papers/position_paper.pdf)
+- White paper (Sep2014), ["Tezos — a self-amending crypto-ledger"](https://tezos.com/static/papers/white_paper.pdf)
+- Source code: [gitlab.com/tezos](https://gitlab.com/tezos)
+- Developer Documentation: [Sphinx](https://tezos.gitlab.io/master/)
+
+#### History
+- 2014 Sep - the position paper and the white paper published
+- 2015 Aug - founded a company, Dynamic Ledger Solutions
+- 2016 Sep - the source code was published on Github
+- 2017 Feb - the public alphanet was launched
+- 2017 Jul - the creation of the Tezos Foundation
+- 2018 Jun - betanet launched
+
+#### Personalities
+- [Michel Mauny](https://tezos.foundation/tezos-foundation-council) - a senior researcher at Inria, joined Inria in 1985 and worked on programming languages with the research group that designed and developed the Coq proof assistant and the OCaml, the functional programming language used to implement Tezos. From 1989 to 2005 Michel led the research team that further developed OCaml.
+
+#### News
+- [Tezos Foundation Issues Grants To Four Leading Research Institutions](https://tezos.foundation/news/tezos-foundation-issues-grants-to-four-leading-research-institutions)
+
 ## Main
 Tezos	requires	developers	to	write	smart	contracts	in	a	formally-specified	low-level	bytecode	and	construct	proofs	using	the	Coq	theorem	prover.
 
@@ -103,11 +135,6 @@ A formal-method framework for Liquidity is under development, to prove the corre
 Roadmap: Development of a proof assistant for Liquidity contracts
 
 ### Links
-
-#### Tezos (general)
-- Main site: [Tezos.com](https://tezos.com)
-- White paper (Sep2014), ["Tezos — a self-amending crypto-ledger"](https://tezos.com/static/papers/white_paper.pdf)
-- Position Paper (Aug2014), ["Tezos: A Self-Amending Crypto-Ledger"](https://tezos.com/static/papers/position_paper.pdf)
 
 #### Liquidity / Michelson
 - ???
