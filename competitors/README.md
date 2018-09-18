@@ -3,7 +3,8 @@
 В составе есть сотрудники Inria и сотрудничает с Inria (Inria - ???, develop functional language OCaml and proof assistant Coq).
 Язык высокого уровня Liquidity является подмножеством OCaml имеет формально определенную схему трансляции в Michelson, bytecode-oriented stack based low-level lang. Michelson spec written in english. The Mickelson interpreter is implemented in OCaml as follows: typing rules and rewriting rules is basically the direct transcription of lang spec., формальная семантика OCaml была описана средствами ??? с трансляцией/доказательством в HOL. Разрабатывают свой ???proof-assistnce, форм верификация не закончена, не могут продемонстрировать.
 
-
+### Kadena / Pact
+It has a doc-string annotation DSL that describes the code's intended properties. ???когда верифицируются?
 
 
 
