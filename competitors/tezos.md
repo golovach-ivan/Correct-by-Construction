@@ -130,6 +130,15 @@ Liquidity is compiled back to Michelson. It is easier to approach as it has loca
 
  - ["Liquidity: OCaml for the Blockchain" (slides)](http://www.ocamlpro.com/wp-content/uploads/2018/02/liquidity_slides.en_.pdf)
 
+### OCaml
+
+- The abstract syntax of OCaml light is represented by mutually recursive algebraic datatypes
+- The type system (which is purely syntactic and nonalgorithmic) is expressed with inductively defined relations
+- The operational semantics is small-step
+- op sem = the 137 rules, type system = 173 rules, 
+- The operational semantics is expressed as an inductively defined labeled transition relation over source programs
+- The (small-step) operational semantics of OCamllight is phrased as a relation on definitions, programs, and stores; 
+
 ### Formal verification
 
 A formal-method framework for Liquidity is under development, to prove the correctness of smart-contracts written in Liquidity.
