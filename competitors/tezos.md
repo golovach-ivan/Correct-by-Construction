@@ -14,7 +14,8 @@ Tezos is a self-amending cryptographic ledger. It achieves consensus not just ab
 - Position Paper (Aug2014), ["Tezos: A Self-Amending Crypto-Ledger"](https://tezos.com/static/papers/position_paper.pdf)
 - White paper (Sep2014), ["Tezos — a self-amending crypto-ledger"](https://tezos.com/static/papers/white_paper.pdf)
 - Source code: [gitlab.com/tezos](https://gitlab.com/tezos)
-- Developer Documentation: [Sphinx](https://tezos.gitlab.io/master/)
+- [Developer Documentation (Sphinx)](https://tezos.gitlab.io/master/)
+- [Reddit (10k subscribers)](https://www.reddit.com/r/tezos/)
 
 #### History
 - 2014 Sep - the position paper and the white paper published
@@ -27,8 +28,9 @@ Tezos is a self-amending cryptographic ledger. It achieves consensus not just ab
 #### Personalities
 - [Michel Mauny](https://tezos.foundation/tezos-foundation-council) - a senior researcher at Inria, joined Inria in 1985 and worked on programming languages with the research group that designed and developed the Coq proof assistant and the OCaml, the functional programming language used to implement Tezos. From 1989 to 2005 Michel led the research team that further developed OCaml.
 
-#### News
+#### Science news
 - [Tezos Foundation Issues Grants To Four Leading Research Institutions](https://tezos.foundation/news/tezos-foundation-issues-grants-to-four-leading-research-institutions)
+- [Tezos Foundation to support Inria and Tarides](https://www.reddit.com/r/tezos/comments/8lhn0g/tezos_foundation_to_support_inria_and_tarides/)
 
 ## Main
 Tezos	requires	developers	to	write	smart	contracts	in	a	formally-specified	low-level	bytecode	and	construct	proofs	using	the	Coq	theorem	prover.
