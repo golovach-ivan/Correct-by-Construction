@@ -1,4 +1,42 @@
 ```
+new Cell in {
+
+  contract Cell(@init, get, set) = {  
+    new State in {    
+      State!(init) |
+      contract get(ret) = {
+        for (@value <- State) {      
+          State!(value) | ret!(value)
+        }
+      } |
+      contract set(@newValue, ack) = {
+        for (_ <- State) {      
+          State!(newValue) | ack!(Nil)
+        }
+      }      
+    }
+  } |
+  
+  new get, set, ack in {
+    Cell!(10, *get, *set) | 
+    new ret in {
+      get!(*ret) | for (@val <- ret) {set!(val + 1, *ack)}
+    } |
+    new ret in {
+      get!(*ret) | for (@val <- ret) {set!(val * 2, *ack)}
+    } |
+    for (_ <- ack) {
+      for (_ <- ack) {      
+        new ret in {        
+          get!(*ret) | for (@val <- ret) { stdout!(val) }
+        }
+      }
+    }
+  }
+}
+```
+
+```
 new Cell, lock in {
 
   contract Cell(@init, get, set) = {  
