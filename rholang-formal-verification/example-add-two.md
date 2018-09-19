@@ -18,6 +18,20 @@ new add in {
 
 ### Type errors
 
+#### Incorrect arg types
+```
+add!(*callback, 1, 2)       // not add!(1, 2, *callback)
+```
+
+```
+add!(true, "A", *callback)  // not add!(1, 2, *callback)
+```
+
+#### Incorrect arg count
+```
+add!([1, 2], *callback)  // not add!(1, 2, *callback)
+```
+
 ### Logic errors
 
 #### Not sum
