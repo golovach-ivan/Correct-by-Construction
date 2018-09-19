@@ -44,20 +44,12 @@ new BlockingQueue in {
       buffer!((false, true, 0, [])) |
       contract put(@newHead, ack) = {
         for (@(_, true, oldSize, oldBuf) <- buffer) {
-          if (oldSize + 1 < maxSize) {
-            buffer!((true, true, oldSize + 1, [newHead, oldBuf])) | ack!(Nil)
-          } else {
-            buffer!((true, false, oldSize + 1, [newHead, oldBuf])) | ack!(Nil)
-          }
+          buffer!((true, oldSize + 1 < maxSize, oldSize + 1, [newHead, oldBuf])) | ack!(Nil)
         }
       } |
       contract take(ret) = {
         for (@(true, _, oldSize, [head, tail]) <- buffer) {
-          if (oldSize - 1 > 0) {
-            buffer!((true, true, oldSize - 1, tail)) | ret!(head)  
-          } else {
-            buffer!((false, true, oldSize - 1, tail)) | ret!(head)  
-          }
+          buffer!((oldSize - 1 > 0, true, oldSize - 1, tail)) | ret!(head)  
         }
       }       
     }    
