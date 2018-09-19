@@ -3,7 +3,7 @@
 ```
 new sum in {
 
-  // server
+  // === SERVER
   contract sum(@arr, callback) = {
     match arr {
       [] => callback!(0) 
@@ -17,7 +17,7 @@ new sum in {
     }
   } |
    
-  // client
+  // === CLIENT
   new callback in {
     sum!([1, 2, 3], *callback) | 
     for (@resp <- callback) {stdout!(resp)}
