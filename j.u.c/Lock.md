@@ -36,24 +36,11 @@ new Cell in {
 }
 ```
 
+### Attempt 1
 ```
 new Cell, lock in {
 
-  contract Cell(@init, get, set) = {  
-    new State in {    
-      State!(init) |
-      contract get(ret) = {
-        for (@value <- State) {      
-          State!(value) | ret!(value)
-        }
-      } |
-      contract set(@newValue, ack) = {
-        for (_ <- State) {      
-          State!(newValue) | ack!(Nil)
-        }
-      }      
-    }
-  } |
+  contract Cell(@init, get, set) = {...} |
     
   lock!(Nil) |  
     
