@@ -31,3 +31,6 @@ new BlockingQueue in {
   }
 }
 ```
+
+Trick (block on empty): ```for (@[head, tail] <- buffer) {...}```
+
