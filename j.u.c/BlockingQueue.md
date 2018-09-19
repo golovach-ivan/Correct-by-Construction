@@ -24,7 +24,7 @@ new BlockingQueue in {
     new ack in { put!(1, *ack) } |
     new ack in { put!(2, *ack) } |    
     
-    // === GET
+    // === TAKE
     new ret in { take!(*ret) | for (@val <- ret) { stdout!(val) } } |
     new ret in { take!(*ret) | for (@val <- ret) { stdout!(val) } } |
     new ret in { take!(*ret) | for (@val <- ret) { stdout!(val) } }    
