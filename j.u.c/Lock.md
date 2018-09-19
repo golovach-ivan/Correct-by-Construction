@@ -78,3 +78,60 @@ Anybody can return any count of locks
 ```
 lock!(Nil) | lock!(Nil) | lock!(Nil)
 ```
+
+### Attempt 2
+```
+new Cell, Lock in {
+
+  contract Cell(@init, get, set) = {...} |
+    
+  contract Lock(lock, unlock) = {
+    new State, Key in {
+      State!(Nil) |
+      contract lock(ret) = {
+        for (_ <- State) {
+          new lockKey in {
+            Key!(*lockKey) | ret!(*lockKey)  
+          }
+        }
+      } |
+      contract unlock(@lockKey) = {
+        for (@savedLockKey <- Key) {
+          match lockKey == savedLockKey {
+            true => State!(Nil)
+            false => Key!(savedLockKey)
+          }
+        }
+      }      
+    }
+  } |   
+    
+ new get, set, lock, unlock, x, y in {
+    Cell!(10, *get, *set) | 
+    Lock!(*lock, *unlock) |
+    
+    new retVal, retLock, ack in {
+      lock!(*retLock) | for (@lockKey <- retLock) {
+        get!(*retVal) | for (@val <- retVal) {
+          set!(val + 1, *ack) | for (_ <- ack) {unlock!(lockKey) | x!(Nil)}
+        }        
+      }
+    } |
+        
+    new retVal, retLock, ack in {
+      lock!(*retLock) | for (@lockKey <- retLock) {
+        get!(*retVal) | for (@val <- retVal) {
+          set!(val * 2, *ack) | for (_ <- ack) {unlock!(lockKey) | y!(Nil)}
+        }        
+      }
+    } |
+    
+    new ret in {        
+      for (_ <- x; _ <- y) {
+        get!(*ret) | for (@val <- ret) { stdout!(val) }
+      }
+    }    
+    
+  }    
+}
+```
