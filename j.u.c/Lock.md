@@ -72,3 +72,9 @@ new Cell, lock in {
   }    
 }
 ```
+
+#### Problem
+Anybody can return any count of locks
+```
+lock!(Nil) | lock!(Nil) | lock!(Nil)
+```
