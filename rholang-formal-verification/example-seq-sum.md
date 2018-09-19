@@ -26,3 +26,17 @@ new sum in {
 
 >> 6
 ```
+
+or *sum*-contract can use private *add*-contract
+```
+[head ...tail] => {
+  new add, tailCallback in {
+    contract add(x, y, addCallback) = {
+      addCallback!(*x + *y)
+    } |        
+    sum!(tail, *tailCallback) | for(tailSum <- tailCallback) { 
+      add!(head, *tailSum, *callback) 
+    }
+  }
+}
+```
