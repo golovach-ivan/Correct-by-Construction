@@ -37,3 +37,13 @@ contract add(x, y, callback) = {
   add!(*x, *y, *callback) 
 }
 ```
+
+#### Unbounded mutual recursion
+```
+contract add(x, y, callback) = {
+  sub!(*x, *y, *callback)
+} |   
+contract sub(x, y, callback) = {
+  add!(*x, *y, *callback)
+}
+```
