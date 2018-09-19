@@ -16,6 +16,22 @@ new add in {
 }
 ```
 
+```
+new add in {
+
+  // server
+  contract add(@{x /\ Int}, @{y /\ Int}, callback) = {
+    callback!(x + y)
+  } |
+   
+  // client
+  new callback in {
+    add!(1, 2, *callback) | 
+    for (@resp <- callback) {stdout!(resp)}
+  }
+}
+```
+
 ### Type errors
 
 #### Incorrect arg types
