@@ -1,8 +1,8 @@
 ### Attempt 1
 
 ```
-new BlockingQueue in {
-  contract BlockingQueue(put, take) = {
+new LinkedBlockingQueue in {
+  contract LinkedBlockingQueue(put, take) = {
     new buffer in {
       buffer!([]) |
       contract put(@newHead, ack) = {
@@ -19,7 +19,7 @@ new BlockingQueue in {
   }|
   
   new put, take in {    
-    BlockingQueue!(*put, *take) |    
+    LinkedBlockingQueue!(*put, *take) |    
     
     // === PUT
     new ack in { put!(0, *ack) } |
@@ -38,8 +38,8 @@ Trick (block on empty): ```for (@[head, tail] <- buffer) {...}```
 
 ### Attempt 2
 ```
-new BlockingQueue in {
-  contract BlockingQueue(@maxSize, put, take) = {
+new LinkedBlockingQueue in {
+  contract LinkedBlockingQueue(@maxSize, put, take) = {
     new buffer in {
       buffer!((false, true, 0, [])) |
       contract put(@newHead, ack) = {
@@ -56,7 +56,7 @@ new BlockingQueue in {
   }|
   
   new put, take in {    
-    BlockingQueue!(2, *put, *take) |    
+    LinkedBlockingQueue!(2, *put, *take) |    
     
     // === PUT
     new ackA in { 
