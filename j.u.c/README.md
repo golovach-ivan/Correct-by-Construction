@@ -15,6 +15,8 @@ itemC = (true,  true,  3, (C, itemB)),
 itemD = (true,  false, 4, (D, itemC))
 
 ### There is no destinction between data and processes: Streams == Futures
+Everething is Process or can be converted to Process. Every Process if Thread.
+Everething is Channel or can be converted to Channel. Every Channel if Stream.
 
 ### Concurrency primitives
 
