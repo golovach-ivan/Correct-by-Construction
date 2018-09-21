@@ -86,3 +86,32 @@ new join in {
 ```
 
 #### 1<-∃n: select
+```
+new copy in {
+  
+  contract copy(src, dst) = {
+    for (@val <- src) {
+      new ack in {
+        dst!((val, *ack)) | for (_ <- ack) { copy!(*src, *dst) }
+      }
+    }
+  } |  
+  
+  new c0, c1 in {
+  
+    // send all
+    c0!!(0) | c1!!(1) |  
+  
+    // receive any N times
+    new N, R in {    
+      copy!(*c0, *R) | copy!(*c1, *R) |
+      
+      N!(10) |
+      for (@(val, ack) <= R; @k <= N) {
+        if (k > 0) { N!(k - 1) } | @ack!(Nil) |
+        stdout!(val)    
+      }
+    }  
+  }
+}
+```
