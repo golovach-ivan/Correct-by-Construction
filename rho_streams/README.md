@@ -1,5 +1,5 @@
 ```
-new const, take, iter, copy in {
+new const, take, takeData, iter, copy in {
 
   contract const(@val, dst) = {
     new ack in {
@@ -20,12 +20,12 @@ new const, take, iter, copy in {
     }
   } |
 
-  // DEMO const + take
-  new stream in {
-    const!(0, *stream) |
-    new dst in {
-      take!(*stream, *dst, 10) | for (@(val, ack) <= dst) {
-        stdout!(val) | @ack!(Nil)
+  contract takeData(src, dst, @count) = {
+    if (count > 0) {
+      for (@(val, ack) <- src) {
+        @ack!(Nil) | 
+        dst!(val) | 
+        takeData!(*src, *dst, count - 1)
       }
     }
   } |
@@ -42,13 +42,18 @@ new const, take, iter, copy in {
       }
     }    
   } |
-  
+
   contract copy(src, dst) = {
-    for (@val <- src) {
-      new ack in {
-        dst!((val, *ack)) | for (_ <- ack) { copy!(*src, *dst) }
-      }
+    for (@val <= src) {
+      dst!(val)
     }
+  } |
+
+  // DEMO const + copy + take
+  new s0, s1, s2 in {
+    const!(0, *s0) |
+    copy!(*s0, *s1) |    
+    takeData!(*s1, *stdout, 10)
   }
 }
 ```
