@@ -9,13 +9,8 @@ new const, take, takeData, iter, copy in {
   
   contract take(src, dst, @count) = {
     if (count > 0) {
-      for (@(val, ack) <- src) {
-        @ack!(Nil) |
-        new newAck in { 
-          dst!((val, *newAck)) | for (_ <- newAck) {
-            take!(*src, *dst, count - 1)
-          } 
-        }
+      for (@item <- src) {
+        dst!(item) | take!(*src, *dst, count - 1)        
       }
     }
   } |
