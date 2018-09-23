@@ -1,4 +1,4 @@
-```Nil``` and ```~Nil```
+```Nil``` and ```~Nil``` and ```~{ stdout!(0) }```
 
 ```PMatches.Proc6  ::= Proc7 "matches" Proc7 ;```
 
