@@ -1,10 +1,12 @@
+Каждый канал можно использовать как atomic variable, если хранить там не более одного значения.
+
 ```
 new countRef in {
   countRef!(10) |
   
   // get
   for (@count <- countRef) {
-    countRef!(count)
+    countRef!(count) | ... do something with 'count'
   } |
   
   // set
@@ -14,7 +16,7 @@ new countRef in {
   
   // incrementAndGet
   for (@count <- countRef) {
-    countRef!(count + 1)
+    countRef!(count + 1) | ... do something with 'count'
   } |   
   
   // 	compareAndSet(10, 20)
@@ -24,6 +26,11 @@ new countRef in {
     } else {
       countRef!(count)
     }
+  } |
+  
+  // OR
+  for (@count <- countRef) {
+    countRef!(if (count == 10) { 20 } else { count })   
   }  
 }
 ```
