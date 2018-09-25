@@ -2,8 +2,7 @@
 
 [Exchanger](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Exchanger.html) - a synchronization point at which threads can pair and swap elements within pairs.
 
-Usage example:
-<details><summary>stdout</summary>
+<details><summary>**Демонстрация работы java.util.concurrent.Exchanger**</summary>
 <p>
     
 ```java
