@@ -1,6 +1,6 @@
 Этот код эквивалентен следующему
 
-```s!([]) --> storage()``` 
+```empty --> [] --> empty --> [xItem, xRet] --> empty --> [] --> empty -->  [xItem, xRet] --> empty --> [] -->  ...``` 
 
 ```java
 import static java.util.concurrent.ForkJoinPool.commonPool;
