@@ -75,3 +75,32 @@ new Exchanger in {
 >> [3, 0]
 >> [4, 2]
 ```
+
+```
+ for (@xItem, @xRet <= input) {          ~           Object[] x = (Object[]) input.take();
+                                         ~           Object xItem = x[0];
+                                         ~           Channel xRet = (Channel) x[1];                                        
+```
+
+```
+for (@maybePair <- storage) {            ~           Object[] maybePair = (Object[]) storage.take();
+  match maybePair {                      ~           
+    [] =>                                ~           if (maybePair.length == 0) {
+      ...                                ~             ... 
+    [yItem, yRet] => {                   ~           } else if (maybePair.length == 2) {              
+      ...                                ~             Object yItem = maybePair[0];
+      ...                                ~             Channel yRet = (Channel) maybePair[1];
+      ...                                ~             ...
+    }                                    ~           }
+  }
+}
+```
+
+```
+storage!([xItem, xRet])                  ~           storage.put(x);
+```
+
+```
+storage!([]) |                           ~           storage.put(new Object[0]);   
+@yRet!(xItem) | @xRet!(yItem)            ~           xRet.put(yItem); yRet.put(xItem);
+```
