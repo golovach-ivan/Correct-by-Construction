@@ -3,6 +3,9 @@
 [Exchanger](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Exchanger.html) - a synchronization point at which threads can pair and swap elements within pairs.
 
 Usage example:
+<details><summary>stdout</summary>
+<p>
+    
 ```java
 import java.util.concurrent.*;
 import static java.util.concurrent.ForkJoinPool.commonPool;
@@ -41,6 +44,8 @@ public class Demo {
 >> 4 -> 5
 >> 3 -> 2
 ```
+</p>
+</details><br/>
 </p>
 </details><br/>
 
