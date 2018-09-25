@@ -77,6 +77,18 @@ new Exchanger in {
 ```
 
 ```
+new Exchanger in {                      ~           public class Exchanger {
+  contract Exchanger(input) = {         ~             public Exchanger(Channel input) throws InterruptedException {...}
+    new storage in {                    ~             private Channel storage = new Channel();
+      ...                               ~             ...
+    }                                   ~             ...
+  }                                     ~             ...
+}                                       ~           }
+```
+Каждое обращение к контракту Exchanger создает замыкание включающее аргумент контракта ```input``` и приватный канал ```storage```.
+Каждое обращение к конструктору Exchanger создает замыкание включающее аргумент контракта ```input``` и приватный канал ```storage```.
+
+```
  for (@xItem, @xRet <= input) {          ~           Object[] x = (Object[]) input.take();
                                          ~           Object xItem = x[0];
                                          ~           Channel xRet = (Channel) x[1];                                        
