@@ -1,3 +1,99 @@
+## java.util.concurrent.Exchanger
+
+[Exchanger](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Exchanger.html) - a synchronization point at which threads can pair and swap elements within pairs.
+
+Usage example:
+```java
+import java.util.concurrent.*;
+import static java.util.concurrent.ForkJoinPool.commonPool;
+
+public class Demo {
+    static int N = 6;
+    static Exchanger<Object> exchanger = new Exchanger<>();
+    static CountDownLatch latch = new CountDownLatch(N);
+
+    public static void main(String[] args) throws Exception {
+        for (int my = 0; my < N; my++) {
+            exchange(my);
+        }
+        latch.await();
+    }
+
+    private static void exchange(Object my) throws Exception {
+        commonPool().execute(() -> {
+            try {
+                Object other = exchanger.exchange(my);
+                System.out.println(my + " -> " + other);
+                latch.countDown();
+            } catch (InterruptedException e) {/*NOP*/}
+        });
+    }
+}
+
+>> 1 -> 0
+>> 0 -> 1
+>> 2 -> 3
+>> 5 -> 4
+>> 4 -> 5
+>> 3 -> 2
+```
+
+```Exchanger``` на RhoLang может быть реализован следующим образом
+```
+new Exchanger in {  
+  contract Exchanger(input) = {
+    new storage in {
+      storage!([]) |                         
+      for (@xItem, @xRet <= input) {
+        for (@maybePair <- storage) {
+          match maybePair {
+            [] =>                            
+              storage!([xItem, xRet])        
+            [yItem, yRet] => {               
+              storage!([]) |                 
+              @yRet!(xItem) | @xRet!(yItem) 
+            } 
+          }
+        }
+      }
+    }
+  } 
+```  
+
+Пример использования
+```
+new Exchanger, exchange in {
+  
+  contract Exchanger(input) = {...} |
+
+  contract exchange(@my, input) = {
+    new ret in {
+      input!(my, *ret) | for (@other <- ret) { 
+        stdout!([my, other]) 
+      }
+    }
+  } |
+
+  // Demo  
+  new input, N in {
+    Exchanger!(*input) |
+    N!(0) |
+    for (@my <= N) {
+      if (my < 6) {
+        exchange!(my, *input) | N!(my + 1)
+      }
+    }
+  }
+}
+
+>> [2, 0]
+>> [5, 1]
+>> [0, 2]
+>> [1, 5]
+>> [4, 3]
+>> [3, 4]
+```
+
 Этот код эквивалентен следующему
 
 ```empty --> [] --> empty --> [xItem, xRet] --> empty --> [] --> empty -->  [xItem, xRet] --> empty --> [] -->  ...``` 
