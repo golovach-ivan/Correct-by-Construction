@@ -2,7 +2,12 @@
 
 [Exchanger](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Exchanger.html) - a synchronization point at which threads can pair and swap elements within pairs.
 
-<details><summary>**Демонстрация работы java.util.concurrent.Exchanger**</summary>
+  - [Как используют java.util.concurrent.Exchanger](???)
+  - [Реализация Exchanger на RhoLang](???)
+  - [Трансляция RhoLang решения в Java](???)
+
+### Как используют java.util.concurrent.Exchanger
+<details><summary>Демонстрация работы java.util.concurrent.Exchanger</summary>
 <p>
     
 ```java
@@ -48,6 +53,7 @@ public class Demo {
 </p>
 </details><br/>
 
+### Реализация на RhoLang 
 ```Exchanger``` на RhoLang может быть реализован следующим образом
 ```
  1  new Exchanger in {  
@@ -80,7 +86,8 @@ public class Demo {
   **8-9**. Если в ```storage``` не было елементов для обмена, то сохраняем входящий элемент в ```storage```.  
   **10-12**. Если в ```storage``` был елемент для обмена, то совершаем обмен и сохраняем в ```storage``` пустой список ```[]```.  
 
-Пример использования
+<details><summary>Пример использования</summary>
+<p>
 ```
  1  new Exchanger, exchange in {
  2    
@@ -104,7 +111,7 @@ public class Demo {
 20        }
 21      }
 22    }
-23  }
+23  }                     
 ```
 <details><summary>stdout</summary>
 <p>
@@ -119,8 +126,14 @@ public class Demo {
 ```
 </p>
 </details><br/>
+</p>
+</details><br/>
 
+### Трансляция RhoLang решения в Java
 Этот код эквивалентен следующему
+<details><summary>stdout</summary>
+<p>
+    
 ```java
 import static java.util.concurrent.ForkJoinPool.commonPool;
 
@@ -153,6 +166,8 @@ public class Exchanger {
     }
 }
 ```
+</p>
+</details><br/>
 
 Каждое обращение к контракту Exchanger создает замыкание включающее аргумент контракта ```input``` и новый приватный канал ```storage```.
 Каждое обращение к конструктору Exchanger создает экземпляр класса включающий аргумент конструктора ```input``` и приватное поле ```storage```.
