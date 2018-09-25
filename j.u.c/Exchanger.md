@@ -203,6 +203,10 @@ storage!([]) |                           ~           storage.put(new Object[0]);
 ```
 
 ### Full RhoLang sources
+
+<details><summary>Full RhoLang sources</summary>
+<p>
+  
 ```
 new CountDownLatch in {
   contract CountDownLatch(@initSize, countDown, await) = {
@@ -253,3 +257,5 @@ new CountDownLatch in {
   }
 }
 ```
+</p>
+</details><br/>
