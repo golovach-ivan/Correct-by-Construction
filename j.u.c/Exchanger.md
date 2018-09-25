@@ -65,6 +65,11 @@ public class Demo {
 17      }
 18    } 
 ```  
+**Общая идея**:  
+```storage``` реализует шаблон [```atomic channel```](???). В качестве пустого нейтрального значения используется пустой список ```[]```, в качестве рабочего значения - ```[item, ret]```.
+```empty --> [] --> empty --> [xItem, xRet] --> empty --> [] --> empty -->  [xItem, xRet] --> empty --> [] -->  ...```   
+```[] --> [xItem, xRet] --> [] --> [xItem, xRet] --> [] -->  ...```   
+
   **1-2**. Объявление контракта ```Exchanger```, который будет получать аргументы и возвращать значения через канал ```input```. Клиет будет помещать в ```input``` лист из пары ```[item, ret]```, где ```item``` - это елемент, а ```ret``` - канал, по которому вернут результат обмена.  
   **3-4**. Создаем приватный канал ```storage```, в котором будем хранить ```[item, ret]```, которым пока нет пары. Инициализируем пустым листом ```[]```.    
   **5-6**. В бесконечном цикле каждому входящему елементу сопоставляем состояние ```storage```.  
@@ -96,7 +101,11 @@ public class Demo {
 21      }
 22    }
 23  }
-
+```
+<details><summary>stdout</summary>
+<p>
+  
+```
 >> [2, 0]
 >> [5, 1]
 >> [0, 2]
@@ -104,13 +113,10 @@ public class Demo {
 >> [4, 3]
 >> [3, 4]
 ```
+</p>
+</details><br/>
 
 Этот код эквивалентен следующему
-
-```empty --> [] --> empty --> [xItem, xRet] --> empty --> [] --> empty -->  [xItem, xRet] --> empty --> [] -->  ...``` 
-
-```[] --> [xItem, xRet] --> [] --> [xItem, xRet] --> [] -->  ...``` 
-
 ```java
 import static java.util.concurrent.ForkJoinPool.commonPool;
 
@@ -142,47 +148,6 @@ public class Exchanger {
         });
     }
 }
-```
-
-```
-new Exchanger in {
-  
-  contract Exchanger(input) = {
-    new storage in {
-      storage!([]) |                         
-      for (@xItem, @xRet <= input) {
-        for (@maybePair <- storage) {
-          match maybePair {
-            [] =>                            
-              storage!([xItem, xRet])        
-            [yItem, yRet] => {               
-              storage!([]) |                 
-              @yRet!(xItem) | @xRet!(yItem) 
-            } 
-          }
-        }
-      }
-    }
-  } |
-
-  // Demo
-  new exchange in {
-    Exchanger!(*exchange) |
-    new ret in {exchange!(0, *ret) | for (@other <- ret) {stdout!([0, other])}} |
-    new ret in {exchange!(1, *ret) | for (@other <- ret) {stdout!([1, other])}} |
-    new ret in {exchange!(2, *ret) | for (@other <- ret) {stdout!([2, other])}} |
-    new ret in {exchange!(3, *ret) | for (@other <- ret) {stdout!([3, other])}} |
-    new ret in {exchange!(4, *ret) | for (@other <- ret) {stdout!([4, other])}} |
-    new ret in {exchange!(5, *ret) | for (@other <- ret) {stdout!([5, other])}}
-  }
-}
-
->> [1, 5]
->> [5, 1]
->> [0, 3]
->> [2, 4]
->> [3, 0]
->> [4, 2]
 ```
 
 Каждое обращение к контракту Exchanger создает замыкание включающее аргумент контракта ```input``` и новый приватный канал ```storage```.
