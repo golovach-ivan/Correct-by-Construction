@@ -40,51 +40,56 @@ public class Demo {
 
 ```Exchanger``` на RhoLang может быть реализован следующим образом
 ```
-new Exchanger in {  
-  contract Exchanger(input) = {
-    new storage in {
-      storage!([]) |                         
-      for (@xItem, @xRet <= input) {
-        for (@maybePair <- storage) {
-          match maybePair {
-            [] =>                            
-              storage!([xItem, xRet])        
-            [yItem, yRet] => {               
-              storage!([]) |                 
-              @yRet!(xItem) | @xRet!(yItem) 
-            } 
-          }
-        }
-      }
-    }
-  } 
+ 1  new Exchanger in {  
+ 2    contract Exchanger(input) = {
+ 3      new storage in {
+ 4        storage!([]) |                         
+ 5        for (@xItem, @xRet <= input) {
+ 6          for (@maybePair <- storage) {
+ 7            match maybePair {
+ 8              [] =>                            
+ 9                storage!([xItem, xRet])        
+10              [yItem, yRet] => {               
+11                storage!([]) |                 
+12                @yRet!(xItem) | @xRet!(yItem) 
+13              } 
+14            }
+15          }
+16        }
+17      }
+18    } 
 ```  
+  1-2. Объявление контракта ```Exchanger```, который будет получать аргументы и возвращать значения через канал ```input```. Клиет будет помещать в ```input``` лист из пары ```[item, ret]```, где ```item``` - это елемент, а ```ret``` - канал, по которому вернут результат обмена.  
+  3-4. Создаем приватный канал ```storage```, в котором будем хранить ```[item, ret]```, которым пока нет пары. Инициализируем пустым листом ```[]```.    
+  5-6. В бесконечном цикле каждому входящему елементу сопоставляем состояние ```storage```.  
+  8-9. Если в ```storage``` не было елементов для обмена, то сохраняем входящий элемент в ```storage```.  
+  10-12. Если в ```storage``` был елемент для обмена, то совершаем обмен и сохраняем в ```storage``` пустой список ```[]```.  
 
 Пример использования
 ```
-new Exchanger, exchange in {
-  
-  contract Exchanger(input) = {...} |
-
-  contract exchange(@my, input) = {
-    new ret in {
-      input!(my, *ret) | for (@other <- ret) { 
-        stdout!([my, other]) 
-      }
-    }
-  } |
-
-  // Demo  
-  new input, N in {
-    Exchanger!(*input) |
-    N!(0) |
-    for (@my <= N) {
-      if (my < 6) {
-        exchange!(my, *input) | N!(my + 1)
-      }
-    }
-  }
-}
+ 1  new Exchanger, exchange in {
+ 2    
+ 3    contract Exchanger(input) = {...} |
+ 4  
+ 5    contract exchange(@my, input) = {
+ 6      new ret in {
+ 7        input!(my, *ret) | for (@other <- ret) { 
+ 8          stdout!([my, other]) 
+ 9        }
+10      }
+11    } |
+12  
+13    // Demo  
+14    new input, N in {
+15      Exchanger!(*input) |
+16      N!(0) |
+17      for (@my <= N) {
+18        if (my < 6) {
+19          exchange!(my, *input) | N!(my + 1)
+20        }
+21      }
+22    }
+23  }
 
 >> [2, 0]
 >> [5, 1]
