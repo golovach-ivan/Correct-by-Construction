@@ -1,7 +1,9 @@
 ## java.util.concurrent.locks.Lock
 A [Lock](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/locks/Lock.html) is a tool for controlling access to a shared resource by multiple threads. Commonly, a lock provides exclusive access to a shared resource: only one thread at a time can acquire the lock and all access to the shared resource requires that the lock be acquired first. 
 
-
+- Как используют java.util.concurrent.locks.Lock
+- Реализация Lock на RhoLang
+- Трансляция RhoLang решения в Java
 
 ```
 new Cell in {
