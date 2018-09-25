@@ -2,6 +2,8 @@
 
 ```empty --> [] --> empty --> [xItem, xRet] --> empty --> [] --> empty -->  [xItem, xRet] --> empty --> [] -->  ...``` 
 
+```[] --> [xItem, xRet] --> [] --> [xItem, xRet] --> [] -->  ...``` 
+
 ```java
 import static java.util.concurrent.ForkJoinPool.commonPool;
 
