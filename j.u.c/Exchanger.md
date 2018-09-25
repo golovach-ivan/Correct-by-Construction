@@ -76,6 +76,8 @@ new Exchanger in {
 >> [4, 2]
 ```
 
+Каждое обращение к контракту Exchanger создает замыкание включающее аргумент контракта ```input``` и новый приватный канал ```storage```.
+Каждое обращение к конструктору Exchanger создает экземпляр класса включающий аргумент конструктора ```input``` и приватное поле ```storage```.
 ```
 new Exchanger in {                      ~           public class Exchanger {
   contract Exchanger(input) = {         ~             public Exchanger(Channel input) throws InterruptedException {...}
@@ -85,13 +87,22 @@ new Exchanger in {                      ~           public class Exchanger {
   }                                     ~             ...
 }                                       ~           }
 ```
-Каждое обращение к контракту Exchanger создает замыкание включающее аргумент контракта ```input``` и приватный канал ```storage```.
-Каждое обращение к конструктору Exchanger создает замыкание включающее аргумент контракта ```input``` и приватный канал ```storage```.
 
+Создание каждого замыкание включает инициализацию приватного канала ```storage``` пустым сообщнием. Создание каждого экземпляра класса включает инициализацию приватного поля ```storage``` пустым сообщением.
 ```
- for (@xItem, @xRet <= input) {          ~           Object[] x = (Object[]) input.take();
-                                         ~           Object xItem = x[0];
-                                         ~           Channel xRet = (Channel) x[1];                                        
+storage!([])                             ~           this.storage.put(new Object[0]);
+```
+
+Исполнение контракта представляет собой неограниченной чтение из канала ```input``` в пару переменных ```xItem``` и ```xRet```. Создание экземпляра включает создание потока, неограниченно читающего из очереди ```input```.
+```
+for (@xItem, @xRet <= input) {           ~           commonPool().execute(() -> {
+                                         ~             while (true) {
+                                         ~               Object[] x = (Object[]) input.take();
+                                         ~               Object xItem = x[0];
+                                         ~               Channel xRet = (Channel) x[1];                                        
+  ...                                    ~               ...
+                                         ~             }
+}                                        ~           }
 ```
 
 ```
