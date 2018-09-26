@@ -45,11 +45,9 @@ new ping: T2 in {
 ### K Framework
 
 ### Bisimulation
-Next contract are weak barbed bisimilar. 
+Next contract are weak barbed bisimilar (```impl ≈ spec```). 
 ```
 contract spec(ack) = { ack!([]) }
-```
-```
 contract impl(ack) = { new foo in { foo!(*ack) | for (val <- foo) { val!([]) } } }
 ```
 **Good** 
