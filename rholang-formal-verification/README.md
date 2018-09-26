@@ -32,13 +32,23 @@ new ping: T2 in {
 #### Proc and Cons
 **Proc**  
 - достаточно просто в реализации
-- можно поддерживать множественные системы типов (TypeScript/CoffeScript for JavaScript)  
+- можно поддерживать множественные системы типов (Liveness/Safety, Security, ...) (TypeScript/CoffeScript for JavaScript) 
+- можно типизировать/специфицировать произвольную часть кода
+- легко изучается и внедряется программистом RhoLang
 
 **Cons**  
 - невозможно задать точную спецификацию программы
 - невозможно выразить все требуемые свойства
 
 ### SAT Solvers
+Возможно расширить язык механизмом asserts (require, ensure, ...)
+
+```
+new ping in {
+  
+  contract ping(ret) = { ret!([]) }
+}
+```
 
 ### General Theorem Provers
 
