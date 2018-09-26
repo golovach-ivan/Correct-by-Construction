@@ -86,8 +86,14 @@ contract search(@elem, @arr, result) = {
 ### Bisimulation
 Next contract are weak barbed bisimilar (```impl ≈ spec```). 
 ```
-contract spec(ack) = { ack!([]) }
-contract impl(ack) = { new foo in { foo!(*ack) | for (val <- foo) { val!([]) } } }
+≈ (ack) = { ack!([]) }
+contract ping(ack) = { 
+  new foo in { 
+    foo!(*ack) | for (val <- foo) { 
+      val!([]) 
+    } 
+  } 
+}
 ```
 **Good** 
   - спецификация пишется на том же языке (RhoLang), что и имплементация  
