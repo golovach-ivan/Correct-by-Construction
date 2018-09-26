@@ -1,6 +1,11 @@
 ## RhoLang Formal Verification (proposals)
-- propertie checking
+What
+- property checking
 - equational reasoning
+
+How
+- легко изучается и пишется программистом (небольшое расширение языка, или спецификация на языке)
+- спецфикация большая, гороздкая, тяжелая в изучении и написании
 
 ### Extended Type System
 RhoCalculi is a async polyadic π-calculus. Для этого типа исчислений есть литература по внедрению различных систем типизации, согласованных именно для исчислений процессов.
