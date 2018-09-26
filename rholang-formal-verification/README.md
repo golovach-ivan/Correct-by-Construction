@@ -2,8 +2,11 @@
 
 ### Extended Type System
 RhoCalculi is a async polyadic π-calculus. Для этого типа исчислений есть литература по внедрению различных систем типизации, согласованных именно для исчислений процессов.
+- A Linear Typs
+- A Session Types
 
-#### A Linear Type System
+
+#### Example: A Linear Type System
 ```T1``` - тип канала, не допускающий чтение и требующий еденичную запись процесса ```[]```.  
 ```T2``` - тип канала, допускающий произвольное количество чтений каналов типа ```T1``` и не допускающий запись.  
 ```
@@ -20,6 +23,20 @@ new ping: T2 in {
 ```contract ping(ret: T1) = { ret!([]) | ret!([]) }``` - множественные записи в канал ret.  
 ```contract ping(ret: T1) = { ret!(0) }``` - запись в канал ret неверного типа.  
 
+#### Implementation
+Реализовано может быть в виде
+- расширенной срецификации типизированного языка (RhoLang Typed)
+- typechecker for RhoLang Typed
+- translator: RhoLang Typed to RhoLang
+
+#### Proc and Cons
+**Proc**  
+- достаточно просто в реализации
+- можно поддерживать множественные системы типов (TypeScript/CoffeScript for JavaScript)  
+
+**Cons**  
+- невозможно задать точную спецификацию программы
+- невозможно выразить все требуемые свойства
 
 ### SAT Solvers
 
