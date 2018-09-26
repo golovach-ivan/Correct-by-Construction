@@ -13,7 +13,10 @@ The main ongoing use case of F* is building a verified, drop-in replacement for 
                /+---> | Z3 |
 +------------+/       +----+
 | F* sources |
-+------------+
++------------+\                    /+---> C 
+               \+ extracted to ---+-----> F#
+                                   \+---> Ocaml
+
 ```
 
 Алгоритмы пишутся на F*.
