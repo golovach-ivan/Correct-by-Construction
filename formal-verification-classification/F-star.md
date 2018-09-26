@@ -1,5 +1,10 @@
 ## F*
-F*: An ML-like language aimed at program verification.
+
+F* (pronounced F star) is a general-purpose ML-like functional programming language with effects aimed at program verification. It puts together the automation of an SMT-backed deductive verification tool with the expressive power of a proof assistant based on dependent types. After verification, F* programs can be extracted to efficient OCaml, F#, or C code. This enables verifying the functional correctness and security of realistic applications, such as a verified HTTPS stack. 
+
+F*'s type system includes dependent types, monadic effects, refinement types, and a weakest precondition calculus. Together, these features allow expressing precise and compact specifications for programs, including functional correctness and security properties. The F* type-checker aims to prove that programs meet their specifications using a combination of SMT solving and interactive proofs. 
+
+The main ongoing use case of F* is building a verified, drop-in replacement for the whole HTTPS stack in [Project Everest](https://project-everest.github.io/). This includes verified implementations of [TLS 1.2 and 1.3](https://github.com/mitls/mitls-fstar) including [the underlying cryptographic primitives](https://github.com/mitls/hacl-star). Moreover, while F* is extracted to OCaml by default, [a subset of F* can be compiled to C for efficiency](https://github.com/FStarLang/kremlin).
 
 ### Как используется язык
 
