@@ -1,4 +1,6 @@
 ## RhoLang Formal Verification (proposals)
+- propertie checking
+- equational reasoning
 
 ### Extended Type System
 RhoCalculi is a async polyadic π-calculus. Для этого типа исчислений есть литература по внедрению различных систем типизации, согласованных именно для исчислений процессов.
@@ -41,14 +43,36 @@ new ping: T2 in {
 - невозможно выразить все требуемые свойства
 
 ### SAT Solvers
-Возможно расширить язык механизмом asserts (require, ensure, ...)
-
-```
-new ping in {
-  
-  contract ping(ret) = { ret!([]) }
+Возможно расширить язык механизмом asserts (require, ensure, ...) и при верификации транслировать программу во входные данные для SMT Solver (Z3).
+```  
+# ensures \result == -1 ==> (\forall int i; 0 <= i && i < arr.length; arr[i] != key);
+# ensures 0 <= \result ==> arr[\result] == key;
+contract search(@elem, @arr, result) = {  
+  match arr {
+    [] => result!(-1)
+    [head...tail] => {
+      if (head == elem) { 
+        result!(0)
+      } else {
+        new tailRet in {
+          search!(elem, tail, *tailRet) | for (@tailIndex <- tailRet) {
+            result!(tailIndex + 1)
+          }
+        }
+      }
+    }
+  }
 }
 ```
+#### Proc and Cons
+**Proc**  
+- легко изучается и внедряется программистом RhoLang (небольшое расширение языка)
+- есть багатая литература и примеры реализации для различных языков
+
+**Cons**  
+- непонятно, как это работает для динамически типизируемого языка RhoLang
+- непонятно, как это работает для process-oriented языка RhoLang
+- SMT Solver хорошо работают для специфических данных
 
 ### General Theorem Provers
 
