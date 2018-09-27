@@ -1,6 +1,7 @@
 **Arithmetic**  
   - add
   - mul
+  - swap add/xor
   
 **32-bit arithmetic**  
   - abs
