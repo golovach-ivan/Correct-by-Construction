@@ -20,4 +20,8 @@ contract sort(@arr, ret) = {
 ???
 
 #### Linear Search
-???
+
+```
+_(ensures \result != -1 ==> ar[\result] == elt)
+_(ensures \forall unsigned i; i < sz && i < \result ==> ar[i] != elt)
+```
