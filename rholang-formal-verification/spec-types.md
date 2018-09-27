@@ -17,7 +17,21 @@ contract sort(@arr, ret) = {
 ```
 
 #### Binary Search
-???
+https://rise4fun.com/SpecSharp/BinarySearch
+```
+  public static int BinarySearch(int[] a, int key)
+    requires forall{int i in (0: a.Length), int j in (i: a.Length); a[i] <= a[j]};
+    ensures 0 <= result ==> a[result] == key;
+    ensures result < 0 ==> forall{int i in (0: a.Length); a[i] != key};
+```
+
+https://rise4fun.com/OpenJMLESC/BinarySearch
+```
+    //@ requires (\forall int i, j; 0 <= i && i < j && j < arr.length; arr[i] <= arr[j]);
+    //@ ensures \result == -1 ==> (\forall int i; 0 <= i && i < arr.length; arr[i] != key);
+    //@ ensures 0 <= \result && \result < arr.length ==> arr[\result] == key;
+    public static int BinarySearch(int[] arr, int key) {
+```
 
 #### Linear Search
 
