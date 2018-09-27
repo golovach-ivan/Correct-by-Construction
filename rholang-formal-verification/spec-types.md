@@ -2,7 +2,7 @@
 
 ### Совокупность свойств однозначно определяющая функционал
 
-#### Search
+#### Sort
 https://rise4fun.com/Boogie/Bubble
 ```
 ensures (forall i, j: int :: 0 <= i && i <= j && j < N ==> a[i] <= a[j]);
