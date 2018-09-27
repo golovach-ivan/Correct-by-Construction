@@ -29,3 +29,18 @@ contract ping(ret) = {
 }
 ```
 indirrect mutually recursive unbounded recursion.  
+
+```
+contract ping(ret) = {
+  new foo, bar in {
+    for (_ <- foo) { 
+      bar!(Nil) 
+    } |
+    for (_ <- bar) { 
+      foo!(Nil) | 
+      ret!(Nil) 
+    }
+  }
+}
+```
+deadlock
