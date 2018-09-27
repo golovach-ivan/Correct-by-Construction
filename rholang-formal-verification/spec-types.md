@@ -1,3 +1,7 @@
+### Equality
+  - Z3: bit count
+  - ping server
+
 ### General properties
 - ackermann is total function
 
