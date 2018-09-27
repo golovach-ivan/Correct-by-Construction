@@ -43,3 +43,16 @@ new lock, unlock in {
   }
 }
 ```
+
+### Errors
+
+#### lock without paired unlock
+```lock {}``` - no unlock.   
+```lock {if (?) { unlock } else { Nil }}``` - no stable unlock.   
+```lock { inf-recursion { unlock } }``` - inf-recursion + unlock.   
+```lock { deadlock { unlock } }``` - deadlock + unlock.   
+```lock | unlock``` - unordered lock/unlock.    
+
+#### multiple unlock
+```lock { unlock | unlock }```    
+
