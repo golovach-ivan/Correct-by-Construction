@@ -1,4 +1,5 @@
 ### General properties
+- ackermann is total function
 
 ### Совокупность свойств однозначно определяющая функционал
 
