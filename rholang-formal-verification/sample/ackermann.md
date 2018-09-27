@@ -19,11 +19,11 @@ contract ackermann(m, n, ret) = {
     ret!(n + 1)
   } else {
     if (n < 0) {
-        ackermann(m - 1, 1, ret)
+        ackermann(m - 1, 1, *ret)
     } else {
       new foo in {
-        ackermann(m, n - 1, foo) | for (@newN <- foo) {
-          ackermann(m - 1, newN, ret)
+        ackermann(m, n - 1, *foo) | for (@newN <- foo) {
+          ackermann(m - 1, *newN, *ret)
         }
       }      
     }
