@@ -2,10 +2,17 @@
   - Z3: bit count
   - ping server
 
-### General properties
+### Total Spec: Совокупность свойств однозначно определяющая функционал
+  - dafny - lsearch, bsearch, sort
+
+### General properties: Liveness/Safety
 - ackermann is total function
 
-### Совокупность свойств однозначно определяющая функционал
+### Specific functionality: security
+
+### Specific Model: OCAP, spatial
+
+### Behavior: ???
 
 #### Sort
 https://rise4fun.com/Boogie/Bubble
