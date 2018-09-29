@@ -69,7 +69,30 @@ new lock: #{ !|∗(?.!) } in
 ```
 
 #### Allowed incorrect
-???
+```
+new lock: #{ !|∗(?.!) } in
+  lock!(Nil) |                                            
+  for (_ <- lock) {           
+    new UNKNOWN in {            
+      for (_ <- UNKNOWN) {
+        lock!(Nil)
+      }
+    }
+  }
+}
+```
+
+```
+new lock: #{ !|∗(?.!) } in
+  lock!(Nil) |                                            
+  for (_ <- lock) {           
+    new x, y in {
+      for (_ <- x) { y!(Nil) } | 
+      for (_ <- y) { x!(Nil) | lock!(Nil) }
+    }
+  }
+}
+```
 
 #### Links 
 - ??? Kobayashi, 2003, Type Systems for Concurrent Programs - EXTENDED
