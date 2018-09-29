@@ -12,6 +12,7 @@ RhoCalculi is a async polyadic π-calculus. Для этого типа исчи�
 - A Linear Typs
 - A Session Types
 
+Although weaker than a full-blown program-verification calculus, the type system is effective and easy to apply.
 
 #### Example: A Linear Type System
 ```T1``` - тип канала, не допускающий чтение и требующий еденичную запись процесса ```[]```.  
