@@ -14,4 +14,4 @@ contract factorial(@n, @x, r) = {
 Not ```factorial!(n - 1, x * n, r)``` but ```factorial!(n, x * n, r)```.
 
 ### From
-Kobayashi, 2003, Type systems for concurrent programs (extended)
+  - - Kobayashi N. (2003) Type Systems for Concurrent Programs. Lecture Notes in Computer Science, vol 2757. Springer, Berlin, Heidelberg.
