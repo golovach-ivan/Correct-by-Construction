@@ -2,6 +2,8 @@
 
 Lets put into channel types information **in which order** channels are used for input and output. 
 
+A usage [16] is a part of a channel type and describes for which operations (input or output) and in which order channels can and/or must be used.
+
 ### Example: Lock
 A channel can be used as a lock. It, however, works correctly only if the channel is used in an intended manner: When the channel is created, one message should be put into the channel (to model the unlocked state). Afterwards, a process should receive a message from the channel to acquire the lock, and after acquiring the lock, it should eventually release the lock.
 
