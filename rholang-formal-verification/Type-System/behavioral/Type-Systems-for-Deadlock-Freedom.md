@@ -16,6 +16,35 @@
 
 ## Type Systems for Deadlock-Freedom
 
+#### Common locks vs process calculi
+В случае обычных блокировок имеется единственный тип deadlock - циклическая зависимость между блокировками.
+```
+X.lock();Y.lock() | Y.lock();X.lock()
+```
+Решением является введение *lock level* и взатие всеми потоками всех блокировок исключительно в порядке возрастания *lock level*.
+
+В случае process calculi наравне с таким типом циклических блокировок
+```
+new X, Y in {
+  for (_ <- X) {Y!(Nil) | ...} |
+  for (_ <- Y) {X!(Nil) | ...}
+}
+```
+
+Возможна блокировка типа чтения из канала в который ничего не будет записано.  
+Вот так
+```
+new X in {
+  for (_ <- X) {...}
+}
+```
+или так (канал *get* никто не случает и потому никто не ответит в канал *ret*)
+```
+new get, ret in {
+  get!(ret) | (_ <- ret) {...}
+}
+```
+
 #### Obligation level
 
 Intuitively, the obligation level of an action denotes the degree of the necessity of the action being executed.
