@@ -1,37 +1,19 @@
 ## Type System with Channel Usage
+
+Lets put into channel types information **in which order** channels are used for input and output. 
+
+### Example: Lock
 A channel can be used as a lock. It, however, works correctly only if the channel is used in an intended manner: When the channel is created, one message should be put into the channel (to model the unlocked state). Afterwards, a process should receive a message from the channel to acquire the lock, and after acquiring the lock, it should eventually release the lock.
 
 A lock can be implemented using a communication channel. Since a receiver on a channel is blocked until a message becomes available, the locked state can be modeled by the absence of a message in the lock channel, and the unlocked state can be modeled by the presence of a message. The operation to acquire a lock is implemented as the operation to receive a message along the lock channel, and the operation to release the lock as the operation to send a message on the channel.
 
-
-
-### Type
-Usage **0** describes a channel that cannot be used at all.   
-Usage **?.U** describes a channel that is first used for input and then used according to U.   
-Usage **!.U** describes a channel that is first used for output and then used according to U.   
-Usage **U1 | U2** describes a channel that is used according to U1 and U2 possibly in parallel.   
-Usage **U1 & U2** describes a channel that is used according to either U1 or U2.   
-Usage **µρ.U** describes a channel that is used recursively according to [µρ.U/ρ]U.   
-
-**∗U** is short for µρ.(0 & (U | ρ)).  
-**ωU** is short for µρ.(U | ρ).  
- 
-#### Examples
-**µρ.(0 & (!.ρ))** describes a channel that can be sequentially used for output an arbitrary number of times.  
-
-**µρ.(?.!.ρ)** describes a channel that should be used for input and output alternately. 
-
-
-
-####
 For example, the following process increment the state of the object using a lock channel *lock*
 ```
-new Cell in {
-  contract Cell(get, set) = {
-    ...
-  } |
+new Cell, get, set in {
+  contract Cell(get, set) = { ... } |
+  Cell(get, set) |
 
-  new get, set, lock: #{ !|∗(?.!) } in
+  new lock in
     lock!(Nil) |                                            // INIT LOCK (set the unlocked state)
     for (_ <- lock) {                                       // LOCK
         new retGet, ackSet in {
@@ -45,7 +27,49 @@ new Cell in {
   }
 }
 ```
-Typed only *lock* channel not *get*, *set* and *Cell*.
+
+### Type
+Usage **0** describes a channel that cannot be used at all.   
+Usage **?.U** describes a channel that is first used for input and then used according to U.   
+Usage **!.U** describes a channel that is first used for output and then used according to U.   
+Usage **U1 | U2** describes a channel that is used according to U1 and U2 possibly in parallel.   
+Usage **U1 & U2** describes a channel that is used according to either U1 or U2.   
+Usage **µρ.U** describes a channel that is used recursively according to \[µρ.U/ρ\]U.   
+
+**∗U** is short for µρ.(0 & (U | ρ)).  
+**ωU** is short for µρ.(U | ρ).  
+ 
+#### Examples
+**µρ.(0 & (!.ρ))** describes a channel that can be sequentially used for output an arbitrary number of times.  
+**µρ.(?.!.ρ)** describes a channel that should be used for input and output alternately.  
+
+#### Prohibited incorrect
+```
+new lock: #{ !|∗(?.!) } in
+  for (_ <- lock) {           // ??? prohibited, lock without init
+    lock!(Nil) 
+  }
+}
+```
+```
+new lock: #{ !|∗(?.!) } in
+  lock!(Nil) |                                            
+  for (_ <- lock) {                                       
+    lock!(Nil) | lock!(Nil)   // prohibited, double unlock
+  }
+}
+```
+```
+new lock: #{ !|∗(?.!) } in
+  lock!(Nil) |                                            
+  for (_ <- lock) {           // ??? prohibited, double lock
+    for (_ <- lock) {Nil}    
+  }
+}
+```
+
+#### Allowed incorrect
+???
 
 #### Links 
 - ??? Kobayashi, 2003, Type Systems for Concurrent Programs - EXTENDED
