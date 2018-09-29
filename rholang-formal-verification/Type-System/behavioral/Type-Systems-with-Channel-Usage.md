@@ -1,4 +1,4 @@
-## Type System with Channel Usage
+## Type Systems with Channel Usage
 
 Lets put into channel types information **in which order** channels are used for input and output. 
 
