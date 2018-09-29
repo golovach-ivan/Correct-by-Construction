@@ -14,7 +14,7 @@
 #### - P.Q - какие требования к соотношению obligation/capability между P и Q?
 ```P<a,b>.Q<c,d>``` => ```b < c```
 
-## A Type System for Deadlock-Freedom
+## A Type Systems for Deadlock-Freedom
 
 #### Obligation level
 
