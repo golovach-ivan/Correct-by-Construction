@@ -1,4 +1,4 @@
-## A Type Systems for Lock-Freedom
+## Type Systems for Lock-Freedom
 
 
 
