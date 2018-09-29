@@ -1,4 +1,4 @@
-## A Type System for Termination
+## A Type Systems for Termination
 
 ### Links
   - Y. Deng and D. Sangiorgi. Ensuring termination by typability. Info. Comput., 204(7):1045–1082, 2006.
