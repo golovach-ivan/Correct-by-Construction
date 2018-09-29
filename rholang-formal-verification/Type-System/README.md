@@ -1,5 +1,7 @@
 ## Type Systems for Rholang
 
+There has been no satisfactorily general framework of type systems for concurrent programming languages: most type systems have been designed in a rather ad hoc manner for guaranteeing certain specific properties.
+
 ### Behavioral Type Systems
   - [Linear Type Systems](behavioral/Linear-Type-Systems.md)
   - [Type Systems with Channel Usage](behavioral/Type-Systems-with-Channel-Usage.md)
