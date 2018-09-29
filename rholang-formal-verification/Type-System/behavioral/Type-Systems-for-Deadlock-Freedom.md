@@ -20,7 +20,7 @@
 
 Intuitively, the obligation level of an action denotes the degree of the necessity of the action being executed.
 
-Its obligation level *to* means that a process can exercise capabilities of level less than *to* before fulfilling the obligation to perform an output on the channel.
+Its obligation level *t<sub>o</sub>* means that a process can exercise capabilities of level less than *t<sub>o</sub>* before fulfilling the obligation to perform an output on the channel.
 
 If the obligation level is 0, the channel must be used for action immediately. 
 
@@ -29,7 +29,7 @@ If the obligation level is ∞, arbitrary actions can be performed before the ch
 #### Capability level
 Intuitively, the capability level of an action denotes the degree of the guarantee for the success of the action.
 
-The capability level *tc* means that the success of an output on the channel is guaranteed by a corresponding input action with an obligation level of less than or equal to *tc*. In other words, some process has an obligation of level less than or equal to *tc* to use the channel for input.
+The capability level *t<sub>c</sub>* means that the success of an output on the channel is guaranteed by a corresponding input action with an obligation level of less than or equal to *t<sub>c</sub>*. In other words, some process has an obligation of level less than or equal to *t<sub>c</sub>* to use the channel for input.
 
 If the capability level is ∞, the success of the action is not guaranteed.
 
