@@ -45,6 +45,9 @@ new get, ret in {
 }
 ```
 
+Потому в случае process calculi с каждым action (input(?), output(!)) вводится **два** уровня: obligation level and capability level
+!\<t<sub>o</sub>, t<sub>c</sub>\>, ?\<t<sub>o</sub>, t<sub>c</sub>\>.
+
 #### Obligation level
 
 Intuitively, the obligation level of an action denotes the degree of the necessity of the action being executed.
