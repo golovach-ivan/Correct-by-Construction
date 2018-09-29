@@ -51,4 +51,7 @@ The part !<t,∞> means that once a process has acquired the lock, it has an obl
 
 
 #### Links
-[19, 24, 44].
+  - Kobayashi N. (2003) Type Systems for Concurrent Programs. Lecture Notes in Computer Science, vol 2757. Springer, Berlin, Heidelberg.
+  - N. Kobayashi. A partially deadlock-free typed process calculus. ACM Trans. Prog. Lang. Syst., 20(2):436–482, 1998.
+  - N. Kobayashi, S. Saito, and E. Sumii. An implicitly-typed deadlock-free process calculus. In Proc. of CONCUR2000, volume 1877 of LNCS, pages 489–503. Springer-Verlag, August 2000.
+  - E. Sumii and N. Kobayashi. A generalized deadlock-free process calculus. In Proc. of Workshop on High-Level Concurrent Language (HLCL’98), volume 16(3) of ENTCS, pages 55–77, 1998.
