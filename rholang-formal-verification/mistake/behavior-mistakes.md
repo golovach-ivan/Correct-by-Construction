@@ -1,4 +1,4 @@
-### Ordering errors
+### Ordering errors, ???race condition
 ```init -> *(lock, unlock)```
 
 ### Deadlock
