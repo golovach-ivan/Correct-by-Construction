@@ -55,3 +55,6 @@ The part !<t,∞> means that once a process has acquired the lock, it has an obl
   - N. Kobayashi. A partially deadlock-free typed process calculus. ACM Trans. Prog. Lang. Syst., 20(2):436–482, 1998.
   - N. Kobayashi, S. Saito, and E. Sumii. An implicitly-typed deadlock-free process calculus. In Proc. of CONCUR2000, volume 1877 of LNCS, pages 489–503. Springer-Verlag, August 2000.
   - E. Sumii and N. Kobayashi. A generalized deadlock-free process calculus. In Proc. of Workshop on High-Level Concurrent Language (HLCL’98), volume 16(3) of ENTCS, pages 55–77, 1998.
+  - N. Kobayashi, B. C. Pierce, and D. N. Turner. Linearity and the pi-calculus. ACM Transactions on Programming Languages and Systems, 21(5):914–947, 1999.
+  - F. Puntigam and C. Peter. Changeable interfaces and promised messages for concurrent components. In Proceedings of the 1999 ACM Symposium on Applied Computing, pages 141–145, 1999.
+  - N. Yoshida. Graph types for monadic mobile processes. In FST/TCS’16, volume 1180 of Lecture Notes in Computer Science, pages 371–387. Springer-Verlag, 1996.
