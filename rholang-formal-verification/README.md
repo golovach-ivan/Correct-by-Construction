@@ -1,3 +1,7 @@
+Formal verification: mathematically prove the correctness of a design with respect to a mathematical formal specification.
+  1. Formalize the specification
+  2. Prove that the impl satisfies the spec
+
 ## RhoLang Formal Verification (proposals)
 What
 - property checking
