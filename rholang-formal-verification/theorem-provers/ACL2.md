@@ -66,4 +66,41 @@ ACL2!>(defthm associativity-of-app
                (app a (app b c)))) 
 ```
 
+Its talk to you
+```
+Name the formula above *1. 
+ 
+Perhaps we can prove *1 by induction.  Three induction schemes are 
+suggested by this conjecture.  Subsumption reduces that number to two. 
+However, one of these is flawed and so we are left with one viable 
+candidate. 
+ 
+We will induct according to a scheme suggested by (APP A B).  If we 
+let  (:P A B C) denote *1 above then the induction scheme we'll use 
+is 
+(AND 
+   (IMPLIES (AND (NOT (ENDP A)) 
+                 (:P (CDR A) B C)) 
+            (:P A B C)) 
+   (IMPLIES (ENDP A) (:P A B C))). 
+This induction is justified by the same argument used to admit APP, 
+namely, the measure (ACL2-COUNT A) is decreasing according to the relation 
+O< (which is known to be well-founded on the domain recognized 
+by O-P).  When applied to the goal at hand the above induction 
+scheme produces the following two nontautological subgoals. 
+```
 
+and summary
+```
+Summary 
+Form:  ( DEFTHM ASSOCIATIVITY-OF-APP ...) 
+Rules: ((:REWRITE CDR-CONS) 
+        (:REWRITE CAR-CONS) 
+        (:DEFINITION NOT) 
+        (:DEFINITION ENDP) 
+        (:FAKE-RUNE-FOR-TYPE-SET NIL) 
+        (:DEFINITION APP)) 
+Warnings:  None 
+Time:  0.27 seconds (prove: 0.10, print: 0.05, other: 0.12) 
+ ASSOCIATIVITY-OF-APP 
+```
