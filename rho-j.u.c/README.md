@@ -1,3 +1,36 @@
+## Package java.util.concurrent
+This package includes a few small standardized extensible frameworks, as well as some classes that provide useful functionality and are otherwise tedious or difficult to implement.
+
+[Runnable](https://docs.oracle.com/javase/9/docs/api/java/lang/Runnable.html) interface should be implemented by any class whose instances are intended to be executed by a thread. The class must define a method of no arguments called run.
+
+[Callable](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Callable.html) is a task that returns a result and may throw an exception. Implementors define a single method with no arguments called call.
+
+The Callable interface is similar to Runnable, in that both are designed for classes whose instances are potentially executed by another thread. A Runnable, however, does not return a result and cannot throw a checked exception.
+
+[Future](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Future.html) returns the results of a function, allows determination of whether execution has completed, and provides a means to cancel execution. A Future represents the result of an asynchronous computation. Methods are provided to check if the computation is complete, to wait for its completion, and to retrieve the result of the computation. The result can only be retrieved using method get when the computation has completed, blocking if necessary until it is ready. Cancellation is performed by the cancel method. Additional methods are provided to determine if the task completed normally or was cancelled. 
+
+[Executor](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Executor.html) is a simple standardized interface for defining custom thread-like subsystems, including thread pools, asynchronous I/O, and lightweight task frameworks. An object that executes submitted Runnable tasks. This interface provides a way of decoupling task submission from the mechanics of how each task will be run
+
+[ConcurrentLinkedQueue](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/ConcurrentLinkedQueue.html) class supplies an efficient scalable thread-safe non-blocking FIFO queue. An unbounded thread-safe queue based on linked nodes. This queue orders elements FIFO (first-in-first-out). 
+
+#### Synchronizers
+
+[Semaphore](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Semaphore.html) is a classic concurrency tool. A counting semaphore. Conceptually, a semaphore maintains a set of permits. Each acquire() blocks if necessary until a permit is available, and then takes it. Each release() adds a permit, potentially releasing a blocking acquirer.
+
+[CountDownLatch](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/CountDownLatch.html) is a very simple yet very common utility for blocking until a given number of signals, events, or conditions hold. A synchronization aid that allows one or more threads to wait until a set of operations being performed in other threads completes. A CountDownLatch is initialized with a given count. The await methods block until the current count reaches zero due to invocations of the countDown() method, after which all waiting threads are released and any subsequent invocations of await return immediately. 
+
+[CyclicBarrier](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/CyclicBarrier.html) a resettable multiway synchronization point useful in some styles of parallel programming. A synchronization aid that allows a set of threads to all wait for each other to reach a common barrier point. CyclicBarriers are useful in programs involving a fixed sized party of threads that must occasionally wait for each other. 
+
+CountDownLatch is a one-shot phenomenon -- the count cannot be reset. If you need a version that resets the count, consider using a CyclicBarrier. The barrier is called cyclic because it can be re-used after the waiting threads are released. A CyclicBarrier supports an optional barrier action ??? is useful for updating shared-state before any of the parties continue.
+
+[Phaser](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Phaser.html) provides a more flexible form of barrier that may be used to control phased computation among multiple threads. A reusable synchronization barrier, similar in functionality to CyclicBarrier and CountDownLatch but supporting more flexible usage.
+
+[Exchanger](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Exchanger.html) allows two threads to exchange objects at a rendezvous point, and is useful in several pipeline designs. A synchronization point at which threads can pair and swap elements within pairs. Each thread presents some object on entry to the exchange method, matches with a partner thread, and receives its partner's object on return. Exchangers may be useful in applications such as genetic algorithms and pipeline designs.
+
+[ConcurrentMap](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/ConcurrentMap.html) ???.
+
+
+
 ### You can block on any pattern
 **structure pattern**  
 block on linked list:   
