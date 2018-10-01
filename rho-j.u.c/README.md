@@ -1,7 +1,6 @@
-## Package java.util.concurrent
-This package includes a few small standardized extensible frameworks, as well as some classes that provide useful functionality and are otherwise tedious or difficult to implement.
+Package [java.util.concurrent](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/package-summary.html) includes a few small standardized extensible frameworks, as well as some classes that provide useful functionality.
 
-[Runnable](https://docs.oracle.com/javase/9/docs/api/java/lang/Runnable.html) interface should be implemented by any class whose instances are intended to be executed by a thread. The class must define a method of no arguments called run.
+[Runnable](https://docs.oracle.com/javase/9/docs/api/java/lang/Runnable.html) interface should be implemented by any class whose instances are intended to be executed by a thread. The class must define a method of no arguments called run. This interface is designed to provide a common protocol for objects that wish to execute code while they are active.
 
 [Callable](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Callable.html) is a task that returns a result and may throw an exception. Implementors define a single method with no arguments called call.
 
@@ -11,7 +10,22 @@ The Callable interface is similar to Runnable, in that both are designed for cla
 
 [Executor](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Executor.html) is a simple standardized interface for defining custom thread-like subsystems, including thread pools, asynchronous I/O, and lightweight task frameworks. An object that executes submitted Runnable tasks. This interface provides a way of decoupling task submission from the mechanics of how each task will be run
 
+[AtomicInteger](???) An int value that may be updated atomically.
+
+#### Collections
+
 [ConcurrentLinkedQueue](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/ConcurrentLinkedQueue.html) class supplies an efficient scalable thread-safe non-blocking FIFO queue. An unbounded thread-safe queue based on linked nodes. This queue orders elements FIFO (first-in-first-out). 
+
+[ConcurrentMap](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/ConcurrentMap.html) ???.
+
+#### Locks
+[Lock](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/locks/Lock.html) ???
+
+[Condition](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/locks/Condition.html) ???
+
+[ReentrantLock](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/locks/ReentrantLock.html)
+
+[ReadWriteLock](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/locks/ReadWriteLock.html)
 
 #### Synchronizers
 
@@ -26,10 +40,6 @@ CountDownLatch is a one-shot phenomenon -- the count cannot be reset. If you nee
 [Phaser](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Phaser.html) provides a more flexible form of barrier that may be used to control phased computation among multiple threads. A reusable synchronization barrier, similar in functionality to CyclicBarrier and CountDownLatch but supporting more flexible usage.
 
 [Exchanger](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Exchanger.html) allows two threads to exchange objects at a rendezvous point, and is useful in several pipeline designs. A synchronization point at which threads can pair and swap elements within pairs. Each thread presents some object on entry to the exchange method, matches with a partner thread, and receives its partner's object on return. Exchangers may be useful in applications such as genetic algorithms and pipeline designs.
-
-[ConcurrentMap](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/ConcurrentMap.html) ???.
-
-
 
 ### You can block on any pattern
 **structure pattern**  
