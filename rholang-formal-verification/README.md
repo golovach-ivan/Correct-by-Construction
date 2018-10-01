@@ -1,3 +1,11 @@
+- Type Systems
+- SMT Solvers
+- General Theorem Provers, K Framework
+- Process equality: Bisimulation
+- Modal Logics
+  - Hennesy-Milner
+  - Spatial (caires, Cardelly)
+
 Formal verification: mathematically prove the correctness of a design with respect to a mathematical formal specification.
   1. Formalize the specification
   2. Prove that the impl satisfies the spec
@@ -52,7 +60,7 @@ new ping: T2 in {
 - невозможно задать точную спецификацию программы
 - невозможно выразить все требуемые свойства
 
-### SAT Solvers
+### SMT Solvers
 Возможно расширить язык механизмом asserts (require, ensure, ...) и при верификации транслировать программу во входные данные для SMT Solver (Z3).
 ```  
 # ensures \result == -1 ==> (\forall int i; 0 <= i && i < arr.length; arr[i] != key);
