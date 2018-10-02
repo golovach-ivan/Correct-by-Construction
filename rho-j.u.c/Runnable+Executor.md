@@ -1,3 +1,48 @@
+This interface should be implemented by any class whose instances are intended to be executed by a thread
+```java
+public interface Runnable {
+  void run();
+}
+```
+
+A task that returns a result
+```java
+public interface Callable {
+  // Computes a result.
+  V call();
+}
+```
+
+An object that executes submitted Runnable tasks
+```java
+public interface Executor {
+  // Executes the given command at some time in the future.
+  void execute(Runnable command)
+}
+```
+
+An Executor that provides methods to manage termination and methods that can produce a Future for tracking progress of one or more asynchronous tasks
+```java
+public interface ExecutorService {
+  // Executes the given command at some time in the future.
+  void execute(Runnable command)
+
+  // Submits a value-returning task for execution and returns a Future representing the pending results of the task.
+  <T> Future<T> submit(Callable<T> task);
+
+  // Executes the given tasks, returning a list of Futures holding their status and results when all complete.
+  <T> List<Future<T>> invokeAll(Collection<? extends Callable<T>> tasks);
+  
+  // Executes the given tasks, returning the result of one that has completed successfully, if any do.
+  <T> T invokeAny(Collection<? extends Callable<T>> tasks);
+  
+  // Initiates an orderly shutdown in which previously submitted tasks are executed, but no new tasks will be accepted.
+  void shutdown();
+  
+  // Attempts to halts the processing of waiting tasks, and returns a list of the tasks that were awaiting execution.
+  List<Runnable> shutdownNow();
+}
+```
 
 ### Explicit Executor
 ```
