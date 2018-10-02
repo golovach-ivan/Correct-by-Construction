@@ -26,7 +26,7 @@ new acq, rel in
 ```
 wait set:      0       0      0      1      2      1      0      0       0 
 permits:     {1,1} -> {1} -> { } -> { } -> { } -> { } -> { } -> {1} -> {1,1}
-steps:    init-->acq--->acq--->acq--->acq--->rel--->rel--->rel--->rel
+steps:  init------>acq--->acq--->acq--->acq--->rel--->rel--->rel--->rel
                                 ^      ^      |      |
                                 |      +------+      |
                                 +--------------------+                                 
@@ -38,7 +38,7 @@ steps:    init-->acq--->acq--->acq--->acq--->rel--->rel--->rel--->rel
 ```
 wait set:       0      0       0        1        2        1        0       0      0   
 permits:       {2} -> {1} -> {Nil} -> {Nil} -> {Nil} -> {Nil} -> {Nil} -> {1} -> {2} 
-steps:    init-->acq--->acq- --->acq----->acq----->rel----->rel----->rel--->rel
+steps:    init---->acq--->acq- --->acq----->acq----->rel----->rel----->rel--->rel
                                  ^        ^         |        |
                                  |        +---------+        |
                                  +---------------------------+                                 
