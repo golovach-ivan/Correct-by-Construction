@@ -4,12 +4,19 @@
 
 Lets try two models of permits set, see reaction on ???:
 ```
+           | ack -> |    | -> rel
+           | ack -> |    | -> rel
+init(2) -> |        | -> |
+           | ack -> |    | -> rel
+           | ack -> |    | -> rel
+```
+```
 new acq, rel in
-  Semaphore(acq, rel) |                                   // init ->
+  Semaphore(2, acq, rel) |                                // init
   new ack0, ack1, ack2, ack3 in {
-    acq!(ack0) | acq!(ack1) | acq!(ack2) | acq!(ack3) |   // ->ack->ack->ack->ack->
+    acq!(ack0) | acq!(ack1) | acq!(ack2) | acq!(ack3) |   // ack | ack | ack | ack
     for (_ <- ack0 ;_ <- ack1 ;_ <- ack2 ;_ <- ack3) {
-      rel!(Nil) | rel!(Nil) | rel!(Nil) | rel!(Nil)       // ->rel->rel->rel->rel
+      rel!(Nil) | rel!(Nil) | rel!(Nil) | rel!(Nil)       // rel | rel | rel | rel
     }
   }
 }
