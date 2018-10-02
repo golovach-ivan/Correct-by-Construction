@@ -19,3 +19,50 @@ API calls:   exchange(itemA, retA)               exchange(itemB, retB)    exchan
                                                                   retA!(itemB)
                                                                   retB!(itemA)
 ```
+
+<details><summary>Complete source code</summary>
+<p>
+  
+```
+new Exchanger, exchange in {
+  
+  contract Exchanger(input) = {
+    new storage in {
+      storage!([]) |                         
+      for (@xItem, @xRet <= input) {
+        for (@maybePair <- storage) {
+          match maybePair {
+            [] =>                            
+              storage!([xItem, xRet])        
+            [yItem, yRet] => {               
+              storage!([]) |                 
+              @yRet!(xItem) | @xRet!(yItem) 
+            } 
+          }
+        }
+      }
+    }
+  } |
+
+  contract exchange(@my, input) = {
+    new ret in {
+      input!(my, *ret) | for (@other <- ret) {
+        stdout!([my, other])
+      }
+    }
+  } |
+
+  // Demo  
+  new input, N in {
+    Exchanger!(*input) |
+    N!(0) |
+    for (@my <= N) {
+      if (my < 6) {
+        exchange!(my, *input) | N!(my + 1)
+      }
+    }
+  }
+}
+```
+</p>
+</details><br/>
