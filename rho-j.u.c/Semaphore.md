@@ -65,9 +65,9 @@ contract Semaphore(@initPermits, acquire, release) = {
 
 Init *permits* in loop with *initPermits* elems
 ```
-new n in {                       // for (i = initPermits; i > 0; i--) {
-  n!(initPermits) |              //   permits!(1)     
-  for (@i <= n) {                // }
+new n in {                             // for (i = initPermits; i > 0; i--) {
+  n!(initPermits) |                    //   permits++;     
+  for (@i <= n) {                      // }
     if (i > 0) {                 
       permits!(1) | n!(i - 1)    
     }                            
@@ -78,14 +78,14 @@ new n in {                       // for (i = initPermits; i > 0; i--) {
 acquire() impl
 ```
 contract acquire(ack) = {
-  for (_ <- permits) { ack!(Nil) }
+  for (_ <- permits) { ack!(Nil) }      // permits--;
 }
 ```
 
 release() impl
 ```
 contract release(_) = {
-  permits!(1)
+  permits!(1)                           // permits++;
 } 
 ```
 
@@ -194,7 +194,7 @@ contract acquire(p /\ Int, ack) = {
     acquire!(*ack)                                   // acquire(1)
   } else {
     new ackL, ackR in {
-      acquire!(*ackL) | acquire!(p - 1, *ackR) |     // acquire(1) | acquire(p - 1)
+      acquire!(*ackL) | acquire!(p - 1, *ackR) |     // acquire(1) | acquire(permits - 1)
       for (_ <- aclL; _ <- ackR) {
         ack!(Nil)
       }                      
