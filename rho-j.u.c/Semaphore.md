@@ -2,7 +2,9 @@
 
 [javadoc](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Semaphore.html): A counting semaphore. Conceptually, a semaphore maintains a set of permits. Each acquire() blocks if necessary until a permit is available, and then takes it. Each release() adds a permit, potentially releasing a blocking acquirer. Semaphores are often used to restrict the number of threads than can access some (physical or logical) resource.
 
-Lets try two models of permits set, see reaction on ???:
+<details><summary>Lets compare two (Model #1, Model #2) permits set models, see reaction on</summary>
+<p>
+  
 ```
            | ack -> |    | -> rel
            | ack -> |    | -> rel
@@ -21,6 +23,8 @@ new acq, rel in
   }
 }
 ```
+</p>
+</details><br/>
 
 #### Model #1: Permits are elems of set, blocking on read empty set: ```{1,1} -> {1} -> {}```
 ```
