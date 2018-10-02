@@ -14,18 +14,53 @@ In both versions structure the same
       
       contract acquire(ack) = { /* impl */ } |
       
-      contract release(ack) = { /* impl */ } 
+      contract release(_) = { /* impl */ } 
     }
    } |
 ```
+acquire - sync (with ack)
+release - async (without ack)
 
 ### Attempt 1
 Model permits count as items (Nil's) in channel
+```
+- {Nil, Nil}  // init with 2 permits
+- {Nil}       // acquire()
+- {}          // acquire() - empty, any new acquire() block on read
+- {Nil}       // release()
+- {Nil, Nil}  // release()
+```
 
-### Attempt 2
-Model permits count as int in channel
+Init *permits* in loop with *initPermits* Nil elems
+```
+new n in {
+  n!(initPermits) |
+  for (@i <= n) {
+    if (i > 0) { 
+      permits!(Nil) | n!(i - 1) 
+    }
+  }
+}        
+```
 
+acquire() impl
+```
+contract acquire(ack) = {
+  for (_ <- permits) { ack!(Nil) }
+}
+```
 
+release() impl
+```
+contract release(_) = {
+  permits!(Nil)
+} 
+```
+
+<details><summary>Сomplete source code</summary>
+<p>
+  
+```
 new Semaphore in {
   contract Semaphore(@initPermits, acquire, release) = {
     new permits in {
@@ -39,9 +74,9 @@ new Semaphore in {
       } |        
       
       contract acquire(ack) = {
-        for (_ <- permits) { Nil }
+        for (_ <- permits) { acquire!(Nil) }
       } |
-      contract release(ack) = {
+      contract release(_) = {
         permits!(Nil)
       } 
     }
@@ -63,3 +98,9 @@ new Semaphore in {
      }     
    }
 }
+```
+</p>
+</details><br/>
+
+### Attempt 2
+Model permits count as int in channel
