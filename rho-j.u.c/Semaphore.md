@@ -78,7 +78,9 @@ new n in {                             // for (i = initPermits; i > 0; i--) {
 acquire() impl
 ```
 contract acquire(ack) = {
-  for (_ <- permits) { ack!(Nil) }      // permits--;
+  for (_ <- permits) {                  // permits--;
+    ack!(Nil) 
+  }      
 }
 ```
 
