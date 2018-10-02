@@ -2,12 +2,31 @@
 
 A counting semaphore. Conceptually, a semaphore maintains a set of permits. Each acquire() blocks if necessary until a permit is available, and then takes it. Each release() adds a permit, potentially releasing a blocking acquirer. Semaphores are often used to restrict the number of threads than can access some (physical or logical) resource.
 
-Lets try two versions:
-  - permits are elems of set, blocking on read empty set: ```{1,1} -> {1} -> {}```
-  - permits are Int or Nil, blocking on read set without Int: ```{2} -> {1} -> {Nil}```
+Lets try two models of permits set:
 
-In first variant *release()* is simple ```permits!(1)```.  
-In second variant *release* is CAS (read-then-write) can not be ```{2} -> {1} -> { }```.  
+#### Permits are elems of set, blocking on read empty set: ```{1,1} -> {1} -> {}```
+```
+wait set:      0       0      0      1      2      1      0      0      0 
+permits:     {1,1} -> {1} -> { } -> { } -> { } -> { } -> { } -> {1} -> {2}
+steps:    init-->acq--->acq--->acq--->acq--->rel--->rel--->rel--->rel--->rel
+                                ^      ^      |      |
+                                |      +------+      |
+                                +--------------------+                                 
+```
+*acquire()* - simple read ```for (_ <- permits) {...}```
+*release()* is simple Write: ```permits!(1)```
+
+#### Permits are AtomicInt with Nil stub, blocking on read set without Int: ```{2} -> {1} -> {Nil}```
+```
+wait set:       0      0       0        1        2        1        0       0      0   
+permits:       {2} -> {1} -> {Nil} -> {Nil} -> {Nil} -> {Nil} -> {Nil} -> {1} -> {2} 
+steps:    init-->acq--->acq- --->acq----->acq----->rel----->rel----->rel--->rel
+                                 ^        ^         |        |
+                                 |        +---------+        |
+                                 +---------------------------+                                 
+```
+*acquire()* - read in pattern ```for (p /\ Int <- permits) {...}```  
+*release* is CAS (```for (p <- permits) {permits!(p + 1)}```), so we need stub elem for non-blocking release  
 
 In both versions structure the same
 ```
@@ -18,33 +37,13 @@ contract Semaphore(@initPermits, acquire, release) = {
     contract release(_) = { /* impl */ } 
   }
 } 
-```
-acquire - sync (with ack)
-release - async (without ack)
+```  
+*permits* - channel with permits model  
+*acquire* - sync (with ack)    
+*release* - async (without ack)    
 
-Var #1
-```
-wait set:      0       0      0      1      2      1      0      0      0 
-permits:     {1,1} -> {1} -> { } -> { } -> { } -> { } -> { } -> {1} -> {2}
-steps:    init-->acq--->acq--->acq--->acq--->rel--->rel--->rel--->rel--->rel
-                                ^      ^      |      |
-                                |      +------+      |
-                                +--------------------+                                 
-```
 
-Var #2
-Model permits count as int in channel
-
-```
-wait set:       0      0       0        1        2        1        0       0      0   
-permits:       {2} -> {1} -> {Nil} -> {Nil} -> {Nil} -> {Nil} -> {Nil} -> {1} -> {2} 
-steps:    init-->acq--->acq- --->acq----->acq----->rel----->rel----->rel--->rel
-                                 ^        ^         |        |
-                                 |        +---------+        |
-                                 +---------------------------+                                 
-```
-
-### Attempt 1
+### Model 1: permits are elems of set
 Model permits count as items (Nil's) in channel
 
 Init *permits* in loop with *initPermits* Nil elems
@@ -53,7 +52,7 @@ new n in {
   n!(initPermits) |
   for (@i <= n) {
     if (i > 0) { 
-      permits!(Nil) | n!(i - 1) 
+      permits!(1) | n!(i - 1) 
     }
   }
 }        
@@ -69,7 +68,7 @@ contract acquire(ack) = {
 release() impl
 ```
 contract release(_) = {
-  permits!(Nil)
+  permits!(1)
 } 
 ```
 
@@ -84,7 +83,7 @@ new Semaphore in {
         n!(initPermits) |
         for (@i <= n) {
           if (i > 0) {
-            permits!(Nil) | n!(i - 1)
+            permits!(1) | n!(i - 1)
           }
         }
       } |        
@@ -92,8 +91,9 @@ new Semaphore in {
       contract acquire(ack) = {
         for (_ <- permits) { acquire!(Nil) }
       } |
+      
       contract release(_) = {
-        permits!(Nil)
+        permits!(1)
       } 
     }
    } |
@@ -118,33 +118,33 @@ new Semaphore in {
 </p>
 </details><br/>
 
-### Attempt 2
+#### Model #2: permits are AtomicInt with Nil stub
 Model permits count as int in channel
 
 Trivial init
 ```
-permits!(initPermits
+permits!(initPermits)
 ```
 
 acquire() impl
 ```
-      contract acquire(ack) = {
-        for (k /\ Int <- permits) { 
-          ack!(Nil) |
-          if (k == 1) { permits!(Nil) }
-          else { permits!(k - 1) }
-        }
-      } 
+contract acquire(ack) = {
+  for (k /\ Int <- permits) { 
+    ack!(Nil) |
+    if (k == 1) { permits!(Nil) }
+    else { permits!(k - 1) }
+  }
+} 
 ```
 
 release() impl
 ```
-      contract release(_) = {
-        for (@p <- permits) {
-          if (p == Nil) { permits!(1) }
-          else { permits!(p + 1) }
-        }
-      }
+contract release(_) = {
+  for (@p <- permits) {
+    if (p == Nil) { permits!(1) }
+    else { permits!(p + 1) }
+  }
+}
 ```
 
 BUT other methods trival too
