@@ -2,6 +2,13 @@
 
 A counting semaphore. Conceptually, a semaphore maintains a set of permits. Each acquire() blocks if necessary until a permit is available, and then takes it. Each release() adds a permit, potentially releasing a blocking acquirer. Semaphores are often used to restrict the number of threads than can access some (physical or logical) resource.
 
+Lets try two versions:
+  - permits are elems of set, blocking on read empty set: ```{1,1} -> {1} -> {}```
+  - permits are Int or Nil, blocking on read set without Int: ```{2} -> {1} -> {Nil}```
+
+In first variant *release()* is simple ```permits!(1)```.  
+In second variant *release* is CAS (read-then-write) can not be ```{2} -> {1} -> { }```.  
+
 In both versions structure the same
 ```
 contract Semaphore(@initPermits, acquire, release) = {
@@ -15,20 +22,30 @@ contract Semaphore(@initPermits, acquire, release) = {
 acquire - sync (with ack)
 release - async (without ack)
 
-Two versions:
-  - permits are elems of set, blocking on read empty set: {1,1} -> {1} -> {}
-  - permits are Int or Nil, blocking on read set without Int: {2} -> {1} -> {Nil}
+Var #1
+```
+wait set:      0       0      0      1      2      1      0      0      0 
+permits:     {1,1} -> {1} -> { } -> { } -> { } -> { } -> { } -> {1} -> {2}
+steps:    init-->acq--->acq--->acq--->acq--->rel--->rel--->rel--->rel--->rel
+                                ^      ^      |      |
+                                |      +------+      |
+                                +--------------------+                                 
+```
+
+Var #2
+Model permits count as int in channel
+
+```
+wait set:       0      0       0        1        2        1        0       0      0   
+permits:       {2} -> {1} -> {Nil} -> {Nil} -> {Nil} -> {Nil} -> {Nil} -> {1} -> {2} 
+steps:    init-->acq--->acq- --->acq----->acq----->rel----->rel----->rel--->rel
+                                 ^        ^         |        |
+                                 |        +---------+        |
+                                 +---------------------------+                                 
+```
 
 ### Attempt 1
 Model permits count as items (Nil's) in channel
-```
-wait set:        0           0       0      1      2      1      0       0       0      0 
-permits:     {Nil, Nil} -> {Nil} -> { } -> { } -> { } -> { } -> { } -> {Nil} -> {1} -> {2} 
-steps:    init------->acq----->acq--->acq--->acq--->rel--->rel--->rel----->rel--->rel
-                            ^     ^      |        |
-                            |     +------+        |
-                            +---------------------+                                 
-```
 
 Init *permits* in loop with *initPermits* Nil elems
 ```
@@ -103,15 +120,6 @@ new Semaphore in {
 
 ### Attempt 2
 Model permits count as int in channel
-
-```
-wait set:       0      0       0        1        2        1        0       0      0   
-permits:       {2} -> {1} -> {Nil} -> {Nil} -> {Nil} -> {Nil} -> {Nil} -> {1} -> {2} 
-steps:    init-->acq--->acq- --->acq----->acq----->rel----->rel----->rel--->rel
-                                 ^        ^         |        |
-                                 |        +---------+        |
-                                 +---------------------------+                                 
-```
 
 Trivial init
 ```
