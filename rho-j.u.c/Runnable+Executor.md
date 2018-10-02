@@ -8,7 +8,6 @@ public interface Runnable {
 A task that returns a result
 ```java
 public interface Callable {
-  // Computes a result.
   V call();
 }
 ```
@@ -16,7 +15,6 @@ public interface Callable {
 An object that executes submitted Runnable tasks
 ```java
 public interface Executor {
-  // Executes the given command at some time in the future.
   void execute(Runnable command)
 }
 ```
