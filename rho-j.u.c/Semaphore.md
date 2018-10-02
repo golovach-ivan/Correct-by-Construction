@@ -1,6 +1,37 @@
 ## Semaphore
 
-[javadoc](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Semaphore.html): A counting semaphore. Conceptually, a semaphore maintains a set of permits. Each acquire() blocks if necessary until a permit is available, and then takes it. Each release() adds a permit, potentially releasing a blocking acquirer. Semaphores are often used to restrict the number of threads than can access some (physical or logical) resource.
+A counting semaphore. Conceptually, a semaphore maintains a set of permits. Each acquire() blocks if necessary until a permit is available, and then takes it. Each release() adds a permit, potentially releasing a blocking acquirer. Semaphores are often used to restrict the number of threads than can access some (physical or logical) resource ([javadoc](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Semaphore.html)).
+
+```java
+public class Semaphore {
+  // Creates a Semaphore with the given number of permits.
+  public Semaphore(int permits) {...}
+  
+  // Acquires a permit from this semaphore, blocking until one is available.
+  public void acquire() {...}
+  
+  // Acquires the given number of permits from this semaphore, blocking until all are available.
+  public void acquire(int permits) {...}
+  
+  // Acquires a permit from this semaphore, only if one is available at the time of invocation.
+  public boolean tryAcquire() {...}
+  
+  // Acquires and returns all permits that are immediately available, or if negative permits are available, releases them.
+  public int drainPermits() {...}  
+  
+  // Releases a permit, returning it to the semaphore.
+  public void release() {...}
+  
+  // Releases the given number of permits, returning them to the semaphore.
+  public void release(int permits)
+  
+  // Returns the current number of permits available in this semaphore.
+  public int availablePermits() {...}
+  
+  // Returns an estimate of the number of threads waiting to acquire.
+  public final int getQueueLength() {...}  
+}
+```
 
 <details><summary>Lets compare two (Model #1, Model #2) permits set models, see reaction on</summary>
 <p>
@@ -183,6 +214,7 @@ contract availablePermits(ret) = {
 ```      
 
 Acquires and returns all permits that are immediately available, or if negative permits are available, releases them.
+// ??? !!! if negative permits are available ===> releases them !!! ??? 
 ```
 contract drainPermits(ret) = {
   for (@p <- permits) {
