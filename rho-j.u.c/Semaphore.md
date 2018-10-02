@@ -139,16 +139,16 @@ new Semaphore in {
 
 Trivial init
 ```
-permits!(initPermits)
+permits!(initPermits)               // permits = initPermits
 ```
 
 acquire() impl
 ```
-contract acquire(ack) = {
-  for (k /\ Int <- permits) { 
+contract acquire(ack) = {           
+  for (k /\ Int <- permits) {       // {Nil} -> WAIT
     ack!(Nil) |
-    if (k == 1) { permits!(Nil) }
-    else { permits!(k - 1) }
+    if (k == 1) { permits!(Nil) }   // {1} -> {Nil}
+    else { permits!(k - 1) }        // {k} -> {k - 1}
   }
 } 
 ```
@@ -157,8 +157,8 @@ release() impl
 ```
 contract release(_) = {
   for (@p <- permits) {
-    if (p == Nil) { permits!(1) }
-    else { permits!(p + 1) }
+    if (p == Nil) { permits!(1) }   // {Nil} -> {1}
+    else { permits!(p + 1) }        // {k} -> {k + 1}
   }
 }
 ```
@@ -169,9 +169,9 @@ Returns the current number of permits available in this semaphore
 ```
 contract availablePermits(ret) = {
   for (@p <- permits) {
-    if (p == Nil) { ret!(0) }
-    else { ret!(p) } |
-    permits!(p)
+    if (p == Nil) { ret!(0) }        // {Nil} -> 0
+    else { ret!(p) } |               // {k} -> k
+    permits!(p)                      // permits = permits
   }
 } 
 ```      
@@ -180,9 +180,9 @@ Acquires and returns all permits that are immediately available, or if negative 
 ```
 contract drainPermits(ret) = {
   for (@p <- permits) {
-    if (p == Nil) { ret!(0) }
-    else { ret!(p) } |
-    permits!(Nil)
+    if (p == Nil) { ret!(0) }         // {Nil} -> 0
+    else { ret!(p) } |                // {k} -> k
+    permits!(Nil)                     // permits = 0
   }
 }
 ```
@@ -191,10 +191,10 @@ Acquires the given number of permits from this semaphore, blocking until all are
 ```
 contract acquire(p /\ Int, ack) = {
   if (p == 1) {
-    acquire!(*ack)
+    acquire!(*ack)                                   // acquire(1)
   } else {
     new ackL, ackR in {
-      acquire!(*ackL) | acquire!(p - 1, *ackR) | 
+      acquire!(*ackL) | acquire!(p - 1, *ackR) |     // acquire(1) | acquire(p - 1)
       for (_ <- aclL; _ <- ackR) {
         ack!(Nil)
       }                      
