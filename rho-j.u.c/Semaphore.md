@@ -2,13 +2,24 @@
 
 [javadoc](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Semaphore.html): A counting semaphore. Conceptually, a semaphore maintains a set of permits. Each acquire() blocks if necessary until a permit is available, and then takes it. Each release() adds a permit, potentially releasing a blocking acquirer. Semaphores are often used to restrict the number of threads than can access some (physical or logical) resource.
 
-Lets try two models of permits set:
+Lets try two models of permits set, see reaction on ???:
+```
+new acq, rel in
+  Semaphore(acq, rel) |                                   // init ->
+  new ack0, ack1, ack2, ack3 in {
+    acq!(ack0) | acq!(ack1) | acq!(ack2) | acq!(ack3) |   // ->ack->ack->ack->ack->
+    for (_ <- ack0 ;_ <- ack1 ;_ <- ack2 ;_ <- ack3) {
+      rel!(Nil) | rel!(Nil) | rel!(Nil) | rel!(Nil)       // ->rel->rel->rel->rel
+    }
+  }
+}
+```
 
 #### Model #1: Permits are elems of set, blocking on read empty set: ```{1,1} -> {1} -> {}```
 ```
-wait set:      0       0      0      1      2      1      0      0      0 
-permits:     {1,1} -> {1} -> { } -> { } -> { } -> { } -> { } -> {1} -> {2}
-steps:    init-->acq--->acq--->acq--->acq--->rel--->rel--->rel--->rel--->rel
+wait set:      0       0      0      1      2      1      0      0       0 
+permits:     {1,1} -> {1} -> { } -> { } -> { } -> { } -> { } -> {1} -> {1,1}
+steps:    init-->acq--->acq--->acq--->acq--->rel--->rel--->rel--->rel
                                 ^      ^      |      |
                                 |      +------+      |
                                 +--------------------+                                 
