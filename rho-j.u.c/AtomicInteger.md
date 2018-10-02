@@ -1,3 +1,30 @@
+```java
+public class AtomicInteger {
+  // Creates a new AtomicInteger with the given initial value.
+  public AtomicInteger(int initialValue) {...}
+  
+  // Returns the current value
+  public int get() {...}
+  
+  // Sets the value to newValue
+  public void set(int newValue) {...}
+  
+  // Atomically sets the value to newValue if the current value, referred to as the witness value, == expectedValue
+  public int compareAndExchange(int expectedValue, int newValue) {...}
+  
+  // Atomically sets the value to newValue if the current value == expectedValue
+  public boolean compareAndSet(int expectedValue, int newValue) {...}
+  
+  public int decrementAndGet() {...}
+  public int incrementAndGet() {...}
+  public int getAndDecrement() {...}
+  public int getAndIncrement() {...}
+  public int getAndAdd(int delta) {...}
+  public int addAndGet(int delta) {...}
+  public int getAndSet(int newValue) {...}
+}
+```
+
 Каждый канал можно использовать как atomic variable, если хранить там не более одного значения и каждую атомарную операцию представлять, как чтение старого значения, выполнения операции и сохранения нового значения.
 
 Если не допускать записи более одного сообщения в канал, то последовательность будет однозначной: {Write, Read, Write, Read, Write, ...}.
