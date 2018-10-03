@@ -126,41 +126,43 @@ new LinkedBlockingQueue in {
 Для того, что бы добавить bounded и методы, знающие размеры (*size*/*remainingCapacity*) можно расширить формат node до 5-elem tuple
 ```(canTake: bool, canPut: bool, size: int, elem: any, next: 5-elem-tuple or Nil)```
 
-```put("A"); put("B"); put("C"); put("D")```
+```put("A"); put("B"); put("C")```
 
 ```
                +-----+              +-----+              +-----+
                |     v              |     v              |     v
-(T, F, 3, "D", *)    (T, T, 2, "C", *)    (T, T, 1, "B", *)    (F, T, 0, "A", Nil)
+(F, T, 3, "C", *)    (T, T, 2, "B", *)    (T, T, 1, "A", *)    (T, F, 0, Nil, Nil)
 ```
 
 **init**  
-```atomicRef!((false, true, 0, Nil, Nil))```  
-???
+```atomicRef!((true, false, 0, Nil, Nil))```   
+```{"canTake": true, "canPut": false, "size": 0, "elem": Nil, "next": Nil)```
 
 **put**   
 ```
 contract put(@newElem, ack) = {
-  for (@(a, true, oldSize, b, c) <- atomicRef) {
+  for (@(true, a, oldSize, b, c) <- atomicRef) {
     atomicRef!(
-      (true, oldSize + 1 < maxSize, oldSize + 1, newElem, 
-      (a, true, oldSize, b, c))) | 
+      (oldSize + 1 < maxSize, true, oldSize + 1, newElem, 
+      (true, a, oldSize, b, c))) | 
     ack!(Nil)
   }
 }
 ```
-Читаем только если второй елемент (canPut) == true.
+Читаем только если первый елемент *canPut* is true  
+```for ((true, _, _, _, _) <- atomicRef) {...}```  
 
 **take**   
 ```
 contract take(ret) = {
-  for (@(true, canPut, oldSize, elem, (a, b, c, d, e)) <- atomicRef) {
+  for (@(_, true, _, elem, (a, b, c, d, e)) <- atomicRef) {
     atomicRef!((a, b, c, d, e)) | 
     ret!(elem)  
   }
 }
 ```
-Читаем только если первый елемент (cantake) == true.
+Читаем только если второй елемент *cantake* is true  
+```for ((_, true, _, _, _) <- atomicRef) {...}```  
 
 **size**   
 ```
@@ -182,15 +184,15 @@ new LinkedBlockingQueue in {
     new atomicRef in {
       atomicRef!((false, true, 0, Nil, Nil)) |
       contract put(@newElem, ack) = {
-        for (@(a, true, oldSize, b, c) <- atomicRef) {
+        for (@(true, a, oldSize, b, c) <- atomicRef) {
           atomicRef!(
-            (true, oldSize + 1 < maxSize, oldSize + 1, newElem, 
-            (a, true, oldSize, b, c))) | 
+            (oldSize + 1 < maxSize, true, oldSize + 1, newElem, 
+            (true, a, oldSize, b, c))) | 
           ack!(Nil)
         }
       } |
       contract take(ret) = {
-        for (@(true, canPut, oldSize, elem, (a, b, c, d, e)) <- atomicRef) {
+        for (@(_, true, _, elem, (a, b, c, d, e)) <- atomicRef) {
           atomicRef!((a, b, c, d, e)) | 
           ret!(elem)  
         }
