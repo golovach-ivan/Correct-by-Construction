@@ -135,47 +135,51 @@ new LinkedBlockingQueue in {
 ```
 
 **init**  
-```atomicRef!((true, false, 0, Nil, Nil))```   
-```{"canTake": true, "canPut": false, "size": 0, "elem": Nil, "next": Nil)```
+```
+1  atomicRef!((true, false, 0, Nil, Nil))
+```   
+1 - Устанавливаем елемент-обелиск: ```{"canTake": true, "canPut": false, "size": 0, "elem": Nil, "next": Nil)```
 
 **put**   
 ```
-contract put(@newElem, ack) = {
-  for (@(true, a, oldSize, b, c) <- atomicRef) {
-    atomicRef!(
-      (oldSize + 1 < maxSize, true, oldSize + 1, newElem, 
-      (true, a, oldSize, b, c))) | 
-    ack!(Nil)
-  }
-}
+1  contract put(@newElem, ack) = {
+2    for (@(true, a, oldSize, b, c) <- atomicRef) {
+3      atomicRef!(
+4        (oldSize + 1 < maxSize, true, oldSize + 1, newElem, 
+5        (true, a, oldSize, b, c))) | 
+6      ack!(Nil)
+7    }
+8  }
 ```
-Читаем только если первый елемент *canPut* is true  
-```for ((true, _, _, _, _) <- atomicRef) {...}```  
+2 - Блокирующе читаем только если первый елемент *canPut* is true (queue is not full).   
+3-5 - Восстанавливаем состояние *atomicRef*, сохраняем новый node со ссылкой на старый node.   
+6 - Подтверждаем клиенту запись.     
 
 **take**   
 ```
-contract take(ret) = {
-  for (@(_, true, _, elem, (a, b, c, d, e)) <- atomicRef) {
-    atomicRef!((a, b, c, d, e)) | 
-    ret!(elem)  
-  }
-}
+1  contract take(ret) = {
+2    for (@(_, true, _, elem, (a, b, c, d, e)) <- atomicRef) {
+3      atomicRef!((a, b, c, d, e)) | 
+4      ret!(elem)  
+5    }
+6  }
 ```
-Читаем только если второй елемент *cantake* is true  
-```for ((_, true, _, _, _) <- atomicRef) {...}```  
+2 - Блокирующе читаем только если второй елемент *canTake* is true (queue is not empty).   
+3 - Восстанавливаем состояние *atomicRef*, сохраняем не вычитанный елемент, а предыдущий.   
+4 - Возвращаем клиенту елемент node (*elem*, forth elem).   
 
 **size**   
 ```
-1 contract size(ret) = {
-2   for (@(a, b, size, c, d) <- atomicRef) {
-3     atomicRef!((a, b, size, c, d)) | 
-4     ret!(size)  
-5   }
-6 } 
+1  contract size(ret) = {
+2    for (@(a, b, size, c, d) <- atomicRef) {
+3      atomicRef!((a, b, size, c, d)) | 
+4      ret!(size)  
+5    }
+6  } 
 ```
-2 - Неблокирующе читаем *atomicRef* выбираем поле *size* и возвращаем елемент на место.  
-3 - Сохраняем предыдущее состояние *atomicRef*.   
-4 - Возвращаем елемент node (*size*, third elem).   
+2 - Неблокирующе читаем *atomicRef* выбираем поле *size* и возвращаем node на место.  
+3 - Восстанавливаем состояние *atomicRef*, возвращаем прочитанное.   
+4 - Возвращаем клиенту елемент node (*size*, third elem).   
 
 <details><summary>Сomplete source code</summary>
 <p>
