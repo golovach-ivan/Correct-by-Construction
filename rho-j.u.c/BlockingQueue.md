@@ -1,12 +1,14 @@
-## java.util.concurrent.BlockingQueue<E>
+## java.util.concurrent.BlockingQueue\<E\> in RhoLang
 
 A Queue that additionally supports operations that wait for the queue to become non-empty when retrieving an element, and wait for space to become available in the queue when storing an element. BlockingQueue implementations are designed to be used primarily for producer-consumer queues ([javadoc](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/BlockingQueue.html)). 
 
 BlockingQueue can be optionally-bounded. BlockingQueue can orders elements FIFO (first-in-first-out) or LIFO (least-in-first-out).
 
+<details><summary>public interface BlockingQueue&lt;E&gt;</summary>
+<p>
+  
 ```java
-public interface BlockingQueue<E> {
-
+{
   // Inserts the specified element into this queue, waiting if necessary for space to become available.
   void put(E e);
 
@@ -23,6 +25,8 @@ public interface BlockingQueue<E> {
   int remainingCapacity();
 }
 ```
+</p>
+</details><br/>
 
 ### Version #1: base linked-list (unbounded LIFO)
 Если нас интересует base (only *put* and *take* methods) unbounded LIFO queue, то мы можем реализовать простейший single-linked stack based on node as 2-elem list (\[elem, next\]) or 2-elem tuple ((elem, next)).
@@ -43,7 +47,7 @@ Trick (block on empty): ```for (@[head, tail] <- buffer) {...}```
 ```
 1  atomicRef!(Nil)
 ```    
-1 - Init *atomicRef* with empty mark (*Nil*).  
+1 - Init with empty mark (*Nil*).  
 
 **put**
 ```
@@ -54,9 +58,9 @@ Trick (block on empty): ```for (@[head, tail] <- buffer) {...}```
 5    }
 6  }
 ```
-2 - Read any value (null mark (*Nil*) too), so always non-blocking.  
+2 - Non-blocking read anything.  
 3 - Insert new node, update *atomicRef*: ```x -> [newElem, x]```.
-4 - Подтверждаем клиенту вставку нового елемента.  
+4 - Возвращаем подтверждение вставки нового елемента.  
 
 **take**
 ```
@@ -75,8 +79,8 @@ Trick (block on empty): ```for (@[head, tail] <- buffer) {...}```
 <p>
   
 ```
-new LinkedBlockingQueue in {
-  contract LinkedBlockingQueue(put, take) = {
+new BlockingQueue in {
+  contract BlockingQueue(put, take) = {
     new atomicRef in {
       atomicRef!(Nil) |
       contract put(@newElem, ack) = {
@@ -93,7 +97,7 @@ new LinkedBlockingQueue in {
   }|
   
   new put, take, size in {    
-    LinkedBlockingQueue!(*put, *take) |    
+    BlockingQueue!(*put, *take) |    
     
     // === put(0); put(1); put(2); 
     // === stdout(get()); stdout(get()); stdout(get())
@@ -193,8 +197,8 @@ new LinkedBlockingQueue in {
 <p>
   
 ```
-new LinkedBlockingQueue in {
-  contract LinkedBlockingQueue(@maxSize, put, take, size, remainingCapacity) = {
+new BlockingQueue in {
+  contract BlockingQueue(@maxSize, put, take, size, remainingCapacity) = {
     new atomicRef in {
       atomicRef!((false, true, 0, Nil, Nil)) |
       contract put(@newElem, ack) = {
@@ -227,7 +231,7 @@ new LinkedBlockingQueue in {
   }|
   
   new put, take, size, remainingCapacity in {    
-    LinkedBlockingQueue!(10, *put, *take, *size, *remainingCapacity) |    
+    BlockingQueue!(10, *put, *take, *size, *remainingCapacity) |    
     
     new ack, ret in { 
       put!("A", *ack) | for (_ <- ack) {
@@ -278,6 +282,10 @@ AtomicRef\<Array\<Any\>, []\>
 AtomicRef\<Int, Nil\>  
 
 ```
+[] -> [0] -> [0, 1] -> [0, 1, 2] -> [1, 2] -> [2] -> []
+```
+
+```
 put/take/size: Array => Array
 
 put:  arr -> arr ++ [newElem]
@@ -324,7 +332,7 @@ contract BlockingQueue(@maxSize, put, take, size) = {
 ```
 1  atomicRef!([])
 ```
-1 - ???.   
+1 - Init atomicRef with empty mark (\[\]).  
 
 **put**  
 ```
