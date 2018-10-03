@@ -45,23 +45,29 @@ Init *atomicRef* with empty mark (*Nil*).
 
 **put**
 ```
-contract put(@newHead, ack) = {
-  for (@oldBuf <- atomicRef) {
-    atomicRef!([newHead, oldBuf]) | ack!(Nil)
-  }
-}
+1  contract put(@newElem, ack) = {
+2    for (@oldNode <- atomicRef) {
+3      atomicRef!([newElem, oldNode]) | 
+4      ack!(Nil)
+5    }
+6  }
 ```
-Read any value (null mark (*Nil*) too) and update *atomicRef*: ```x -> [elem, x]```, so always non-blocking.
+2 - Read any value (null mark (*Nil*) too), so always non-blocking.  
+3 - Insert new node, update *atomicRef*: ```x -> [newElem, x]```.
+4 - Подтверждаем клиенту вставку.  
 
 **take**
 ```
-contract take(ret) = {
-  for (@[head, tail] <- atomicRef) {
-    atomicRef!(tail) | ret!(head)  
-  }
-} 
+1  contract take(ret) = {
+2    for (@[elem, next] <- atomicRef) {
+3      atomicRef!(next) | 
+4      ret!(elem)  
+5    }
+6  } 
 ```
-Read only non empty (not null mark (*Nil*)) and update *atomicRef*: ```[elem, x] -> x```, so blocking on empty.
+2 - Read only non empty (not null mark (*Nil*)).  
+3 - Remove top node, update *atomicRef*: ```[elem, next] -> next```, so blocking on empty.  
+4 - Возвращаем клиенту *elem*.   
 
 <details><summary>Сomplete source code</summary>
 <p>
@@ -71,14 +77,14 @@ new LinkedBlockingQueue in {
   contract LinkedBlockingQueue(put, take) = {
     new atomicRef in {
       atomicRef!(Nil) |
-      contract put(@newHead, ack) = {
-        for (@oldBuf <- atomicRef) {
-          atomicRef!([newHead, oldBuf]) | ack!(Nil)
+      contract put(@newElem, ack) = {
+        for (@oldNode <- atomicRef) {
+          atomicRef!([newElem, oldNode]) | ack!(Nil)
         }
       } |
       contract take(ret) = {
-        for (@[head, tail] <- atomicRef) {
-          atomicRef!(tail) | ret!(head)  
+        for (@[elem, next] <- atomicRef) {
+          atomicRef!(next) | ret!(elem)  
         }
       } 
     }    
@@ -153,7 +159,7 @@ new LinkedBlockingQueue in {
 ```
 2 - Блокирующе читаем только если первый елемент *canPut* is true (queue is not full).   
 3-5 - Восстанавливаем состояние *atomicRef*, сохраняем новый node со ссылкой на старый node. Высчитываем новый размер ```oldSize + 1``` и новое значение флага *canPut* = ```oldSize + 1 < maxSize```.   
-6 - Подтверждаем клиенту запись.     
+6 - Подтверждаем клиенту вставку.     
 
 **take**   
 ```
