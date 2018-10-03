@@ -1,24 +1,23 @@
 ## java.util.concurrent.LinkedBlockingQueue<E>
 
-An optionally-bounded blocking queue based on linked nodes. This queue orders elements FIFO (first-in-first-out). The head of the queue is that element that has been on the queue the longest time. The tail of the queue is that element that has been on the queue the shortest time. New elements are inserted at the tail of the queue, and the queue retrieval operations obtain elements at the head of the queue.
+A Queue that additionally supports operations that wait for the queue to become non-empty when retrieving an element, and wait for space to become available in the queue when storing an element. BlockingQueue implementations are designed to be used primarily for producer-consumer queues ([javadoc](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/BlockingQueue.html)). 
 
-https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/BlockingQueue.html
-
-[javadoc](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/LinkedBlockingQueue.html)
+BlockingQueue can be optionally-bounded. BlockingQueue can orders elements FIFO (first-in-first-out) or LIFO (least-in-first-out).
 
 ```java
-public class LinkedBlockingQueue<E> implements BlockingQueue<E> {
-  void	clear​()	
-Atomically removes all of the elements from this queue.
+public interface BlockingQueue<E> {
 
-void	forEach​(Consumer<? super E> action)	
-Performs the given action for each element of the Iterable until all elements have been processed or the action throws an exception.
+  // Inserts the specified element into this queue, waiting if necessary for space to become available.
+  void put(E e);
 
-boolean	offer​(E e)	
-Inserts the specified element at the tail of this queue if it is possible to do so immediately without exceeding the queue's capacity, returning true upon success and false if this queue is full.
+  // Retrieves and removes the head of this queue, waiting if necessary until an element becomes available.
+  E take();
 
-int	size​()	
-Returns the number of elements in this queue.
+  // Performs the given action for each element of the Iterable until all elements have been processed or the action throws an exception.
+  void forEach(Consumer<? super E> action);
+
+  // Returns the number of elements in this queue.
+  int size();
 }
 ```
 
