@@ -40,8 +40,10 @@ Result of ```put(0); put(1); put(2); ``` is
 Trick (block on empty): ```for (@[head, tail] <- buffer) {...}```
 
 **init**  
-```atomicRef!(Nil)```    
-Init *atomicRef* with empty mark (*Nil*).
+```
+1  atomicRef!(Nil)
+```    
+1 - Init *atomicRef* with empty mark (*Nil*).  
 
 **put**
 ```
