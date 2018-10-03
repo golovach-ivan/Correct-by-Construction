@@ -166,14 +166,16 @@ contract take(ret) = {
 
 **size**   
 ```
-contract size(ret) = {
-  for (@(a, b, size, c, d) <- atomicRef) {
-    atomicRef!((a, b, size, c, d)) | 
-    ret!(size)  
-  }
-} 
+1 contract size(ret) = {
+2   for (@(a, b, size, c, d) <- atomicRef) {
+3     atomicRef!((a, b, size, c, d)) | 
+4     ret!(size)  
+5   }
+6 } 
 ```
-Читаем, выбираем поле *size* и возвращаем елемент на место.
+2 - Неблокирующе читаем *atomicRef* выбираем поле *size* и возвращаем елемент на место.  
+3 - Сохраняем предыдущее состояние *atomicRef*.   
+4 - Возвращаем елемент node (*size*, third elem).   
 
 <details><summary>Сomplete source code</summary>
 <p>
