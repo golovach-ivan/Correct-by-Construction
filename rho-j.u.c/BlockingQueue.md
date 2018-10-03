@@ -277,6 +277,22 @@ Best variant - atomic ref with array.
 AtomicRef\<Array\<Any\>, []\>  
 AtomicRef\<Int, Nil\>  
 
+```
+put/take/size: Array => Array
+
+put:  arr -> arr ++ [newElem]
+take: [elem...next] -> next
+size: arr -> arr
+
+put:  arr -> Nil
+take: [elem...next] -> elem
+size: arr -> Int
+
+put =  AtomicRef<Array<Any>, []>(arr -> arr ++ [newElem], arr -> Nil)  
+take = AtomicRef<Array<Any>, []>([elem...next] -> next,   [elem...next] -> elem)  
+size = AtomicRef<Array<Any>, []>(arr -> arr,              arr -> arr.length())  
+```
+
 Symmetric impls
 ```
 contract BlockingQueue(@maxSize, put, take, size) = {
