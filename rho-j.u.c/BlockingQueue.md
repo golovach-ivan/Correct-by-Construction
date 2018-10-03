@@ -24,26 +24,50 @@ public interface BlockingQueue<E> {
 }
 ```
 
-### Model #1: linked-list (unbounded LIFO)
+### Version #1: base linked-list (unbounded LIFO)
 Если нас интересует base (only *put* and *take* methods) unbounded LIFO queue, то мы можем реализовать простейший single-linked stack based on node as 2-elem list (\[elem, next\]) or 2-elem tuple ((elem, next)).
 
 ```
 contract LinkedBlockingQueue(put, take) = {
-  new buffer in {
-    buffer!(Nil) |    
+  new atomicRef in {
+    atomicRef!(Nil) |
     contract put(@newHead, ack) = {
-      for (@oldBuf <- buffer) {
-        buffer!([newHead, oldBuf]) | ack!(Nil)
+      for (@oldBuf <- atomicRef) {
+        atomicRef!([newHead, oldBuf]) | ack!(Nil)
       }
-    } |    
+    } |
     contract take(ret) = {
-      for (@[head, tail] <- buffer) {
-        buffer!(tail) | ret!(head)  
+      for (@[head, tail] <- atomicRef) {
+        atomicRef!(tail) | ret!(head)  
       }
     } 
   }    
 }
 ```
+
+**init**  
+```atomicRef!(Nil)```    
+Init *atomicRef* with empty mark (*Nil*).
+
+**put**
+```
+contract put(@newHead, ack) = {
+  for (@oldBuf <- atomicRef) {
+    atomicRef!([newHead, oldBuf]) | ack!(Nil)
+  }
+}
+```
+Read any value (null mark (*Nil*) too) and update *atomicRef*: ```x -> [elem, x]```, so always non-blocking.
+
+**take**
+```
+contract take(ret) = {
+  for (@[head, tail] <- atomicRef) {
+    atomicRef!(tail) | ret!(head)  
+  }
+} 
+```
+Read only non empty (not null mark (*Nil*)) and update *atomicRef*: ```[elem, x] -> x```, so blocking on empty.
 
 So result of ```put(0); put(1); put(2); ``` is
 ```
@@ -60,16 +84,16 @@ Trick (block on empty): ```for (@[head, tail] <- buffer) {...}```
 ```
 new LinkedBlockingQueue in {
   contract LinkedBlockingQueue(put, take) = {
-    new buffer in {
-      buffer!(Nil) |
+    new atomicRef in {
+      atomicRef!(Nil) |
       contract put(@newHead, ack) = {
-        for (@oldBuf <- buffer) {
-          buffer!([newHead, oldBuf]) | ack!(Nil)
+        for (@oldBuf <- atomicRef) {
+          atomicRef!([newHead, oldBuf]) | ack!(Nil)
         }
       } |
       contract take(ret) = {
-        for (@[head, tail] <- buffer) {
-          buffer!(tail) | ret!(head)  
+        for (@[head, tail] <- atomicRef) {
+          atomicRef!(tail) | ret!(head)  
         }
       } 
     }    
@@ -78,7 +102,8 @@ new LinkedBlockingQueue in {
   new put, take, size in {    
     LinkedBlockingQueue!(*put, *take) |    
     
-    // === put, size, take
+    // === put(0); put(1); put(2); 
+    // === stdout(get()); stdout(get()); stdout(get())
     new ack, ret in { 
       put!(0, *ack) | for (_ <- ack) {
         put!(1, *ack) | for (_ <- ack) {
@@ -111,54 +136,143 @@ new LinkedBlockingQueue in {
 </p>
 </details><br/>
 
-### Attempt 2
+### Version #2: linked-list with size (bounded LIFO)
+
+Для того, что бы добавить bounded и методы, знающие размеры (*size*/*remainingCapacity*) можно расширить формат node до Tuple4
+```
+(canTake, canPut, size, elem, next)
+canTake - boolean, can take it?
+canPut - boolean, can add one more?
+size: Int
+elem: Any
+next: Tuple5 or Nil
+```
+
+```put("A"); put("B"); put("C"); put("D")```
 
 ```
-          +-----+
-          |     v 
-(T, T, 2, *)   (T, T, 1, *) -> (F, T, 0, Nil)
+               +-----+              +-----+              +-----+
+               |     v              |     v              |     v
+(T, F, 3, "D", *)    (T, T, 2, "C", *)    (T, T, 1, "B", *)    (F, T, 0, "A", Nil)
 ```
 
+**init**  
+```atomicRef!((false, true, 0, Nil, Nil))```  
+???
+
+**put**   
+```
+contract put(@newElem, ack) = {
+  for (@(a, true, oldSize, b, c) <- atomicRef) {
+    atomicRef!(
+      (true, oldSize + 1 < maxSize, oldSize + 1, newElem, 
+      (a, true, oldSize, b, c))) | 
+    ack!(Nil)
+  }
+}
+```
+Читаем только если второй елемент (canPut) == true.
+
+**take**   
+```
+contract take(ret) = {
+  for (@(true, canPut, oldSize, elem, (a, b, c, d, e)) <- atomicRef) {
+    atomicRef!((a, b, c, d, e)) | 
+    ret!(elem)  
+  }
+}
+```
+Читаем только если первый елемент (cantake) == true.
+
+**size**   
+```
+contract size(ret) = {
+  for (@(a, b, size, c, d) <- atomicRef) {
+    atomicRef!((a, b, size, c, d)) | 
+    ret!(size)  
+  }
+} 
+```
+Читаем, выбираем поле *size* и возвращаем елемент на место.
+
+<details><summary>Сomplete source code</summary>
+<p>
+  
 ```
 new LinkedBlockingQueue in {
-  contract LinkedBlockingQueue(@maxSize, put, take) = {
-    new buffer in {
-      buffer!((false, true, 0, [])) |
-      contract put(@newHead, ack) = {
-        for (@(_, true, oldSize, oldBuf) <- buffer) {
-          buffer!((true, oldSize + 1 < maxSize, oldSize + 1, [newHead, oldBuf])) | ack!(Nil)
+  contract LinkedBlockingQueue(@maxSize, put, take, size, remainingCapacity) = {
+    new atomicRef in {
+      atomicRef!((false, true, 0, Nil, Nil)) |
+      contract put(@newElem, ack) = {
+        for (@(a, true, oldSize, b, c) <- atomicRef) {
+          atomicRef!(
+            (true, oldSize + 1 < maxSize, oldSize + 1, newElem, 
+            (a, true, oldSize, b, c))) | 
+          ack!(Nil)
         }
       } |
       contract take(ret) = {
-        for (@(true, _, oldSize, [head, tail]) <- buffer) {
-          buffer!((oldSize - 1 > 0, true, oldSize - 1, tail)) | ret!(head)  
+        for (@(true, canPut, oldSize, elem, (a, b, c, d, e)) <- atomicRef) {
+          atomicRef!((a, b, c, d, e)) | 
+          ret!(elem)  
         }
-      }       
+      } |
+      contract size(ret) = {
+        for (@(a, b, size, c, d) <- atomicRef) {
+          atomicRef!((a, b, size, c, d)) | 
+          ret!(size)  
+        }
+      } |
+      contract remainingCapacity(ret) = {
+        for (@(a, b, size, c, d) <- atomicRef) {
+          atomicRef!((a, b, size, c, d)) | 
+          ret!(maxSize - size)  
+        }
+      }        
     }    
   }|
   
-  new put, take in {    
-    LinkedBlockingQueue!(2, *put, *take) |    
+  new put, take, size, remainingCapacity in {    
+    LinkedBlockingQueue!(10, *put, *take, *size, *remainingCapacity) |    
     
-    // === PUT
-    new ackA in { 
-      put!(0, *ackA) | for (_ <- ackA) {
-        stdout!("A") | new ackB in { 
-          put!(1, *ackB) | for (_ <- ackB) {
-            stdout!("B") | new ackC in { 
-              put!(2, *ackC) | for (_ <- ackC) {
-                stdout!("C")
-              } 
+    new ack, ret in { 
+      put!("A", *ack) | for (_ <- ack) {
+        put!("B", *ack) | for (_ <- ack) {
+          put!("C", *ack) | for (_ <- ack) {
+            size!(*ret) | for (@sz <- ret) {
+              stdoutAck!(["size", sz], *ack) | for (_ <- ack) {              
+                remainingCapacity!(*ret) | for (@sz <- ret) {
+                  stdoutAck!(["remainingCapacity", sz], *ack) | for (_ <- ack) {         
+                    take!(*ret) | for (@elem <- ret) {
+                      stdoutAck!(["take", elem], *ack) | for (_ <- ack) {
+                        take!(*ret) | for (@elem <- ret) {
+                          stdoutAck!(["take", elem], *ack) | for (_ <- ack) {
+                            take!(*ret) | for (@elem <- ret) {
+                              stdoutAck!(["take", elem], *ack) | for (_ <- ack) {
+                                Nil
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }                
+                  }
+                }                
+              }
             }
           } 
         }
       } 
-    }
-    
-    // === TAKE
-//    new ret in { take!(*ret) | for (@val <- ret) { stdout!(val) } } |
-//    new ret in { take!(*ret) | for (@val <- ret) { stdout!(val) } } |
-//    new ret in { take!(*ret) | for (@val <- ret) { stdout!(val) } }    
+    }     
   }
 }
 ```
+```
+>> @{["size", 3]}
+>> @{["remainingCapacity", 7]}
+>> @{["take", "C"]}
+>> @{["take", "B"]}
+>> @{["take", "A"]}
+```
+</p>
+</details><br/>
