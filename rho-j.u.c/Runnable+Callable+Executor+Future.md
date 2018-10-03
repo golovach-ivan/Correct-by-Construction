@@ -1,3 +1,8 @@
+https://docs.oracle.com/javase/9/docs/api/java/lang/Runnable.html
+https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Callable.html
+https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Executor.html
+https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/ExecutorService.html
+
 This interface should be implemented by any class whose instances are intended to be executed by a thread
 ```java
 public interface Runnable {
