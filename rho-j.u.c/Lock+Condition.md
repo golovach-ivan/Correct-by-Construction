@@ -1,5 +1,21 @@
 ## java.util.concurrent.locks.Lock
-A [Lock](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/locks/Lock.html) is a tool for controlling access to a shared resource by multiple threads. Commonly, a lock provides exclusive access to a shared resource: only one thread at a time can acquire the lock and all access to the shared resource requires that the lock be acquired first. 
+A *Lock* is a tool for controlling access to a shared resource by multiple threads. Commonly, a lock provides exclusive access to a shared resource: only one thread at a time can acquire the lock and all access to the shared resource requires that the lock be acquired first ([javadoc](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/locks/Lock.html)). 
+
+```java
+public interface Lock {
+  // Acquires the lock.
+  void lock();
+
+  // Returns a new Condition instance that is bound to this Lock instance.
+  Condition newCondition();
+
+  // Acquires the lock only if it is free at the time of invocation.
+  boolean tryLock();
+
+  // Releases the lock.
+  void unlock();
+}
+```
 
 - Как используют java.util.concurrent.locks.Lock
 - Реализация Lock на RhoLang
