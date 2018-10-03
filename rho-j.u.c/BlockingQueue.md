@@ -27,23 +27,17 @@ public interface BlockingQueue<E> {
 ### Version #1: base linked-list (unbounded LIFO)
 Если нас интересует base (only *put* and *take* methods) unbounded LIFO queue, то мы можем реализовать простейший single-linked stack based on node as 2-elem list (\[elem, next\]) or 2-elem tuple ((elem, next)).
 
+Empty queue (empty mark)  
+```Nil``` 
+
+Result of ```put(0); put(1); put(2); ``` is
 ```
-contract LinkedBlockingQueue(put, take) = {
-  new atomicRef in {
-    atomicRef!(Nil) |
-    contract put(@newHead, ack) = {
-      for (@oldBuf <- atomicRef) {
-        atomicRef!([newHead, oldBuf]) | ack!(Nil)
-      }
-    } |
-    contract take(ret) = {
-      for (@[head, tail] <- atomicRef) {
-        atomicRef!(tail) | ret!(head)  
-      }
-    } 
-  }    
-}
+    +----+   +----+
+    |    v   |    v
+[2, *]   [1, *]   [0, Nil]
 ```
+
+Trick (block on empty): ```for (@[head, tail] <- buffer) {...}```
 
 **init**  
 ```atomicRef!(Nil)```    
@@ -68,15 +62,6 @@ contract take(ret) = {
 } 
 ```
 Read only non empty (not null mark (*Nil*)) and update *atomicRef*: ```[elem, x] -> x```, so blocking on empty.
-
-So result of ```put(0); put(1); put(2); ``` is
-```
-    +----+   +----+
-    |    v   |    v
-[2, *]   [1, *]   [0, Nil]
-```
-
-Trick (block on empty): ```for (@[head, tail] <- buffer) {...}```
 
 <details><summary>Сomplete source code</summary>
 <p>
@@ -138,15 +123,8 @@ new LinkedBlockingQueue in {
 
 ### Version #2: linked-list with size (bounded LIFO)
 
-Для того, что бы добавить bounded и методы, знающие размеры (*size*/*remainingCapacity*) можно расширить формат node до Tuple4
-```
-(canTake, canPut, size, elem, next)
-canTake - boolean, can take it?
-canPut - boolean, can add one more?
-size: Int
-elem: Any
-next: Tuple5 or Nil
-```
+Для того, что бы добавить bounded и методы, знающие размеры (*size*/*remainingCapacity*) можно расширить формат node до 5-elem tuple
+```(canTake: bool, canPut: bool, size: int, elem: any, next: 5-elem-tuple or Nil)```
 
 ```put("A"); put("B"); put("C"); put("D")```
 
