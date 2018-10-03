@@ -18,54 +18,45 @@ public interface BlockingQueue<E> {
 
   // Returns the number of elements in this queue.
   int size();
+  
+  // Returns the number of additional elements that this queue can accept without blocking.  
+  int remainingCapacity();
 }
 ```
 
-```java
-BlockingQueue queue = new LinkedBlockingQueue();
-queue.put(0);
-queue.put(1);
-queue.put(2);
-queue.put(3);
+### Model #1: linked-list (unbounded LIFO)
+Если нас интересует base (only *put* and *take* methods) unbounded LIFO queue, то мы можем реализовать простейший single-linked stack based on node as 2-elem list (\[elem, next\]) or 2-elem tuple ((elem, next)).
+
 ```
+contract LinkedBlockingQueue(put, take) = {
+  new buffer in {
+    buffer!(Nil) |    
+    contract put(@newHead, ack) = {
+      for (@oldBuf <- buffer) {
+        buffer!([newHead, oldBuf]) | ack!(Nil)
+      }
+    } |    
+    contract take(ret) = {
+      for (@[head, tail] <- buffer) {
+        buffer!(tail) | ret!(head)  
+      }
+    } 
+  }    
+}
 ```
-Nil -> [0, Nil] -> [1, [0, Nil]] -> [2, [1, [0, Nil]]] -> [3, [2, [1, [0, Nil]]]]
 
-Nil
-
-[0, Nil]
-
-    +----+
-    |    v
-[1, *]   [0, Nil]
-
+So result of ```put(0); put(1); put(2); ``` is
+```
     +----+   +----+
     |    v   |    v
-[2, *]   [0, *]   [0, Nil]
+[2, *]   [1, *]   [0, Nil]
 ```
 
-```
-(false, true, 0, Nil) -> (true, true, 1, Nil) -> (true, true, 2, Nil) -> (true, false, 3, Nil)
-```
+Trick (block on empty): ```for (@[head, tail] <- buffer) {...}```
 
-```
-                                      (F, T, 0, Nil)
-                                                ^
-                                                |
-                    (F, T, 0, Nil)    (T, T, 1, *)
-                              ^                 ^
-                              |                 |
-(F, T, 0, Nil)  ->  (T, T, 1, *)  ->  (T, T, 2, *)  ->  (T, F, 3, Nil)
-
-          +-----+
-          |     v 
-(T, T, 2, *)   (T, T, 1, *) -> (F, T, 0, Nil)
-```
-
-### Model #1: unbounded queue
-
-
-
+<details><summary>Сomplete source code</summary>
+<p>
+  
 ```
 new LinkedBlockingQueue in {
   contract LinkedBlockingQueue(put, take) = {
@@ -84,25 +75,50 @@ new LinkedBlockingQueue in {
     }    
   }|
   
-  new put, take in {    
+  new put, take, size in {    
     LinkedBlockingQueue!(*put, *take) |    
     
-    // === PUT
-    put!(0, Nil) |
-    put!(1, Nil) |
-    put!(2, Nil) |
-    
-    // === TAKE
-    new ret in { take!(*ret) | for (@val <- ret) { stdout!(val) } } |
-    new ret in { take!(*ret) | for (@val <- ret) { stdout!(val) } } |
-    new ret in { take!(*ret) | for (@val <- ret) { stdout!(val) } }    
+    // === put, size, take
+    new ack, ret in { 
+      put!(0, *ack) | for (_ <- ack) {
+        put!(1, *ack) | for (_ <- ack) {
+          put!(2, *ack) | for (_ <- ack) {
+            take!(*ret) | for (@elem <- ret) {
+              stdoutAck!(["take", elem], *ack) | for (_ <- ack) {
+                take!(*ret) | for (@elem <- ret) {
+                  stdoutAck!(["take", elem], *ack) | for (_ <- ack) {
+                    take!(*ret) | for (@elem <- ret) {
+                      stdoutAck!(["take", elem], *ack) | for (_ <- ack) {
+                        Nil
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          } 
+        }
+      } 
+    }
   }
 }
 ```
-
-Trick (block on empty): ```for (@[head, tail] <- buffer) {...}```
+```
+>> @{["take", 2]}
+>> @{["take", 1]}
+>> @{["take", 0]}
+```
+</p>
+</details><br/>
 
 ### Attempt 2
+
+```
+          +-----+
+          |     v 
+(T, T, 2, *)   (T, T, 1, *) -> (F, T, 0, Nil)
+```
+
 ```
 new LinkedBlockingQueue in {
   contract LinkedBlockingQueue(@maxSize, put, take) = {
