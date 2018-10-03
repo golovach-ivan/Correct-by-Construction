@@ -56,7 +56,7 @@ Trick (block on empty): ```for (@[head, tail] <- buffer) {...}```
 ```
 2 - Read any value (null mark (*Nil*) too), so always non-blocking.  
 3 - Insert new node, update *atomicRef*: ```x -> [newElem, x]```.
-4 - Подтверждаем клиенту вставку.  
+4 - Подтверждаем клиенту вставку нового елемента.  
 
 **take**
 ```
@@ -161,7 +161,7 @@ new LinkedBlockingQueue in {
 ```
 2 - Блокирующе читаем только если первый елемент *canPut* is true (queue is not full).   
 3-5 - Восстанавливаем состояние *atomicRef*, сохраняем новый node со ссылкой на старый node. Высчитываем новый размер ```oldSize + 1``` и новое значение флага *canPut* = ```oldSize + 1 < maxSize```.   
-6 - Подтверждаем клиенту вставку.     
+6 - Подтверждаем клиенту вставку нового елемента.       
 
 **take**   
 ```
@@ -267,6 +267,151 @@ new LinkedBlockingQueue in {
 >> @{["take", "C"]}
 >> @{["take", "B"]}
 >> @{["take", "A"]}
+```
+</p>
+</details><br/>
+
+### Version #3: bounded LIFO/FIFO with backed array
+
+Best variant - atomic ref with array.  
+AtomicRef\<Array\<Any\>, []\>  
+AtomicRef\<Int, Nil\>  
+
+Symmetric impls
+```
+contract BlockingQueue(@maxSize, put, take, size) = {
+  new atomicRef in {
+    atomicRef!([]) |
+    
+    contract put(@newElem, ack) = {
+      for (@arr <- atomicRef) {
+        atomicRef!(arr ++ [newElem]) | ack!(Nil)
+      }
+    } |
+    
+    contract take(ret) = {
+      for (@[head...tail] <- atomicRef) {
+        atomicRef!(tail) | ret!(head)
+      }
+    } |
+    
+    contract size(ret) = {
+      for (@arr <- atomicRef) {
+        atomicRef!(arr) | ret!(arr.length())
+      }
+    } 
+  }    
+}
+```
+
+**init**  
+```
+1  atomicRef!([])
+```
+1 - ???.   
+
+**put**  
+```
+1  contract put(@newElem, ack) = {
+2    for (@arr <- atomicRef) {
+3      atomicRef!(arr ++ [newElem]) | 
+4      ack!(Nil)
+5    }
+6  }
+```
+2 - ???.   
+3 - ???.   
+4 - ???.   
+
+**take**  
+```
+1  contract take(ret) = {
+2    for (@[head...tail] <- atomicRef) {
+3      atomicRef!(tail) | 
+4      ret!(head)
+5    }
+6  }
+```
+2 - ???.   
+3 - ???.   
+4 - ???.   
+
+**size**  
+```
+1  contract size(ret) = {
+2    for (@arr <- atomicRef) {
+3      atomicRef!(arr) | 
+4      ret!(arr.length())
+5    }
+6  } 
+```
+2 - ???.   
+3 - ???.   
+4 - ???.   
+
+<details><summary>Сomplete source code</summary>
+<p>
+  
+```
+new BlockingQueue in {
+  contract BlockingQueue(@maxSize, put, take, size) = {
+    new atomicRef in {
+      atomicRef!([]) |
+      contract put(@newElem, ack) = {
+        for (@arr <- atomicRef) {
+          atomicRef!(arr ++ [newElem]) | ack!(Nil)
+        }
+      } |
+      contract take(ret) = {
+        for (@[head...tail] <- atomicRef) {
+          atomicRef!(tail) | ret!(head)
+        }
+      } |
+      contract size(ret) = {
+        for (@arr <- atomicRef) {
+          atomicRef!(arr) | ret!(arr.length())
+        }
+      } 
+    }    
+  }|
+  
+  new put, take, size in {    
+    BlockingQueue!(2, *put, *take, *size) |    
+    
+    // === put, size, take
+    new ack, ret in { 
+      put!(0, *ack) | for (_ <- ack) {
+        put!(1, *ack) | for (_ <- ack) {
+          put!(2, *ack) | for (_ <- ack) {
+            size!(*ret) | for (@sz <- ret) {
+              stdoutAck!(["size", sz], *ack) | for (_ <- ack) {
+                take!(*ret) | for (@elem <- ret) {
+                  stdoutAck!(["take", elem], *ack) | for (_ <- ack) {
+                    take!(*ret) | for (@elem <- ret) {
+                      stdoutAck!(["take", elem], *ack) | for (_ <- ack) {
+                        take!(*ret) | for (@elem <- ret) {
+                          stdoutAck!(["take", elem], *ack) | for (_ <- ack) {
+                            Nil
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          } 
+        }
+      } 
+    }     
+  }
+}
+```
+```
+>> @{["size", 3]}
+>> @{["take", 0]}
+>> @{["take", 1]}
+>> @{["take", 2]}
 ```
 </p>
 </details><br/>
