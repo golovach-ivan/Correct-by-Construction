@@ -171,3 +171,49 @@ new AtomicInteger in {
   }
 }
 ```
+
+#### Equivalent reduction cores
+```
+for (@value <= valueRef) {            
+  for (ret       <- get) { valueRef!(...) | ... } |     
+  for (newValue  <- set) { valueRef!(...) | ... } |      
+  for (ret <- getAndInc) { valueRef!(...) | ... }
+}
+```
+```           
+for (@value <= valueRef; ret       <= get) { valueRef!(...) | ... } |     
+for (@value <= valueRef; newValue  <= set) { valueRef!(...) | ... } |      
+for (@value <= valueRef; ret <= getAndInc) { valueRef!(...) | ... }
+```
+```
+for (ret       <= get; @value <= valueRef) { valueRef!(...) | ... } |     
+for (newValue  <= set; @value <= valueRef) { valueRef!(...) | ... } |      
+for (ret <= getAndInc; @value <= valueRef) { valueRef!(...) | ... }
+```
+```
+for (ret       <= get) {            
+  for (@value <- valueRef) { valueRef!(...) | ... }
+} |     
+  
+for (newValue  <= set) {              
+  for (@value <- valueRef) { valueRef!(...) | ... }
+} |      
+  
+for (ret <= getAndInc) {              
+  for (@value <- valueRef) { valueRef!(...) | ... }
+}
+```
+
+```
+contract get(ret) = {            
+  for (@value <- valueRef) { valueRef!(...) | ... }
+} |     
+  
+contract set(newValue) = {              
+  for (@value <- valueRef) { valueRef!(...) | ... }
+} |      
+  
+contract getAndInc(ret) = {              
+  for (@value <- valueRef) { valueRef!(...) | ... }
+}
+```
