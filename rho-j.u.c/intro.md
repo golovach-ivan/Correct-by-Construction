@@ -72,6 +72,40 @@ contract AtomicInteger(@initState, set, incAndGet) = {
 </p></details><br/>
 
 ### Blocked (conditional) update
+В случае AtomicInteger у нас состояние - это Int и все операции неблокирующие.
+
+В случае Semaphore у нас состояние - это неотрицательный Int (permission count), операция relese - неблокирующая, но операция acquire - блокирующая на одном значении (на 0, если нет permission - ждем его появления).
+
+```Nil <-> 1 <-> 2 <-> 3 <-> ...```
+
+```
+1  new Semaphore in {
+2    contract Semaphore(@initPermits, acquireOp, releaseOp) = {
+3      new permitsRef in {
+4        permitsRef!(initЗermits) |        
+5      
+6        contract acquireOp(ack) = {
+7          for (@(permits /\ Int) <- permitsRef) { 
+8            if (permits == 1) { permitsRef!(Nil) } 
+9            else { permitsRef!(permits - 1) } |
+10           ack!(Nil)
+11         }
+12       } |
+13      
+14       contract releaseOp(_) = {
+15         for (@permits <- permitsRef) {
+16           if (permits == Nil) { permitsRef!(1) }
+17           else { permitsRef!(permits + 1) }
+18         }
+19       } 
+20     }
+21    }    
+22 }
+```
+**7** - blocking (conditional) read ```for (@(permits /\ Int) <- permitsRef) {...} ```. Wait for *Int* not *Nil*.  
+**8-9** - *1-- = Nil* or *k-- = (k-1)* decrement logic.   
+**15** - nonblocking (unconditional) read.   
+**16-17** - *Nil++ = 1* or *k+ = (k+1)* increment logic.   
 
 ### Multistate update
 
