@@ -50,8 +50,9 @@ contract MyPrimitive(@initState, fooOp, barOp) = {
 }
 ```
 
-Рассмотрим пример - *AtomicInteger*, *state: Int*, *foo* == set, *bar* = incAndGet
-```
+<details><summary>Example: <i>AtomicInteger</i>, *state: Int*, ops = {*set*, *incAndGet*}</summary><p>
+  
+```  
 contract AtomicInteger(@initState, set, incAndGet) = {
   new stateRef in {
     stateRef!(initState) |
@@ -60,7 +61,7 @@ contract AtomicInteger(@initState, set, incAndGet) = {
         stateRef!(arg) | ack!(Nil)
       }
     } |
-    contract incAndGet(ret) = {'
+    contract incAndGet(ret) = {
       for (@state <- stateRef) {
         stateRef!(state + 1) | ret!(state + 1)
       }
@@ -68,7 +69,13 @@ contract AtomicInteger(@initState, set, incAndGet) = {
   }
 }
 ```
+</p></details><br/>
 
+### Blocked (conditional) update
+
+### Multistate update
+
+### ???
 ```
 new stateRef in {
   stateRef!(init) |
