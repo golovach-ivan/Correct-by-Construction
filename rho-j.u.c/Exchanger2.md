@@ -12,9 +12,6 @@ public class Exchanger<V> {
 }
 ```
 
-- [Version #1: one process do both transition](#version-1-one-process-do-both-transition)
-- [Version #2: two concurrent processes do one transition each](#version-2-two-concurrent-processes-do-one-transition-each)
-
 ```
 +-----> Nil--------+
 |                  |
@@ -22,46 +19,31 @@ public class Exchanger<V> {
 +--[itemA, retA] <-+
 ```
 
-```Nil --> [itemA, retA] --> Nil --> [itemA, retA] --> Nil -->  ...```   
+```
+(state, input) -> (state, result):
+  (Nil, (itemA, retA)) -> ((itemA, retA), WAIT)
+  ((itemA, retA), (itemB, retB)) -> (Nil, _)
+```
 
 ```
-for (@arg <= input; @state <= stateRef) {
-  f!(arg, state)
-}
-
-for (@state <= stateRef; @arg <= input) {
-  f!(arg, state)
-}
-
-for (@arg <= input) {
-  for (@state <- stateRef) {
-    f!(arg, state)
-  }
-}
-
-for (@state <= stateRef) {
-  for (@arg <- input) {
-    f!(arg, state)
-  }
-}
+> Nil
+exchange(itemA, retA)
+> [itemA, retA]
+exchange(itemB, retB)
+> Nil
+exchange(itemC, retC)
+> [itemC, retC]
+exchange(itemD, retD)
+> Nil
+...
 ```
+
+- [Version #1: one process do both transition](#version-1-one-process-do-both-transition)
+- [Version #2: two concurrent processes do one transition each](#version-2-two-concurrent-processes-do-one-transition-each)
+
 
 ### Version #1: one process do both transition
 
-**Общая идея**:  
-```storage``` реализует шаблон [```atomic channel```](???). В качестве пустого нейтрального значения используется пустой список ```[]```, в качестве рабочего значения - ```[item, ret]```.
-```empty --> [] --> empty --> [xItem, xRet] --> empty --> [] --> empty -->  [xItem, xRet] --> empty --> [] -->  ...```   
-
-
-#### Model
-```
-storage:  [] --------------------> [itemA, retA] --------------------> [] --------------------> [itemС, retС]
-API calls:   exchange(itemA, retA)               exchange(itemB, retB)    exchange(itemС, retС)
-                                                                  retA!(itemB)
-                                                                  retB!(itemA)
-```
-
-### Реализация на RhoLang 
 ```Exchanger``` на RhoLang может быть реализован следующим образом
 ```
 1  contract Exchanger(input) = {
@@ -94,18 +76,20 @@ API calls:   exchange(itemA, retA)               exchange(itemB, retB)    exchan
 new Exchanger in {
   
   contract Exchanger(input) = {
-    new atomicRef in {
+    new stateRef in {
     
-      // INIT
-      atomicRef!([]) |                         
+      // init state
+      stateRef!(Nil) |                         
       
-      // CORE CYCLE
-      for (@itemA, @retA <= input) {
-        for (@maybePair <- atomicRef) {
-          match maybePair {
-            [] => atomicRef!([itemA, retA])        
-            [itemB, retB] => { atomicRef!([]) |                 
-              @retB!(itemA) | @retA!(itemB) }}}}      
+      // (state, input) -> (state, return) match cycle
+      for (@state <= stateRef; @itemA, @retA <= input) {
+        match state {
+          Nil => stateRef!([itemA, retA])        
+          [itemB, retB] => { stateRef!(Nil) |                 
+            @retB!(itemA) | @retA!(itemB) 
+          }
+        }
+      }     
     }
   } |
 
@@ -127,6 +111,14 @@ new Exchanger in {
   }
 }
 ```
+```
+>> [1, " -> ", 0]
+>> [0, " -> ", 1]
+>> [4, " -> ", 3]
+>> [3, " -> ", 4]
+>> [5, " -> ", 2]
+>> [2, " -> ", 5]
+```
 </p>
 </details><br/>
 
@@ -135,23 +127,37 @@ new Exchanger in {
 ```
 1  contract Exchanger(input) = {
 2    new atomicRef in {    
-3      // INIT
-4      atomicRef!(Nil) |                               
-5      // *(Nil -> [item, ret])
-6      for (@Nil <= atomicRef) {
-7        for (@itemA, @retA <- input) {
-8          atomicRef!([itemA, retA])
-9        }
-10     } |
-11     // *([item, ret] -> Nil)
-12     for (@[itemA, retA] <= atomicRef) {
-13       for (@itemB, @retB <- input) {
-14         atomicRef!(Nil) |                 
-15         @retB!(itemA) | @retA!(itemB)
-16       }
-17     }
-18   }      
-19 }
+3      
+4      atomicRef!(Nil) |  
+5      
+6      for (@itemA, @retA <= input; @Nil <= atomicRef) {
+7        atomicRef!([itemA, retA])
+8      } |
+9     
+10     for (@itemB, @retB <= input; @[itemA, retA] <= atomicRef) {
+11       atomicRef!(Nil) |                 
+12       @retB!(itemA) | @retA!(itemB)
+13     }
+14   }      
+15 }
+```
+**4** - Init.   
+**6** - ???.
+**7** - ???.   
+**10** - ???.   
+**11** - ???.   
+**12** - ???.   
+
+Core cycles can be rewritten to
+```
+for (@itemA, @retA <= input; @Nil <= atomicRef) {
+  atomicRef!([itemA, retA])
+} |
+     
+for (@itemB, @retB <= input; @[itemA, retA] <= atomicRef) {
+  atomicRef!(Nil) |                 
+  @retB!(itemA) | @retA!(itemB)
+}
 ```
 
 <details><summary>Complete source code</summary>
@@ -162,19 +168,19 @@ new Exchanger in {
   
   contract Exchanger(input) = {
     new atomicRef in {    
-      // INIT
+    
+      // init state
       atomicRef!(Nil) |                               
-      // CORE CYCLE
-      for (@Nil <= atomicRef) {
-        for (@itemA, @retA <- input) {
-          atomicRef!([itemA, retA])
-        }
+      
+      // *(Nil -> [item, ret])
+      for (@itemA, @retA <- input; @Nil <= atomicRef) {
+        atomicRef!([itemA, retA])
       } |
-      for (@[itemA, retA] <= atomicRef) {
-        for (@itemB, @retB <- input) {
-          atomicRef!(Nil) |                 
-          @retB!(itemA) | @retA!(itemB)
-        }
+      
+      // *([item, ret] -> Nil)
+      for (@itemB, @retB <- input; @[itemA, retA] <= atomicRef) {
+        atomicRef!(Nil) |                 
+        @retB!(itemA) | @retA!(itemB)
       }
     }      
   } |
