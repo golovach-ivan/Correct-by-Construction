@@ -1,6 +1,17 @@
 ## Intro
 
 ### Concurrency Primitive as FSM
+
+Во многих случаях можно реализовать как атомарно обновляемое значение (канал, в котором не более одного значения)
+```
+contract MyPrimitive(@initState, ...) = {
+  new stateRef in {
+    stateRef!(initState) |
+    ...  
+  }
+}
+```
+
 Многие операции concurrency primitive можно представить как atomic update over state
 ```
 contract op(@arg, out) = {
