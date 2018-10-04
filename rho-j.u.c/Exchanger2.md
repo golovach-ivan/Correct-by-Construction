@@ -1,4 +1,4 @@
-## java.util.concurrent.Exchanger
+## java.util.concurrent.Exchanger\<V\> in RhoLang
 
 A synchronization point at which threads can pair and swap elements within pairs. Each thread presents some object on entry to the exchange method, matches with a partner thread, and receives its partner's object on return ([javadoc](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Exchanger.html)).
 
@@ -12,6 +12,27 @@ public class Exchanger<V> {
 }
 ```
 
+- \[Version #1: one process do both transition\](???)
+- \[Version #2: two concurrent processes do one transition each\](???)
+
+```
++-----> Nil--------+
+|                  |
+|                  |
++--[itemA, retA] <-+
+```
+
+```Nil --> [itemA, retA] --> Nil --> [itemA, retA] --> Nil -->  ...```   
+
+### Version #1: one process do both transition
+
+### Version #2: two concurrent processes do one transition each
+
+**Общая идея**:  
+```storage``` реализует шаблон [```atomic channel```](???). В качестве пустого нейтрального значения используется пустой список ```[]```, в качестве рабочего значения - ```[item, ret]```.
+```empty --> [] --> empty --> [xItem, xRet] --> empty --> [] --> empty -->  [xItem, xRet] --> empty --> [] -->  ...```   
+
+
 #### Model
 ```
 storage:  [] --------------------> [itemA, retA] --------------------> [] --------------------> [itemС, retС]
@@ -20,45 +41,68 @@ API calls:   exchange(itemA, retA)               exchange(itemB, retB)    exchan
                                                                   retB!(itemA)
 ```
 
+### Реализация на RhoLang 
+```Exchanger``` на RhoLang может быть реализован следующим образом
+```
+1  contract Exchanger(input) = {
+2    new atomicRef in {    
+3      // INIT
+4      atomicRef!([]) |                               
+5      // CORE CYCLE
+6      for (@itemA, @retA <= input) {
+7        for (@maybePair <- atomicRef) {
+8          match maybePair {
+9            [] => atomicRef!([itemA, retA])        
+10           [itemB, retB] => { atomicRef!([]) |                 
+11             @retB!(itemA) | @retA!(itemB) 
+12           }
+13         }
+14       }
+15     }      
+16   }
+17 } 
+```  
+  **4** - ???.   
+  **6** - ???.   
+  **7-8** - ???.   
+  **9** - ???.   
+  **10-11** - ???.   
+
 <details><summary>Complete source code</summary>
 <p>
   
 ```
-new Exchanger, exchange in {
+new Exchanger in {
   
   contract Exchanger(input) = {
-    new storage in {
-      storage!([]) |                         
-      for (@xItem, @xRet <= input) {
-        for (@maybePair <- storage) {
+    new atomicRef in {
+    
+      // INIT
+      atomicRef!([]) |                         
+      
+      // CORE CYCLE
+      for (@itemA, @retA <= input) {
+        for (@maybePair <- atomicRef) {
           match maybePair {
-            [] =>                            
-              storage!([xItem, xRet])        
-            [yItem, yRet] => {               
-              storage!([]) |                 
-              @yRet!(xItem) | @xRet!(yItem) 
-            } 
-          }
-        }
-      }
+            [] => atomicRef!([itemA, retA])        
+            [itemB, retB] => { atomicRef!([]) |                 
+              @retB!(itemA) | @retA!(itemB) }}}}      
     }
   } |
 
-  contract exchange(@my, input) = {
-    new ret in {
-      input!(my, *ret) | for (@other <- ret) {
-        stdout!([my, other])
-      }
-    }
-  } |
-
-  // Demo  
-  new input, N in {
-    Exchanger!(*input) |
-    N!(0) |
-    for (@my <= N) {
-      if (my < 6) {
-        exchange!(my, *input) | N!(my + 1)
+  // === DEMO
+  // for (i = 0; i < 6; i++) {
+  //   exchange!(i, ?j) | stdout("%i -> " %j)
+  // }
+  new exchange, k in {
+    Exchanger!(*exchange) |
+    k!(0) |
+    for (@i <= k) {
+      if (i < 6) {
+        new ret in {
+          exchange!(i, *ret) | for (@j <- ret) {
+            stdout!([i, " -> ", j]) }} |  
+        k!(i + 1)
       }
     }
   }
