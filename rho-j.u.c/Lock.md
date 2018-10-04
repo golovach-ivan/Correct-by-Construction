@@ -21,10 +21,13 @@ public interface Lock {
 ### Version #1: lock/unlock
 
 ```
-+---> {*}----+   UNLOCKED
-|            |
-|            |
-+-----{ } <--+   LOCKED
+         UNLOCKED
+      +---> {*}----+   
+      |            |
+unlock|            |lock
+      |            |
+      +-----{ } <--+   
+          LOCKED
 ```
 
 ```
