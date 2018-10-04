@@ -88,6 +88,7 @@ public class Demo {
 
 <details><summary>Пример использования</summary>
 <p>
+  
 ```
  1  new Exchanger, exchange in {
  2    
