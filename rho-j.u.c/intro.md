@@ -7,8 +7,8 @@ contract op(@arg, out) = {
   }
 }  
 ```
-**arg** - ???.   
-**out** - ???.   
+**arg** - аргумент операции, может отсутствовать (как у *get*), быть один (как у *set*) или будет ???множество (как у *???*).   
+**out** - обычно называется *ret* у возвращающих значение (```get(ret)```), *ack* у синхронных void (```set(arg, ack)```), отсутсвуют у асинхронных void (```set(arg)```).   
 **state** - ???.   
 **F** - ???.   
 **G** - ???.   
@@ -46,7 +46,7 @@ contract AtomicInteger(@initState, set, incAndGet) = {
         stateRef!(arg) | ack!(Nil)
       }
     } |
-    contract incAndGet(ret) = {
+    contract incAndGet(ret) = {'
       for (@state <- stateRef) {
         stateRef!(state + 1) | ret!(state + 1)
       }
