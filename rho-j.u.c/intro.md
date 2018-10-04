@@ -1,4 +1,6 @@
 ## Intro
+
+### Concurrency Primitive as FSM
 Многие операции concurrency primitive можно представить как atomic update over state
 ```
 contract op(@arg, out) = {
@@ -13,6 +15,7 @@ contract op(@arg, out) = {
 **F** - ???.   
 **G** - ???.   
 
+### Concurrency Primitive Sceleton
 - *state* value saved in channel *stateRef*
 - there are two operations: *fooOp* and *barOp*
 - each op (*fooOp* and *barOp*) has form: (state, arg) -> (F(state, arg), G(state, arg))
