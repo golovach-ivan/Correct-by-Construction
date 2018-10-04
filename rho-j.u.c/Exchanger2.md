@@ -12,8 +12,8 @@ public class Exchanger<V> {
 }
 ```
 
-- \[Version #1: one process do both transition\](???)
-- \[Version #2: two concurrent processes do one transition each\](???)
+- [Version #1: one process do both transition](#version-1-one-process-do-both-transition)
+- [Version #2: two concurrent processes do one transition each](#version-2-two-concurrent-processes-do-one-transition-each)
 
 ```
 +-----> Nil--------+
