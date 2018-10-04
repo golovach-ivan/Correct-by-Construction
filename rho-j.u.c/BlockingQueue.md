@@ -346,9 +346,9 @@ contract BlockingQueue(@maxSize, put, take, size) = {
 5    }
 6  }
 ```
-2 - ???.   
-3 - ???.   
-4 - ???.   
+2 - Unblocked read.   
+3 - Restore/update: arr -> arr ++ \[newElem]\  
+4 - Подтверждаем клиенту вставку нового елемента.   
 
 **take**  
 ```
@@ -359,9 +359,9 @@ contract BlockingQueue(@maxSize, put, take, size) = {
 5    }
 6  }
 ```
-2 - ???.   
-3 - ???.   
-4 - ???.   
+2 - Blocked read, wait on non-empty array.   
+3 - Restore/update: \[head..tail\] -> tail  
+4 - Return: \[head..tail\] -> head  
 
 **size**  
 ```
@@ -372,9 +372,9 @@ contract BlockingQueue(@maxSize, put, take, size) = {
 5    }
 6  } 
 ```
-2 - ???.   
-3 - ???.   
-4 - ???.   
+2 - Unblocked read.   
+3 - Restore/save state.   
+4 - Return arr.length.   
 
 <details><summary>Сomplete source code</summary>
 <p>
