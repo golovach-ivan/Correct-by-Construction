@@ -4,6 +4,16 @@ A Queue that additionally supports operations that wait for the queue to become 
 
 BlockingQueue can be optionally-bounded. BlockingQueue can orders elements FIFO (first-in-first-out) or LIFO (least-in-first-out).
 
+  - [Version #1: base linked-list (unbounded LIFO)](#version-1-base-linked-list-unbounded-lifo)
+  - [Version #2: linked-list with size (bounded LIFO)](#version-2-linked-list-with-size-bounded-lifo)
+  - [Version #3: bounded LIFO/FIFO with backed array](#version-3-bounded-lifofifo-with-backed-array)
+
+
+
+  - [Version #1: base linked-list (unbounded LIFO)](https://github.com/golovach-ivan/Correct-by-Construction/blob/master/rho-j.u.c/BlockingQueue.md#version-1-base-linked-list-unbounded-lifo)
+  - [Version #2: linked-list with size (bounded LIFO)](https://github.com/golovach-ivan/Correct-by-Construction/blob/master/rho-j.u.c/BlockingQueue.md#version-2-linked-list-with-size-bounded-lifo)
+  - [Version #3: bounded LIFO/FIFO with backed array](https://github.com/golovach-ivan/Correct-by-Construction/blob/master/rho-j.u.c/BlockingQueue.md#version-3-bounded-lifofifo-with-backed-array)
+
 <details><summary>public interface BlockingQueue&lt;E&gt;</summary>
 <p>
   
