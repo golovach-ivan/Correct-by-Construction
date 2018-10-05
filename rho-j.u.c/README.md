@@ -11,7 +11,7 @@
   - **Locks**: [Lock](Lock.md), [Condition](Condition.md), ReentrantLock, ReadWriteLock   
   - **Synchronizers**: [Semaphore](Semaphore.md), [Exchanger](Exchanger.md), [CountDownLatch](CountDownLatch.md), CyclicBarrier, Phaser, 
 ###  Exercises   
-  - [???](???)   
+  - [Implement method ```int getCount()``` for CountDownLatch.](CountDownLatch.md#exercise)   
   - [???](???)   
   - [???](???)   
   - [???](???)   
