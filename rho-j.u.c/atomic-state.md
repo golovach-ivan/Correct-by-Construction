@@ -1,9 +1,9 @@
 ## Atomic State pattern
 
-- [Concurrency Primitive as FSM]()  
-- [Example]()  
-- [Blocked (conditional) update]()  
-- [Multislot State]()  
+- [Concurrency Primitive as FSM](#concurrency-primitive-as-fsm)  
+- [Example](#example)  
+- [Blocked (conditional) update](#blocked-conditional-update)  
+- [Multislot State](#multislot-state)  
 - [???]()  
 
 ### Concurrency Primitive as FSM
@@ -121,7 +121,7 @@ contract AtomicInteger(@initState, set, incAndGet) = {
 
 ### Multislot State
 
-### ???
+### Join State and Operations Channels
 ```
 new stateRef in {
   stateRef!(init) |
