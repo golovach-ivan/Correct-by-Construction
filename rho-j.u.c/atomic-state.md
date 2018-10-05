@@ -1,11 +1,11 @@
 ## Atomic State pattern
 
 - [Concurrency Primitive as FSM](#concurrency-primitive-as-fsm)  
-- [Join State and Operations Channels](???)  
+- [Join State and Operations Channels](#join-state-and-operations-channels)  
 - [Example](#example)  
 - [Blocked (conditional) update](#blocked-conditional-update)  
 - [Multislot State](#multislot-state)  
-- [Join equi-transformations](???)  
+- [Join equi-transformations](#join-equi-transformations)  
 
 ### Concurrency Primitive as FSM
 
@@ -123,7 +123,26 @@ contract AtomicInteger(@initState, set, incAndGet) = {
 **16-17** - *Nil++ = 1* or *k+ = (k+1)* increment logic.   
 
 ### Multislot State
-???
+
+RhoLang is a **polyadic π-calculi** extension so multivalued channel for free ```stateRef!(slot0, slot1)``` + ```for (@slot0, @slot1 <- stateRef)```
+```
+contract C(@initSlot0, @initSlot1, fooOp, ...) = {
+  new stateRef in {
+    stateRef!(initSlot0, initSlot1) |
+    
+    contract fooOp(_) = {
+      for (@slot0, @slot1 <- stateRef) {
+        stateRef!(F0::(slot0), F1::(slot1)) |
+        ...
+      }
+    } |
+    ...
+  }
+}
+```
+
+```
+```
 
 ### Join equi-transformations
 ```
