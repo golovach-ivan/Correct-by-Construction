@@ -1,32 +1,36 @@
 ## Loops
 
-### Index set
+In sources (mostly in demos) udes loops.
+
+### Index set (unordered)
 ```
-new indexSet in {
-  indexSet!(0) | indexSet!(1) | indexSet!(2) |
-  for (@index <= indexSet) {
-    stdout!(index)
+new n in {
+  n!(0) | n!(1) | n!(2) | n!(3) | n!(4) | 
+  for (@i <= n) {
+    stdout!(i)
   }
 }
 ```
 
-### Loop index
+### Loop index (unordered)
 ```
-new loopIndex in {
-  loopIndex!(0) | for (@index <= loopIndex) {
-    if (index < 5) {
-      stdout!(index) | loopIndex!(index + 1)
+new n in {
+  n!(0) | for (@i <= n) {
+    if (i < 5) {
+      stdout!(i) | loopIndex!(i + 1)
     }
   }
 }
 ```
+
+### Loop index (ordered)
 ```
-new loopIndex in {
-  loopIndex!(0) | for (@index <= loopIndex) {
-    if (index < 5) {
+new n in {
+  n!(0) | for (@i <= n) {
+    if (i < 5) {
       new ack in {
-        stdoutAck!(index, *ack) | for (_ <- ack) {
-          loopIndex!(index + 1)
+        stdoutAck!(i, *ack) | for (_ <- ack) {
+          n!(i + 1)
         }
       }
     }
@@ -34,30 +38,24 @@ new loopIndex in {
 }
 ```
 
-### ???
+### Loop range (unordered)
 ```
-new loopRange in {
-  loopRange!([0, 1, 2, 3, 4]) | for (@[index...tail] <= loopRange) { 
-    stdout!(index) | loopRange!(tail)    
-  }
-}
-```
-```
-new loopRange in {
-  loopRange!([0, 1, 2, 3, 4]) | for (@[index...tail] <= loopRange) { 
-    new ack in {
-      stdoutAck!(index, *ack) | for (_ <- ack) {
-        loopRange!(tail)
-      }
-    }
+new n in {
+  n!([0, 1, 2, 3, 4]) | for (@[i...tail] <= loopRange) { 
+    stdout!(i) | n!(tail)    
   }
 }
 ```
 
+### Loop range (ordered)
 ```
->> 0
->> 1
->> 2
->> 3
->> 4
+new n in {
+  n!([0, 1, 2, 3, 4]) | for (@[i...tail] <= loopRange) { 
+    new ack in {
+      stdoutAck!(i, *ack) | for (_ <- ack) {
+        n!(tail)
+      }
+    }
+  }
+}
 ```
