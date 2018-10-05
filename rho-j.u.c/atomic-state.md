@@ -141,8 +141,13 @@ contract C(@initSlot0, @initSlot1, fooOp, ...) = {
 }
 ```
 
+
+<details><summary>Example: <a href="CountDownLatch.md">CountDownLatch</a></summary><p>
+  
 ```
+???
 ```
+</p></details><br/>
 
 ### Join equi-transformations
 ```
