@@ -26,12 +26,12 @@ public class CountDownLatch {
 ### Model
 
 #### State
-[Atomic state](???) with [two slots](???) ***count: Int, waitSet: [WaitSet](???) }***.      
-[Initialized](???) with ***{ count <- [constructor-arg](???), waitSet <- [new WaitSet()](???)}***.   
+[Atomic state](???) with [two slots](???) *{**count: Int**, **waitSet: [WaitSet](???)**}*.      
+[Initialized](???) with *{**count <- [constructor-arg](???)**, **waitSet <- [new WaitSet()](???)**}*.   
 
 #### Operations
-await - [sync void(void)](???).   
-countDown - [async void(void)](???).  
+await(ack) - [sync void(void)](???).   
+countDown(_) - [async void(void)](???).  
 
 #### State Trace example
 Operations order
@@ -46,13 +46,17 @@ countDown(Nil);
 
 State Trace
 ```
+count
+ :  waitSet
+ :  :
 (2, {}) -> (2, {ack0}) -> (2, {ack0, ack1}) -> (2, {ack0, ack1, ack2})
                                                           |
                                                           v
                                                (1, {ack0, ack1, ack2})
                                                           |
-                                                          v
-                                               (0, {ack0, ack1, ack2})
+                                                          v                 ack0!(Nil)
+                                               (0, {ack0, ack1, ack2})  =>  ack1!(Nil)  
+                                                                            ack2!(Nil)
 ```
 
 ### Impl
