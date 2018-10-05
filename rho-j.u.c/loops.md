@@ -25,7 +25,9 @@ new loopIndex in {
   loopIndex!(0) | for (@index <= loopIndex) {
     if (index < 5) {
       new ack in {
-        stdoutAck!(index, *ack) | loopIndex!(index + 1)
+        stdoutAck!(index, *ack) | for (_ <- ack) {
+          loopIndex!(index + 1)
+        }
       }
     }
   }
