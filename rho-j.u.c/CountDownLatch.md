@@ -148,3 +148,6 @@ new CountDownLatch in {
 >> [4, "woke up!"]
 ```
 </p></details><br/>
+
+### Exercise
+Implement method ```int getCount()``` for CountDownLatch.
