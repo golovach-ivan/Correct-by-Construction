@@ -15,13 +15,38 @@ public class CountDownLatch {
   public void await() {...}
   
   // Decrements the count of the latch, releasing all waiting threads if the count reaches zero.
-  public void countDown();	
+  public void countDown() {...}	
   
   // Returns the current count.
   public long getCount() {...}
 }
 ```
 </p></details><br/>
+
+### Model
+
+Atomic state with two slots **{*count: Int, waitSet*}**
+
+Command order
+```
+CountDownLatch!(2, await, countDown);
+await!(ack0);
+await!(ack1);
+await!(ack2);
+countDown(Nil);
+countDown(Nil);
+```
+
+State machine path
+```
+(2, {}) -> (2, {ack0}) -> (2, {ack0, ack1}) -> (2, {ack0, ack1, ack2})
+                                                          |
+                                                          v
+                                               (1, {ack0, ack1, ack2})
+                                                          |
+                                                          v
+                                               (0, {ack0, ack1, ack2})
+```
 
 ### Impl
 ```
