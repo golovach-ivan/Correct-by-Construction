@@ -1,4 +1,10 @@
-## Intro
+## Atomic State pattern
+
+- [Concurrency Primitive as FSM]()  
+- [Example]()  
+- [Blocked (conditional) update]()  
+- [Multislot State]()  
+- [???]()  
 
 ### Concurrency Primitive as FSM
 
@@ -26,7 +32,7 @@ contract op(@arg, out) = {
 **F** - ???.   
 **G** - ???.   
 
-### Concurrency Primitive Sceleton
+### Example
 - *state* value saved in channel *stateRef*
 - there are two operations: *fooOp* and *barOp*
 - each op (*fooOp* and *barOp*) has form: (state, arg) -> (F(state, arg), G(state, arg))
@@ -35,12 +41,15 @@ Non-blocking update
 ```
 contract MyPrimitive(@initState, fooOp, barOp) = {
   new stateRef in {
+  
     stateRef!(initState) |
+    
     contract fooOp(arg, result) = {
       for (@state <- stateRef) {
         stateRef!(F0(state, arg)) | result!(F1(state, arg))
       }
     } |
+    
     contract barOp(arg, result) = {
       for (@state <- stateRef) {
         stateRef!(G0(state, arg)) | result!(G1(state, arg))
@@ -55,12 +64,15 @@ contract MyPrimitive(@initState, fooOp, barOp) = {
 ```  
 contract AtomicInteger(@initState, set, incAndGet) = {
   new stateRef in {
+  
     stateRef!(initState) |
+    
     contract set(arg, ack) = {
       for (_ <- stateRef) {
         stateRef!(arg) | ack!(Nil)
       }
     } |
+    
     contract incAndGet(ret) = {
       for (@state <- stateRef) {
         stateRef!(state + 1) | ret!(state + 1)
@@ -107,7 +119,7 @@ contract AtomicInteger(@initState, set, incAndGet) = {
 **15** - nonblocking (unconditional) read.   
 **16-17** - *Nil++ = 1* or *k+ = (k+1)* increment logic.   
 
-### Multistate update
+### Multislot State
 
 ### ???
 ```
