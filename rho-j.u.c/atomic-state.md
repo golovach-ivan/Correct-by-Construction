@@ -1,10 +1,11 @@
 ## Atomic State pattern
 
 - [Concurrency Primitive as FSM](#concurrency-primitive-as-fsm)  
+- [Join State and Operations Channels](???)  
 - [Example](#example)  
 - [Blocked (conditional) update](#blocked-conditional-update)  
 - [Multislot State](#multislot-state)  
-- [???]()  
+- [Join equi-transformations](???)  
 
 ### Concurrency Primitive as FSM
 
@@ -31,6 +32,8 @@ contract op(@arg, out) = {
 **state** - ???.   
 **F** - ???.   
 **G** - ???.   
+
+### Join State and Operations Channels
 
 ### Example
 - *state* value saved in channel *stateRef*
@@ -120,8 +123,9 @@ contract AtomicInteger(@initState, set, incAndGet) = {
 **16-17** - *Nil++ = 1* or *k+ = (k+1)* increment logic.   
 
 ### Multislot State
+???
 
-### Join State and Operations Channels
+### Join equi-transformations
 ```
 new stateRef in {
   stateRef!(init) |
