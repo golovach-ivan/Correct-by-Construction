@@ -26,8 +26,11 @@ public class CountDownLatch {
 ### Model
 
 #### State Type
-[Atomic state](???) with [two slots](???) **{*count: Int, waitSet: [WaitSet](???)*}**.  
-[Initialized](???) with {[constructor-arg](???), [new WaitSet()](???)}.  
+[Atomic state](???) with [two slots](???) ***{***   \      
+***count: Int,***   
+***waitSet: [WaitSet](???)***    
+***}***.      
+[Initialized](???) with {**count <- [constructor-arg](???), waitSet <- [new WaitSet()](???)**}.  
 await - [sync void(void)](???).   
 countDown - [async void(void)](???).  
 
