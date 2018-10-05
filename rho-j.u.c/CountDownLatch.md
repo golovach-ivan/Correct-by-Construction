@@ -1,3 +1,5 @@
+## java.util.concurrent.CountDownLatch in RhoLang
+
 A synchronization aid that allows one or more threads to wait until a set of operations being performed in other threads completes. 
 
 A *CountDownLatch* is initialized with a given count. The *await()* methods block until the current count reaches zero due to invocations of the *countDown()* method, after which all waiting threads are released and any subsequent invocations of *await()* return immediately ([javadoc](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/CountDownLatch.html)). 
