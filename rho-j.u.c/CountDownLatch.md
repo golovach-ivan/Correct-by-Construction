@@ -25,18 +25,16 @@ public class CountDownLatch {
 
 ### Model
 
-#### State Type
-[Atomic state](???) with [two slots](???)      
-***count: Int,***   
-***waitSet: [WaitSet](???)***          
-[Initialized](???) with 
-***count <- [constructor-arg](???)***    
-***waitSet <- [new WaitSet()](???)***        
+#### State
+[Atomic state](???) with [two slots](???) ***count: Int, waitSet: [WaitSet](???) }***.      
+[Initialized](???) with ***{ count <- [constructor-arg](???), waitSet <- [new WaitSet()](???)}***.   
+
+#### Operations
 await - [sync void(void)](???).   
 countDown - [async void(void)](???).  
 
-#### State Trace
-Command order
+#### State Trace example
+Operations order
 ```
 CountDownLatch!(2, await, countDown);
 await!(ack0);
@@ -46,7 +44,7 @@ countDown(Nil);
 countDown(Nil);
 ```
 
-State machine trace
+State Trace
 ```
 (2, {}) -> (2, {ack0}) -> (2, {ack0, ack1}) -> (2, {ack0, ack1, ack2})
                                                           |
@@ -81,9 +79,68 @@ State machine trace
 20   }    
 21 }
 ```
+**2** - [atomic state](???).     
+**2** - ???.     
+**2** - ???.     
+**2** - ???.     
+**2** - ???.     
+**2** - ???.     
+**2** - ???.     
+**2** - ???.     
+**2** - ???. 
 
-<details><summary>public class CountDownLatch {</summary><p>
+<details><summary>Complete source code for CountDownLatch (with demo)</summary><p>
   
 ```
+new CountDownLatch in {
+  contract CountDownLatch(@initCount, awaitOp, countDownOp) = {  
+    new stateRef in {    
+    
+      new waitSet in {
+        stateRef!(initCount, *waitSet) } |
+  
+      contract awaitOp(ack) = {
+        for (@count, waitSet <- stateRef) {
+          stateRef!(count, *waitSet) |
+          if (count > 0) {
+            waitSet!(*ack)            
+          } else {             
+            ack!(Nil) } } } |  
+  
+      contract countDownOp(_) = {
+        for (@count, waitSet <- stateRef) {
+          stateRef!(count - 1, *waitSet) |
+          if (count - 1 == 0) {
+            for (ack <= waitSet) { ack!(Nil) } } } }                  
+    }    
+  } |
+  
+  new countDown, await in {
+    CountDownLatch!(3, *await, *countDown) |
+    
+    new n in {
+      n!(0) | n!(1) | n!(2) | n!(3) | n!(4) | for (@i <= n) { 
+        new ack in { 
+          await!(*ack) | for (_ <- ack) { stdout!([i, "woke up!"]) } } } } |     
+    
+    new ack in { 
+      stdoutAck!("knok", *ack) | for (_ <- ack) {
+        stdoutAck!("KNOK", *ack) | for (_ <- ack) {
+          stdoutAck!("WAKE UP !!!", *ack) | for (_ <- ack) {
+            countDown!(Nil) |
+            countDown!(Nil) |
+            countDown!(Nil) } } } }    
+  }
+}
+```
+```
+>> "knok"
+>> "KNOK"
+>> "WAKE UP !!!"
+>> [2, "woke up!"]
+>> [0, "woke up!"]
+>> [3, "woke up!"]
+>> [1, "woke up!"]
+>> [4, "woke up!"]
 ```
 </p></details><br/>
