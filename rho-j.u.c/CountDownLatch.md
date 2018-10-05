@@ -2,9 +2,10 @@ A synchronization aid that allows one or more threads to wait until a set of ope
 
 A *CountDownLatch* is initialized with a given count. The *await()* methods block until the current count reaches zero due to invocations of the *countDown()* method, after which all waiting threads are released and any subsequent invocations of *await()* return immediately ([javadoc](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/CountDownLatch.html)). 
 
-<details><summary>public class CountDownLatch {</summary><p>
+<details><summary><b>java.util.concurrent.CountDownLatch.java</b></summary><p>
   
 ```java
+public class CountDownLatch {
   // Constructs a CountDownLatch initialized with the given count.
   public CountDownLatch(int count) {...}
   
