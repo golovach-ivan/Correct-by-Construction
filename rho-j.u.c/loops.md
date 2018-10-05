@@ -1,6 +1,12 @@
 ## Loops
 
-In sources (mostly in demos) udes loops.
+Loops used in demos. Unordered loop prints *0..4* in any order, ordered only consequentially (from 0 to 4).
+
+- [Index set (unordered)](#index-set-unordered)    
+- [Loop index (unordered)](#loop-index-unordered)    
+- [Loop index (ordered)](#loop-index-ordered)    
+- [Loop range (unordered)](#loop-range-unordered)    
+- [Loop range (ordered)](#loop-range-ordered)    
 
 ### Index set (unordered)
 ```
