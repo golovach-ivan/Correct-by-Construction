@@ -2,8 +2,9 @@ A synchronization aid that allows one or more threads to wait until a set of ope
 
 A *CountDownLatch* is initialized with a given count. The *await()* methods block until the current count reaches zero due to invocations of the *countDown()* method, after which all waiting threads are released and any subsequent invocations of *await()* return immediately ([javadoc](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/CountDownLatch.html)). 
 
+<details><summary>public class CountDownLatch {</summary><p>
+  
 ```java
-public class CountDownLatch {
   // Constructs a CountDownLatch initialized with the given count.
   public CountDownLatch(int count) {...}
   
@@ -17,122 +18,35 @@ public class CountDownLatch {
   public long getCount() {...}
 }
 ```
+</p></details><br/>
 
+### Impl
 ```
-new CountDownLatch in {
-  contract CountDownLatch(@initSize, countDown, await) = {
-    new countRef, awaitQueueRef in {    
-      countRef!(initSize) |
-      awaitQueueRef!(Nil) |
-  
-      contract await(ack) = {
-        for (@count <- countRef) {
-          countRef!(count) |
-          if (count > 0) {
-            for (@oldAwaitQueue <- awaitQueueRef) {
-              awaitQueueRef!((*ack, oldAwaitQueue))
-            }          
-          } else { ack!(Nil) }
-        }
-      } |  
-  
-      contract countDown(_) = {
-        for (@count <- countRef) {
-          if (count == 0) {
-            countRef!(0)
-          } else if (count == 1) {
-              countRef!(0) |
-              new wakeUp in {
-                for (@awaitQueue <- awaitQueueRef) { wakeUp!(awaitQueue) } |
-                contract wakeUp(list) = {
-                  match *list { (ack, next) => { @ack!(Nil) | wakeUp!(next) } }
-                }            
-              }          
-          } else {
-            countRef!(count - 1)
-          }        
-        }
-      }                  
-    }    
-  } |
-  
-  new countDown, await in {
-    CountDownLatch!(2, *countDown, *await) |
-    
-    new ack in { await!(*ack) | for (_ <- ack) { stdout!(0) } } |
-    new ack in { await!(*ack) | for (_ <- ack) { stdout!(1) } } |
-    new ack in { await!(*ack) | for (_ <- ack) { stdout!(2) } } |
-    
-    countDown!(Nil) |
-    countDown!(Nil)
-  }
-}
+1  contract CountDownLatch(@initCount, awaitOp, countDownOp) = {  
+2    new stateRef in {    
+3    
+4      new waitSet in {
+5        stateRef!(initCount, *waitSet) } |
+6  
+7      contract awaitOp(ack) = {
+8        for (@count, waitSet <- stateRef) {
+9          stateRef!(count, *waitSet) |
+10         if (count > 0) {
+11           waitSet!(*ack)            
+12         } else {             
+13           ack!(Nil) } } } |  
+14  
+15     contract countDownOp(_) = {
+16       for (@count, waitSet <- stateRef) {
+17         stateRef!(count - 1, *waitSet) |
+18         if (count - 1 == 0) {
+19           for (ack <= waitSet) { ack!(Nil) } } } }                  
+20   }    
+21 }
 ```
 
+<details><summary>public class CountDownLatch {</summary><p>
+  
 ```
-new CountDownLatch in {
-  contract CountDownLatch(@initCount, countDown, await) = {  
-    new countRef, awaitersRef in {    
-    
-      countRef!(initCount) |
-      awaitersRef!(Nil) |
-  
-      contract await(wakeUpChannel) = {
-        for (@count <- countRef) {
-          countRef!(count) |
-          if (count > 0) {
-            for (@awaiters <- awaitersRef) {
-              awaitersRef!((*wakeUpChannel, awaiters))
-            }          
-          } else { wakeUpChannel!(Nil) }
-        }
-      } |  
-  
-      contract countDown(_) = {
-        for (@count <- countRef) {
-          if (count == 0) {
-            countRef!(0)
-          } else if (count == 1) {
-              countRef!(0) |
-              new wakeUp in {
-                for (@awaiters <- awaitersRef) { wakeUp!(awaiters) } |
-                contract wakeUp(@seq) = {
-                  match seq { 
-                    (wakeUpChannel, next) => { 
-                      @wakeUpChannel!(Nil) | wakeUp!(next) 
-                    } 
-                  }
-                }            
-              }          
-          } else {
-            countRef!(count - 1)
-          }        
-        }
-      }                  
-    }    
-  } |
-  
-  new countDown, await in {
-    CountDownLatch!(2, *countDown, *await) |
-    
-    new wakeUpSignal in { 
-      await!(*wakeUpSignal) | for (_ <- wakeUpSignal) { 
-        stdout!("wakeUp! (0)") 
-      } 
-    } |
-    new wakeUpSignal in { 
-      await!(*wakeUpSignal) | for (_ <- wakeUpSignal) { 
-        stdout!("wakeUp! (1)") 
-      } 
-    } |
-    new wakeUpSignal in { 
-      await!(*wakeUpSignal) | for (_ <- wakeUpSignal) { 
-        stdout!("wakeUp! (2)") 
-      } 
-    } |    
-    
-    countDown!(Nil) |
-    countDown!(Nil)
-  }
-}
 ```
+</p></details><br/>
