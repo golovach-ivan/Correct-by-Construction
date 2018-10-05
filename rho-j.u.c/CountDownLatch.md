@@ -25,9 +25,12 @@ public class CountDownLatch {
 
 ### Model
 
-Atomic state with two slots **{*count: Int, waitSet*}**
+#### State Type
+[Atomic state](???) with [two slots](???) **{*count: Int, waitSet: [WaitSet](???)*}**.  
+Initialized with {constructor-arg, new WaitSet()}.
 
-Command order
+#### State Trace
+**Command order**
 ```
 CountDownLatch!(2, await, countDown);
 await!(ack0);
@@ -37,7 +40,7 @@ countDown(Nil);
 countDown(Nil);
 ```
 
-State machine path
+**State machine trace**
 ```
 (2, {}) -> (2, {ack0}) -> (2, {ack0, ack1}) -> (2, {ack0, ack1, ack2})
                                                           |
