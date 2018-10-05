@@ -68,3 +68,71 @@ new CountDownLatch in {
   }
 }
 ```
+
+```
+new CountDownLatch in {
+  contract CountDownLatch(@initCount, countDown, await) = {  
+    new countRef, awaitersRef in {    
+    
+      countRef!(initCount) |
+      awaitersRef!(Nil) |
+  
+      contract await(wakeUpChannel) = {
+        for (@count <- countRef) {
+          countRef!(count) |
+          if (count > 0) {
+            for (@awaiters <- awaitersRef) {
+              awaitersRef!((*wakeUpChannel, awaiters))
+            }          
+          } else { wakeUpChannel!(Nil) }
+        }
+      } |  
+  
+      contract countDown(_) = {
+        for (@count <- countRef) {
+          if (count == 0) {
+            countRef!(0)
+          } else if (count == 1) {
+              countRef!(0) |
+              new wakeUp in {
+                for (@awaiters <- awaitersRef) { wakeUp!(awaiters) } |
+                contract wakeUp(@seq) = {
+                  match seq { 
+                    (wakeUpChannel, next) => { 
+                      @wakeUpChannel!(Nil) | wakeUp!(next) 
+                    } 
+                  }
+                }            
+              }          
+          } else {
+            countRef!(count - 1)
+          }        
+        }
+      }                  
+    }    
+  } |
+  
+  new countDown, await in {
+    CountDownLatch!(2, *countDown, *await) |
+    
+    new wakeUpSignal in { 
+      await!(*wakeUpSignal) | for (_ <- wakeUpSignal) { 
+        stdout!("wakeUp! (0)") 
+      } 
+    } |
+    new wakeUpSignal in { 
+      await!(*wakeUpSignal) | for (_ <- wakeUpSignal) { 
+        stdout!("wakeUp! (1)") 
+      } 
+    } |
+    new wakeUpSignal in { 
+      await!(*wakeUpSignal) | for (_ <- wakeUpSignal) { 
+        stdout!("wakeUp! (2)") 
+      } 
+    } |    
+    
+    countDown!(Nil) |
+    countDown!(Nil)
+  }
+}
+```
