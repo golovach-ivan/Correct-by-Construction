@@ -22,11 +22,11 @@ public interface Lock {
 
 ```
          UNLOCKED
-      +---> {*}----+   
-      |            |
-unlock|            |lock
-      |            |
-      +-----{ } <--+   
+      +---> {*}-----+   
+      |             |
+unlock|             |lock
+      |             |
+      +-----{ } <---+   
           LOCKED
 ```
 
@@ -70,10 +70,13 @@ new Lock in {
 ### Version #2: lock/unlock/tryLock
 
 ```
-+---> {1}----+   UNLOCKED
-|            |
-|            |
-+-----{0} <--+   LOCKED
+         UNLOCKED
+      +---> {1}-----+   
+      |             |
+unlock|             |lock
+      |             |
+      +-----{0} <---+   
+          LOCKED
 ```
 
 ```
@@ -134,10 +137,12 @@ Anybody can return any count of locks
 ```
 unlock!(Nil) | unlock!(Nil) | unlock!(Nil)
 ```
-
 ```
-+--> { Nil }-----+   UNLOCKED
-|                |
-|                |
-+---{  key  } <--+   LOCKED
+           UNLOCKED
+      +---> { Nil }-----+   
+      |                 |
+unlock|                 |lock
+      |                 |
+      +-----{[key]} <---+   
+            LOCKED
 ```
