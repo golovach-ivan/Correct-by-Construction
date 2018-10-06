@@ -27,6 +27,7 @@ Multislot State = atomic-state.md#multislot-state
 
 Join State and Operations Channels = atomic-state.md#join-state-and-operations-channels   
 Join equi-transformations = atomic-state.md#join-equi-transformations   
+Reduction core = atomic-state.md#reduction-core    
 
 **Wait Set**   
 Wait Set = wait-set.md   
