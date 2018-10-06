@@ -67,13 +67,10 @@ AtomicInteger это [Atomic State](atomic-state.md) = *Int* with non-blocking o
 **1** - [contract/object](oop.md#contract--object) with [constructor arg](oop.md#initialization) *initValue*        
 **2** - [atomic state](atomic-state.md) = Int   
 **3** - atomic state [initialization](atomic-state.md#initialization)
-
 **5** - *get* [contract/method](oop.md#contract--method): [sync void -> something](oop.md#sync-void---something)         
 **6-7** - [read-and-restore](atomic-state.md#restore-state) atomic state and  return *value*
-
 **9** - *set* [contract/method](oop.md#contract--method): [async something -> void](oop.md#sync-something---void)             
 **10-11** - [non-blocked update](atomic-state.md#non-blocked-update) *valueState* with new value and send ack   
-
 **13** - *getAndInc* [contract/method](oop.md#contract--method): [sync void -> something](oop.md#sync-void---something)                   
 **14-15** - [non-blocked update](atomic-state.md#non-blocked-update) *valueState* with new value and return updated *value*       
 
@@ -90,22 +87,16 @@ new AtomicInteger in {
       
       contract getOp(ret) = { 
         for (@value <- valueRef) { 
-          valueRef!(value) | ret!(value)
-        } 
-      } |
+          valueRef!(value) | ret!(value) } } |
       
       contract setOp(newValue, ack) = { 
         for (_ <- valueRef) { 
-          valueRef!(*newValue) | ack!(Nil)
-        } 
-      } |
+          valueRef!(*newValue) | ack!(Nil) } } |
       
       contract getAndIncOp(ret) = { 
         for (@value <- valueRef) { 
-          valueRef!(value + 1) | ret!(value)
-        } 
-      }       
-    }
+          valueRef!(value + 1) | ret!(value) } } 
+    } 
   } |
 
   new get, set, getAndInc in {
@@ -113,15 +104,14 @@ new AtomicInteger in {
         
     new ack, ret in {
       set!(42, *ack) | for (_ <- ack) {
-       getAndInc!(*ret) | for (_ <- ret) {
-         get!(*ret) | for (@value <- ret) {
-           stdout!(value)
-         }
-       }
-     }
-    }
+        getAndInc!(*ret) | for (_ <- ret) {
+          get!(*ret) | for (@value <- ret) {
+            stdout!(value) } } } }
   }
 }
+```
+```
+>> 43
 ```
 </p></details><br/>
 
