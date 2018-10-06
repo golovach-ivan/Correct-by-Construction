@@ -46,6 +46,12 @@ public class C {
 ```
 </p></details><br/>
 
+### Contract/Object
+???
+
+### Contract/Method
+???
+
 ### State
 
 #### Initialization 
