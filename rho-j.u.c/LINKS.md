@@ -16,11 +16,16 @@ Sync something -> void =      oop.md#sync-something---void
 Sync something -> something = oop.md#sync-something---something   
 
 **Atomic State**   
-Atomic State = atomic-state.md     
-Concurrency Primitive as FSM = atomic-state.md#concurrency-primitive-as-fsm   
-Join State and Operations Channels = atomic-state.md#join-state-and-operations-channels   
+Atomic State = atomic-state.md 
+
+Concurrency Primitive as FSM = atomic-state.md#concurrency-primitive-as-fsm 
+
+Restore state = atomic-state.md#restore-state   
+Non-blocked update = atomic-state.md#non-blocked-update   
 Blocked (conditional) update = atomic-state.md#blocked-conditional-update   
 Multislot State = atomic-state.md#multislot-state   
+
+Join State and Operations Channels = atomic-state.md#join-state-and-operations-channels   
 Join equi-transformations = atomic-state.md#join-equi-transformations   
 
 **Wait Set**   
@@ -30,7 +35,9 @@ Reusable WaitSet = wait-set.md#reusable-waitset
 
 wait() = wait-set.md#wait   
 notify() = wait-set.md#notify   
-notifyAll() = wait-set.md#notifyAll   
+notifyAll() = wait-set.md#notifyall   
+
+WaitSet Initialization = wait-set.md#initialization
 
 **Loops**   
 Loops = loops.md   
