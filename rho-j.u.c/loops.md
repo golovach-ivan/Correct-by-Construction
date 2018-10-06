@@ -3,10 +3,10 @@
 Loops used in demos. Unordered loop prints *0..4* in any order, ordered only consequentially (from 0 to 4).
 
 - [Index set (unordered)](#index-set-unordered)    
-- [Loop index (unordered)](#loop-index-unordered)    
-- [Loop index (ordered)](#loop-index-ordered)    
-- [Loop range (unordered)](#loop-range-unordered)    
-- [Loop range (ordered)](#loop-range-ordered)    
+- [Index variable (unordered)](#index-variable-unordered)    
+- [Index variable (ordered)](#index-variable-ordered)    
+- [Index array (unordered)](#index-array-unordered)    
+- [Index array (ordered)](#index-array-ordered)    
 
 ### Index set (unordered)
 ```
@@ -18,7 +18,7 @@ new n in {
 }
 ```
 
-### Loop index (unordered)
+### Index variable (unordered)
 ```
 new n in {
   n!(0) | for (@i <= n) {
@@ -29,7 +29,7 @@ new n in {
 }
 ```
 
-### Loop index (ordered)
+### Index variable (ordered)
 ```
 new n in {
   n!(0) | for (@i <= n) {
@@ -44,7 +44,7 @@ new n in {
 }
 ```
 
-### Loop range (unordered)
+### Index array (unordered)
 ```
 new n in {
   n!([0, 1, 2, 3, 4]) | for (@[i...tail] <= loopRange) { 
@@ -53,7 +53,7 @@ new n in {
 }
 ```
 
-### Loop range (ordered)
+### Index array (ordered)
 ```
 new n in {
   n!([0, 1, 2, 3, 4]) | for (@[i...tail] <= loopRange) { 
