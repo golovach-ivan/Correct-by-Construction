@@ -1,10 +1,11 @@
 ## Atomic State pattern
 
 - [Concurrency Primitive as FSM](#concurrency-primitive-as-fsm)  
-- [Join State and Operations Channels](#join-state-and-operations-channels)  
-- [Example](#example)  
+- [Non-blocked update](#non-blocked-update)
 - [Blocked (conditional) update](#blocked-conditional-update)  
 - [Multislot State](#multislot-state)  
+- [Example](#example)  
+- [Join State and Operations Channels](#join-state-and-operations-channels)  
 - [Join equi-transformations](#join-equi-transformations)  
 
 ### Concurrency Primitive as FSM
@@ -33,58 +34,7 @@ contract op(@arg, out) = {
 **F** - ???.   
 **G** - ???.   
 
-### Join State and Operations Channels
-
-### Example
-- *state* value saved in channel *stateRef*
-- there are two operations: *fooOp* and *barOp*
-- each op (*fooOp* and *barOp*) has form: (state, arg) -> (F(state, arg), G(state, arg))
-
-Non-blocking update
-```
-contract MyPrimitive(@initState, fooOp, barOp) = {
-  new stateRef in {
-  
-    stateRef!(initState) |
-    
-    contract fooOp(arg, result) = {
-      for (@state <- stateRef) {
-        stateRef!(F0(state, arg)) | result!(F1(state, arg))
-      }
-    } |
-    
-    contract barOp(arg, result) = {
-      for (@state <- stateRef) {
-        stateRef!(G0(state, arg)) | result!(G1(state, arg))
-      }
-    }  
-  }
-}
-```
-
-<details><summary>Example: <i>AtomicInteger</i>, *state: Int*, ops = {*set*, *incAndGet*}</summary><p>
-  
-```  
-contract AtomicInteger(@initState, set, incAndGet) = {
-  new stateRef in {
-  
-    stateRef!(initState) |
-    
-    contract set(arg, ack) = {
-      for (_ <- stateRef) {
-        stateRef!(arg) | ack!(Nil)
-      }
-    } |
-    
-    contract incAndGet(ret) = {
-      for (@state <- stateRef) {
-        stateRef!(state + 1) | ret!(state + 1)
-      }
-    }  
-  }
-}
-```
-</p></details><br/>
+### Non-blocked update
 
 ### Blocked (conditional) update
 В случае AtomicInteger у нас состояние - это Int и все операции неблокирующие.
@@ -148,6 +98,59 @@ contract C(@initSlot0, @initSlot1, fooOp, ...) = {
 ???
 ```
 </p></details><br/>
+
+### Example
+- *state* value saved in channel *stateRef*
+- there are two operations: *fooOp* and *barOp*
+- each op (*fooOp* and *barOp*) has form: (state, arg) -> (F(state, arg), G(state, arg))
+
+Non-blocking update
+```
+contract MyPrimitive(@initState, fooOp, barOp) = {
+  new stateRef in {
+  
+    stateRef!(initState) |
+    
+    contract fooOp(arg, result) = {
+      for (@state <- stateRef) {
+        stateRef!(F0(state, arg)) | result!(F1(state, arg))
+      }
+    } |
+    
+    contract barOp(arg, result) = {
+      for (@state <- stateRef) {
+        stateRef!(G0(state, arg)) | result!(G1(state, arg))
+      }
+    }  
+  }
+}
+```
+
+<details><summary>Example: <i>AtomicInteger</i>, *state: Int*, ops = {*set*, *incAndGet*}</summary><p>
+  
+```  
+contract AtomicInteger(@initState, set, incAndGet) = {
+  new stateRef in {
+  
+    stateRef!(initState) |
+    
+    contract set(arg, ack) = {
+      for (_ <- stateRef) {
+        stateRef!(arg) | ack!(Nil)
+      }
+    } |
+    
+    contract incAndGet(ret) = {
+      for (@state <- stateRef) {
+        stateRef!(state + 1) | ret!(state + 1)
+      }
+    }  
+  }
+}
+```
+</p></details><br/>
+
+### Join State and Operations Channels
 
 ### Join equi-transformations
 ```
