@@ -1,8 +1,13 @@
 ## Class/Object structures in RhoLang
 
+### State
+
+### Construction, initialization
+
 ### Operations
 
 #### Async void -> void
+Example: [CountDownLatch.countDown()](CountDownLatch.md).
 ```
 // CONTRACT
 contract countDown(_) = {...} |
@@ -12,6 +17,7 @@ countDown!(Nil)
 ```
 
 #### Async something -> void
+Example: [Lock.unlock()](Lock.md).
 ```
 // CONTRACT
 contract unlock(key) = {...} |
@@ -26,6 +32,7 @@ new ret in {
 ```
 
 #### Sync void -> void
+Example: [CountDownLatch.await()](CountDownLatch.md).
 ```
 // CONTRACT
 contract await(ack) = {ack!(Nil) | ... } |
@@ -35,6 +42,7 @@ countDown!(Nil)
 ```
 
 #### Sync void -> something
+Example: [Lock.lock()](Lock.md).
 ```
 // CONTRACT
 contract lock(ret) = {ret!(...) | ... } |
@@ -44,6 +52,7 @@ countDown!(Nil)
 ```
 
 #### Sync something -> void
+Example: stdoutAck.
 ```
 // CONTRACT
 contract stdoutAck(data, ack) = { ... } |
@@ -57,6 +66,7 @@ new ack in {
 ```
 
 #### Sync something -> something
+Example: [Exchanger.exhange()](Exchanger.md).
 ```
 // CONTRACT
 contract exchange(@item, ret) = {...} |
@@ -71,7 +81,7 @@ new ret in {
 
 ### Scala
 ```scala
-class C(field0: Any, field1: Any) {
+class C(var field0: Any, var field1: Any) {
   
   def method0(...) = ...
   def method1(...) = ...
