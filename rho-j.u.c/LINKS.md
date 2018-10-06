@@ -1,19 +1,19 @@
 **OOP**   
-OOP =                         oop.md    
+OOP = oop.md    
+
+Contract sceleton = oop.md#contract-sceleton
+contract/object   = oop.md#contract--object
+contract/method   = oop.md#contract--method
+
+State Initialization = oop.md#initialization
+State Update = oop.md#update
+
 Async void -> void =          oop.md#async-void---void   
 Async something -> void =     oop.md#async-something---void   
 Sync void -> void =           oop.md#sync-void---void   
 Sync void -> something =      oop.md#sync-void---something   
 Sync something -> void =      oop.md#sync-something---void   
 Sync something -> something = oop.md#sync-something---something   
-
-**Loops**   
-Loops = loops.md   
-Index set (unordered) = loops.md#index-set-unordered   
-Index variable (unordered) = loops.md#index-variable-unordered   
-Index variable (ordered) = loops.md#index-variable-ordered   
-Index array (unordered) = loops.md#index-array-unordered   
-Index array (ordered) = loops.md#index-array-ordered   
 
 **Atomic State**   
 Atomic State = atomic-state.md     
@@ -25,7 +25,17 @@ Join equi-transformations = atomic-state.md#join-equi-transformations
 
 **Wait Set**   
 Wait Set = wait-set.md   
-
 One-off WaitSet = wait-set.md#one-off-waitset   
 Reusable WaitSet = wait-set.md#reusable-waitset   
-??? new waitSet
+
+wait() = wait-set.md#wait
+notify() = wait-set.md#notify
+notifyAll() = wait-set.md#notifyAll
+
+**Loops**   
+Loops = loops.md   
+Index set (unordered) = loops.md#index-set-unordered   
+Index variable (unordered) = loops.md#index-variable-unordered   
+Index variable (ordered) = loops.md#index-variable-ordered   
+Index array (unordered) = loops.md#index-array-unordered   
+Index array (ordered) = loops.md#index-array-ordered 
