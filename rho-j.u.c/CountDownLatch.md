@@ -89,16 +89,14 @@ count
 **1** - [contract/object](oop.md#contract--object) with [constructor arg](oop.md#initialization) *initCount*.    
 **2** - [atomic state](atomic-state.md) ([multifield](atomic-state.md#multislot-state) = Int × [WaitSet](wait-set.md)).     
 **4-5** - [initialization](oop.md#initialization) of atomic state with pair constructor-arg × ([new WaitSet](wait-set.md#initialization)) 
-
 **7** - await [contract/method](oop.md#contract--method): [sync void -> void](oop.md#sync-void---void)     
-**8-9** - [read-and-restore](???) atomic state
-**10-11** - if gate closed - [add to waitSet](wait-set.md#wait) (modify waitSet in restored state by reference)
+**8-9** - [read-and-restore](???) atomic state  
+**10-11** - if gate closed - [add to waitSet](wait-set.md#wait) (modify waitSet in restored state by reference)  
 **12-13** - else [notify](wait-set.md#notify) at the same moment     
-
 **15** - countDown [contract/method](oop.md#contract--method): [async void -> void](oop.md#async-void---void)     
 **16-17** - [Non-blocked read-and-decrement](atomic-state.md#non-blocked-update) ```counter``` in atomic state      
 **18** - if counter reach zero     
-**19** - then [notifyAll](wait-set.md#notifyAll) blocked waiters in waitSet    
+**19** - then [notifyall](wait-set.md#notifyAll) blocked waiters in waitSet    
 
 <details><summary>Complete source code for CountDownLatch (with demo)</summary><p>
   
