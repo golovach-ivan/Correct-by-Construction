@@ -4,26 +4,69 @@
 
 #### Async void -> void
 ```
+// CONTRACT
 contract countDown(_) = {...} |
+
+// DEMO
 countDown!(Nil)
 ```
 
 #### Async something -> void
 ```
+// CONTRACT
 contract unlock(key) = {...} |
-countDown!(Nil)
+
+// DEMO
+new ret in {
+  lock!(ret) | for (@key <- ret) {
+    ... |
+    unlock!(key)
+  }
+}
 ```
 
 #### Sync void -> void
 ```
+// CONTRACT
 contract await(ack) = {ack!(Nil) | ... } |
+
+// DEMO
 countDown!(Nil)
 ```
 
 #### Sync void -> something
 ```
+// CONTRACT
 contract lock(ret) = {ret!(...) | ... } |
+
+// DEMO
 countDown!(Nil)
+```
+
+#### Sync something -> void
+```
+// CONTRACT
+contract stdoutAck(data, ack) = { ... } |
+
+// DEMO
+new ack in {
+  stdoutAck!(data, ack) | for (_ <- ack) {
+    ...
+  }
+}
+```
+
+#### Sync something -> something
+```
+// CONTRACT
+contract exchange(@item, ret) = {...} |
+
+// DEMO
+new ret in {
+  exchange!(thisItem, ret) | for (@thatItem <- ret) {
+    stdout!([thisItem, " -- exchange to --> ", thatItem])
+  }
+}
 ```
 
 ### Scala
