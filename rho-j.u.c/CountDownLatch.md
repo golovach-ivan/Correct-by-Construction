@@ -4,6 +4,10 @@ A synchronization aid that allows one or more threads to wait until a set of ope
 
 A *CountDownLatch* is initialized with a given count. The *await()* methods block until the current count reaches zero due to invocations of the *countDown()* method, after which all waiting threads are released and any subsequent invocations of *await()* return immediately ([javadoc](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/CountDownLatch.html)). 
 
+- [Model](#model)
+- [Impl](#impl)
+- [Exercise](#exercise)
+
 <details><summary><b>java.util.concurrent.CountDownLatch.java</b></summary><p>
   
 ```java
@@ -98,6 +102,7 @@ count
 **18** - if counter reach zero     
 **19** - then [notifyall](wait-set.md#notifyAll) blocked waiters in waitSet    
 
+### Complete source code (with demo)
 <details><summary>Complete source code for CountDownLatch (with demo)</summary><p>
   
 ```
@@ -155,4 +160,4 @@ new CountDownLatch in {
 </p></details><br/>
 
 ### Exercise
-Implement method ```int getCount()``` for CountDownLatch.
+Implement method ```int getCount()``` for CountDownLatch in RhoLang.
