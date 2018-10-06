@@ -1,12 +1,12 @@
 **OOP**   
-OOP = oop.md    
+OOP = oop.md      
 
-Contract sceleton = oop.md#contract-sceleton
-contract/object   = oop.md#contract--object
-contract/method   = oop.md#contract--method
+Contract sceleton = oop.md#contract-sceleton  
+contract/object   = oop.md#contract--object  
+contract/method   = oop.md#contract--method  
 
-State Initialization = oop.md#initialization
-State Update = oop.md#update
+State Initialization = oop.md#initialization  
+State Update = oop.md#update  
 
 Async void -> void =          oop.md#async-void---void   
 Async something -> void =     oop.md#async-something---void   
@@ -28,9 +28,9 @@ Wait Set = wait-set.md
 One-off WaitSet = wait-set.md#one-off-waitset   
 Reusable WaitSet = wait-set.md#reusable-waitset   
 
-wait() = wait-set.md#wait
-notify() = wait-set.md#notify
-notifyAll() = wait-set.md#notifyAll
+wait() = wait-set.md#wait   
+notify() = wait-set.md#notify   
+notifyAll() = wait-set.md#notifyAll   
 
 **Loops**   
 Loops = loops.md   
@@ -38,4 +38,4 @@ Index set (unordered) = loops.md#index-set-unordered
 Index variable (unordered) = loops.md#index-variable-unordered   
 Index variable (ordered) = loops.md#index-variable-ordered   
 Index array (unordered) = loops.md#index-array-unordered   
-Index array (ordered) = loops.md#index-array-ordered 
+Index array (ordered) = loops.md#index-array-ordered    
