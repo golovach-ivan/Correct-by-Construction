@@ -2,6 +2,14 @@
 
 An *int* value that may be updated atomically ([javadoc](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/atomic/AtomicInteger.html)).
 
+- [Model](#model)
+- [Impl](#impl)
+- [Complete source code (with demo)](#complete-source-code-with-demo)  
+- [Equivalent reduction cores](#equivalent-reduction-cores)  
+- [Exercise](#exercise)
+
+<details><summary><b>java.util.concurrent.atomic.AtomicInteger.java</b></summary><p>
+
 ```java
 public class AtomicInteger {
   // Creates a new AtomicInteger with the given initial value.
@@ -28,63 +36,105 @@ public class AtomicInteger {
   public int getAndSet(int newValue) {...}
 }
 ```
+</p></details><br/>
+
+### Model
+???
+
+### Impl
+```
+1  contract AtomicInteger(@initValue, getOp, setOp, getAndIncOp) = {
+2    new valueRef in {
+3      valueRef!(initValue) |
+4      
+5      contract getOp(ret) = { 
+6        for (@value <- valueRef) { 
+7          valueRef!(value) | ret!(value)
+8        } 
+9      } |
+10      
+11     contract setOp(newValue, ack) = { 
+12       for (_ <- valueRef) { 
+13         valueRef!(*newValue) | ack!(Nil)
+14       } 
+15     } |
+16     
+17     contract getAndIncOp(ret) = { 
+18       for (@value <- valueRef) { 
+19         valueRef!(value + 1) | ret!(value)
+20       } 
+21     }       
+22   }
+23 }
+```
 
 ```
-new AtomicInteger in {
-
-  contract AtomicInteger(@initValue, get, set, getAndIncrement, compareAndSet) = {
+  contract AtomicInteger(@initValue, getOp, setOp, getAndIncOp) = {
     new valueRef in {
       valueRef!(initValue) |
       
-      contract get(ret) = { 
+      contract getOp(ret) = { 
+        for (@value <- valueRef) { 
+          valueRef!(value) | ret!(value) } } |
+      
+      contract setOp(newValue, ack) = { 
+        for (_ <- valueRef) { 
+          valueRef!(*newValue) | ack!(Nil) } } |
+      
+      contract getAndIncOp(ret) = { 
+        for (@value <- valueRef) { 
+          valueRef!(value + 1) | ret!(value) } } } } |
+```
+
+### Complete source code (with demo)
+
+<details><summary>Complete source code for AtomicInteger (with demo)</summary><p>
+  
+```
+new AtomicInteger in {
+
+  contract AtomicInteger(@initValue, getOp, setOp, getAndIncOp) = {
+    new valueRef in {
+      valueRef!(initValue) |
+      
+      contract getOp(ret) = { 
         for (@value <- valueRef) { 
           valueRef!(value) | ret!(value)
         } 
       } |
       
-      contract set(newValue) = { 
+      contract setOp(newValue, ack) = { 
         for (_ <- valueRef) { 
-          valueRef!(*newValue)
+          valueRef!(*newValue) | ack!(Nil)
         } 
       } |
       
-      contract getAndIncrement(ret) = { 
+      contract getAndIncOp(ret) = { 
         for (@value <- valueRef) { 
           valueRef!(value + 1) | ret!(value)
         } 
-      } |
-      
-      contract compareAndSet(expect, newValue, ret) = { 
-        for (oldValue <- valueRef) {
-          if (*oldValue == *expect) {
-            valueRef!(*newValue) | ret!(true)
-          } else {
-            valueRef!(*oldValue) | ret!(false)
-          }
-        }
-      }      
+      }       
     }
   } |
 
-  new get, set, getAndIncrement, compareAndSet in {
-    AtomicInteger!(0, *get, *set, *getAndIncrement, *compareAndSet) |
+  new get, set, getAndInc in {
+    AtomicInteger!(0, *get, *set, *getAndInc) |
         
-    // get
-    new ret in { get!(*ret) | for (@value <- ret) {stdout!(value)} } |
-    
-    // set
-    set!(10) |
-    
-    // getAndIncrement
-    new ret in { getAndIncrement!(*ret) | for (@value <- ret) {stdout!(value)} } |
-    
-    // compareAndSet
-    new ret in { compareAndSet!(0, 20, *ret) | for (@value <- ret) {stdout!(value)} }
+    new ack, ret in {
+      set!(42, *ack) | for (_ <- ack) {
+       getAndInc!(*ret) | for (_ <- ret) {
+         get!(*ret) | for (@value <- ret) {
+           stdout!(value)
+         }
+       }
+     }
+    }
   }
 }
 ```
+</p></details><br/>
 
-#### Equivalent reduction cores
+### Equivalent reduction cores
 ```
 for (@value <= valueRef) {            
   for (ret       <- get) { valueRef!(...) | ... } |     
@@ -129,3 +179,6 @@ contract getAndInc(ret) = {
   for (@value <- valueRef) { valueRef!(...) | ... }
 }
 ```
+
+### Exercise
+Implement method [boolean compareAndSet(expect, newValue)](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/atomic/AtomicInteger.html#compareAndSet-int-int-) for AtomicInteger in RhoLang.
