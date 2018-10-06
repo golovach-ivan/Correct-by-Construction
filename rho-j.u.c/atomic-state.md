@@ -60,6 +60,17 @@ contract C(@initSlot0, @initSlot1, fooOp, ...) = {
 </p></details><br/>
 
 ### Restore state
+
+Sometime you read-and-restore stateRef because you need *state*
+```
+contract foo(ret) = {
+  for (@state <- stateRef) {
+    stateRef!(state) | /* do something with 'state' */
+  }
+} 
+```
+
+Example: read-only two slots Atomic State
 ```
 contract C(_) = {
   new stateRef in {
