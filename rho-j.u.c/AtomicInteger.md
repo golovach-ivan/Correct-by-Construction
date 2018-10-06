@@ -39,7 +39,9 @@ public class AtomicInteger {
 </p></details><br/>
 
 ### Model
-???
+AtomicInteger это [Atomic State](atomic-state.md) = *Int* with non-blocking operations      
+*get* - non-blocking [restore state](atomic-state.md#restore-state)      
+*set*, *getAndInc* - [non-blocking update](atomic-state.md#non-blocked-update)     
 
 ### Impl
 [Sceleton](oop.md#contract--object) modification   
@@ -63,7 +65,7 @@ public class AtomicInteger {
 17 }
 ```
 **1** - [contract/object](oop.md#contract--object) with [constructor arg](oop.md#initialization) *initValue*        
-**2** - [atomic state](atomic-state.md) = Int
+**2** - [atomic state](atomic-state.md) = Int   
 **3** - atomic state [initialization](atomic-state.md#initialization)
 
 **5** - *get* [contract/method](oop.md#contract--method): [sync void -> something](oop.md#sync-void---something)         
