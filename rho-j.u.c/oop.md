@@ -1,5 +1,7 @@
 ## Class/Object structures in RhoLang
 
+### Contract Sceleton
+
 ```
 contract C(@field0, @field1, method0, method1, method2) = {
 
@@ -44,13 +46,14 @@ public class C {
 ```
 </p></details><br/>
 
-### Contract Sceleton
+### State: initialization, update 
 
-### State
+### Operations: sync/async, void/something
 
-### Construction, initialization
-
-### Operations
+**ack** - channel for acknowledge (add synchrony).   
+**ret** - channel for sync result.   
+**Nil** - process for send in *ack*-channel.  
+**Nil** - process for send to contract with unused arg (```contract countDown(_) | countDown!(Nil)```).  
 
 #### Async void -> void
 Example: [CountDownLatch.countDown()](CountDownLatch.md).
