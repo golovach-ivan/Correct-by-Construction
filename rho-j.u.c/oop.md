@@ -46,10 +46,10 @@ public class C {
 ```
 </p></details><br/>
 
-### Contract/Object
+### Contract / Object
 ???
 
-### Contract/Method
+### Contract / Method
 ???
 
 ### State
