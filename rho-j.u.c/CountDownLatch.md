@@ -83,15 +83,19 @@ count
 20   }    
 21 }
 ```
+**1** - .    
 **2** - [atomic state](???).     
-**2** - ???.     
-**2** - ???.     
-**2** - ???.     
-**2** - ???.     
-**2** - ???.     
-**2** - ???.     
-**2** - ???.     
-**2** - ???. 
+**4-5** - ???.     
+
+**7** - await method/contract: [sync void -> void](oop.md#sync-void---void)     
+**8-9** - [read-and-restore](???) atomic state
+**10-11** - if gate close - [add to waitSet](???) (modify by reference)
+**12-13** - else [notify](???) at the same moment     
+
+**15** - countDown method/contract: [async void -> void](oop.md#async-void---void)     
+**16-17** - [read-and-decrement](???) counter in atomic state      
+**18** - if counter reach zero     
+**19** - then [notifyAll](wait-set.md#notifyAll) blocked waiters in waitSet    
 
 <details><summary>Complete source code for CountDownLatch (with demo)</summary><p>
   
