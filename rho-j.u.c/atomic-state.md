@@ -42,7 +42,7 @@ contract C(@initSlot0, @initSlot1, fooOp, ...) = {
     
     contract fooOp(_) = {
       for (@slot0, @slot1 <- stateRef) {
-        stateRef!(F0::(slot0), F1::(slot1)) |
+        stateRef!(F(slot0), G(slot1)) |
         ...
       }
     } |
