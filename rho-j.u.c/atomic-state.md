@@ -64,8 +64,8 @@ contract C(@initSlot0, @initSlot1, fooOp, ...) = {
 Sometime you read-and-restore stateRef because you need *state*
 ```
 contract foo(ret) = {
-  for (@state <- stateRef) {
-    stateRef!(state) | /* do something with 'state' */
+  for (@state <- stateRef) {                             // read
+    stateRef!(state) | /* do something with 'state' */   // restore
   }
 } 
 ```
