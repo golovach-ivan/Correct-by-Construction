@@ -1,5 +1,51 @@
 ## Class/Object structures in RhoLang
 
+```
+contract C(@field0, @field1, method0, method1, method2) = {
+
+  new stateRef in {
+    stateRef!(field0, field1)
+  } |  
+  
+  contract method0(...) = {...} |  
+  contract method1(...) = {...} |  
+  contract method2(...) = {...}
+}
+```
+
+<details><summary>Sceleton in Scala</summary><p>
+  
+```scala
+class C(var field0: Any, var field1: Any) {
+  
+  def method0(...) = ...
+  def method1(...) = ...
+  def method2(...) = ...
+}
+```
+</p></details><br/>
+
+<details><summary>Sceleton in Java</summary><p>
+  
+```java
+public class C {
+
+  private Object field0;
+  private Object field1;
+  public C(Object field0, Object field1) {
+    this.field0 = field0;
+    this.field1 = field1;
+  }
+  
+  public ... method0(...) {...}
+  public ... method1(...) {...}
+  public ... method2(...) {...}
+}
+```
+</p></details><br/>
+
+### Contract Sceleton
+
 ### State
 
 ### Construction, initialization
@@ -76,46 +122,5 @@ new ret in {
   exchange!(thisItem, ret) | for (@thatItem <- ret) {
     stdout!([thisItem, " -- exchange to --> ", thatItem])
   }
-}
-```
-
-### Scala
-```scala
-class C(var field0: Any, var field1: Any) {
-  
-  def method0(...) = ...
-  def method1(...) = ...
-  def method2(...) = ...
-}
-```
-
-### RhoLang
-```
-contract C(@field0, @field1, method0, method1, method2) = {
-
-  new stateRef in {
-    stateRef!(field0, field1)
-  } |  
-  
-  contract method0(...) = {...} |  
-  contract method1(...) = {...} |  
-  contract method2(...) = {...}
-}
-```
-
-### Java
-```java
-public class C {
-
-  private Object field0;
-  private Object field1;
-  public C(Object field0, Object field1) {
-    this.field0 = field0;
-    this.field1 = field1;
-  }
-  
-  public ... method0(...) {...}
-  public ... method1(...) {...}
-  public ... method2(...) {...}
 }
 ```
