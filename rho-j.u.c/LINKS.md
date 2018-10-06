@@ -8,20 +8,20 @@ Sync something -> void =      oop.md#sync-something---void
 Sync something -> something = oop.md#sync-something---something   
 
 **Loops**   
-Loops = loops.md
-Index set (unordered) = loops.md#index-set-unordered
-Index variable (unordered) = loops.md#index-variable-unordered
-Index variable (ordered) = loops.md#index-variable-ordered
-Index array (unordered) = loops.md#index-array-unordered
-Index array (ordered) = loops.md#index-array-ordered
+Loops = loops.md   
+Index set (unordered) = loops.md#index-set-unordered   
+Index variable (unordered) = loops.md#index-variable-unordered   
+Index variable (ordered) = loops.md#index-variable-ordered   
+Index array (unordered) = loops.md#index-array-unordered   
+Index array (ordered) = loops.md#index-array-ordered   
 
 **Atomic State**   
 Atomic State = atomic-state.md     
-Concurrency Primitive as FSM = atomic-state.md#concurrency-primitive-as-fsm
-Join State and Operations Channels = atomic-state.md#join-state-and-operations-channels
-Blocked (conditional) update = atomic-state.md#blocked-conditional-update
-Multislot State = atomic-state.md#multislot-state
-Join equi-transformations = atomic-state.md#join-equi-transformations
+Concurrency Primitive as FSM = atomic-state.md#concurrency-primitive-as-fsm   
+Join State and Operations Channels = atomic-state.md#join-state-and-operations-channels   
+Blocked (conditional) update = atomic-state.md#blocked-conditional-update   
+Multislot State = atomic-state.md#multislot-state   
+Join equi-transformations = atomic-state.md#join-equi-transformations   
 
 **Wait Set**   
 Wait Set = wait-set.md   
