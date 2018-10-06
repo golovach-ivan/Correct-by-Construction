@@ -42,6 +42,7 @@ public class AtomicInteger {
 ???
 
 ### Impl
+[Sceleton](oop.md#contract--object) modification   
 ```
 1  contract AtomicInteger(@initValue, getOp, setOp, getAndIncOp) = {
 2    new valueRef in {
@@ -49,42 +50,30 @@ public class AtomicInteger {
 4      
 5      contract getOp(ret) = { 
 6        for (@value <- valueRef) { 
-7          valueRef!(value) | ret!(value)
-8        } 
-9      } |
-10      
-11     contract setOp(newValue, ack) = { 
-12       for (_ <- valueRef) { 
-13         valueRef!(*newValue) | ack!(Nil)
-14       } 
-15     } |
-16     
-17     contract getAndIncOp(ret) = { 
-18       for (@value <- valueRef) { 
-19         valueRef!(value + 1) | ret!(value)
-20       } 
-21     }       
-22   }
-23 }
+7          valueRef!(value) | ret!(value) } } |
+8      
+9      contract setOp(newValue, ack) = { 
+10       for (_ <- valueRef) { 
+11         valueRef!(*newValue) | ack!(Nil) } } |
+12     
+13     contract getAndIncOp(ret) = { 
+14       for (@value <- valueRef) { 
+15         valueRef!(value + 1) | ret!(value) } } 
+16   } 
+17 }
 ```
+**1** - [contract/object](oop.md#contract--object) with [constructor arg](oop.md#initialization) *initValue*        
+**2** - [atomic state](atomic-state.md) = Int
+**3** - atomic state [initialization](atomic-state.md#initialization)
 
-```
-  contract AtomicInteger(@initValue, getOp, setOp, getAndIncOp) = {
-    new valueRef in {
-      valueRef!(initValue) |
-      
-      contract getOp(ret) = { 
-        for (@value <- valueRef) { 
-          valueRef!(value) | ret!(value) } } |
-      
-      contract setOp(newValue, ack) = { 
-        for (_ <- valueRef) { 
-          valueRef!(*newValue) | ack!(Nil) } } |
-      
-      contract getAndIncOp(ret) = { 
-        for (@value <- valueRef) { 
-          valueRef!(value + 1) | ret!(value) } } } } |
-```
+**5** - *get* [contract/method](oop.md#contract--method): [sync void -> something](oop.md#sync-void---something)         
+**6-7** - [read-and-restore](atomic-state.md#restore-state) atomic state and  return *value*
+
+**9** - *set* [contract/method](oop.md#contract--method): [async something -> void](oop.md#sync-something---void)             
+**10-11** - [non-blocked update](atomic-state.md#non-blocked-update) *valueState* with new value and send ack   
+
+**13** - *getAndInc* [contract/method](oop.md#contract--method): [sync void -> something](oop.md#sync-void---something)                   
+**14-15** - [non-blocked update](atomic-state.md#non-blocked-update) *valueState* with new value and return updated *value*       
 
 ### Complete source code (with demo)
 
