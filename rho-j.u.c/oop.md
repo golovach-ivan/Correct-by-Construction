@@ -28,9 +28,9 @@ contract C(@field0, @field1, method0, method1, method2) = {
 ```java
 public class C {
 
-  private Any field0;
-  private Any field1;
-  public C(Any field0, Any field1) {
+  private Object field0;
+  private Object field1;
+  public C(Object field0, Object field1) {
     this.field0 = field0;
     this.field1 = field1;
   }
