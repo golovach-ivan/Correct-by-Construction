@@ -116,49 +116,32 @@ new AtomicInteger in {
 </p></details><br/>
 
 ### Equivalent reduction cores
+
+[Reduction core](atomic-state.md#reduction-core)    
 ```
-for (@value <= valueRef) {            
-  for (ret       <- get) { valueRef!(...) | ... } |     
-  for (newValue  <- set) { valueRef!(...) | ... } |      
-  for (ret <- getAndInc) { valueRef!(...) | ... }
-}
-```
-```           
-for (@value <= valueRef; ret       <= get) { valueRef!(...) | ... } |     
-for (@value <= valueRef; newValue  <= set) { valueRef!(...) | ... } |      
-for (@value <= valueRef; ret <= getAndInc) { valueRef!(...) | ... }
-```
-```
-for (ret       <= get; @value <= valueRef) { valueRef!(...) | ... } |     
-for (newValue  <= set; @value <= valueRef) { valueRef!(...) | ... } |      
-for (ret <= getAndInc; @value <= valueRef) { valueRef!(...) | ... }
-```
-```
-for (ret       <= get) {            
-  for (@value <- valueRef) { valueRef!(...) | ... }
-} |     
-  
-for (newValue  <= set) {              
-  for (@value <- valueRef) { valueRef!(...) | ... }
-} |      
-  
-for (ret <= getAndInc) {              
-  for (@value <- valueRef) { valueRef!(...) | ... }
-}
+contract getOp(ret) = { 
+  for (@value <- valueRef) { 
+    valueRef!(value) | ret!(value) } } |
+      
+contract setOp(newValue, ack) = { 
+  for (_ <- valueRef) { 
+    valueRef!(*newValue) | ack!(Nil) } } |
+      
+contract getAndIncOp(ret) = { 
+  for (@value <- valueRef) { 
+    valueRef!(value + 1) | ret!(value) } } 
 ```
 
-```
-contract get(ret) = {            
-  for (@value <- valueRef) { valueRef!(...) | ... }
-} |     
-  
-contract set(newValue) = {              
-  for (@value <- valueRef) { valueRef!(...) | ... }
-} |      
-  
-contract getAndInc(ret) = {              
-  for (@value <- valueRef) { valueRef!(...) | ... }
-}
+can be rewritten to
+```      
+for (@value <= valueRef; ret <= getOp) { 
+  valueRef!(value) | ret!(value) }  |
+      
+for (@value <= valueRef; newValue, ack <= setOp) { 
+    valueRef!(*newValue) | ack!(Nil) } |
+      
+for (@value <= valueRef; ret <= getAndIncOp) { 
+    valueRef!(value + 1) | ret!(value) }
 ```
 
 ### Exercise
