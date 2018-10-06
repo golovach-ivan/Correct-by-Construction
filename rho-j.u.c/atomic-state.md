@@ -1,9 +1,10 @@
 ## Atomic State pattern
 
-- [Concurrency Primitive as FSM](#concurrency-primitive-as-fsm)  
+- [Concurrency Primitive as FSM](#concurrency-primitive-as-fsm)
+- [Multislot State](#multislot-state)  
+- [Restore state](atomic-state.md#restore-state)  
 - [Non-blocked update](#non-blocked-update)
 - [Blocked (conditional) update](#blocked-conditional-update)  
-- [Multislot State](#multislot-state)  
 - [Example](#example)  
 - [Join State and Operations Channels](#join-state-and-operations-channels)  
 - [Join equi-transformations](#join-equi-transformations)  
@@ -33,6 +34,56 @@ contract op(@arg, out) = {
 **state** - ???.   
 **F** - ???.   
 **G** - ???.   
+
+### Multislot State
+
+RhoLang is a **polyadic π-calculi** extension so multivalued channel for free ```stateRef!(slot0, slot1)``` + ```for (@slot0, @slot1 <- stateRef)```
+```
+contract C(@initSlot0, @initSlot1, fooOp, ...) = {
+  new stateRef in {
+    stateRef!(initSlot0, initSlot1) |
+    
+    contract fooOp(_) = {
+      for (@slot0, @slot1 <- stateRef) {
+        stateRef!(F0::(slot0), F1::(slot1)) |
+        ...
+      }
+    } |
+    ...
+  }
+}
+```
+
+
+<details><summary>Example: <a href="CountDownLatch.md">CountDownLatch</a></summary><p>
+  
+```
+???
+```
+</p></details><br/>
+
+### Restore state
+```
+contract C(_) = {
+  new stateRef in {
+    stateRef!(0, 0)
+  } |
+  
+  contract getFst(ret) = {
+    for (@fst, @snd <- stateRef) {   // read multislot state
+      stateRef!(fst, snd) |          // restore multislot state
+      ret!(fst)
+    }
+  } |
+  
+  contract getSnd(ret) = {
+    for (@fst, @snd <- stateRef) {   // read multislot state
+      stateRef!(fst, snd) |          // restore multislot state
+      ret!(snd)
+    }
+  } |  
+}
+```
 
 ### Non-blocked update
 
@@ -71,33 +122,6 @@ contract op(@arg, out) = {
 **8-9** - *1-- = Nil* or *k-- = (k-1)* decrement logic.   
 **15** - nonblocking (unconditional) read.   
 **16-17** - *Nil++ = 1* or *k+ = (k+1)* increment logic.   
-
-### Multislot State
-
-RhoLang is a **polyadic π-calculi** extension so multivalued channel for free ```stateRef!(slot0, slot1)``` + ```for (@slot0, @slot1 <- stateRef)```
-```
-contract C(@initSlot0, @initSlot1, fooOp, ...) = {
-  new stateRef in {
-    stateRef!(initSlot0, initSlot1) |
-    
-    contract fooOp(_) = {
-      for (@slot0, @slot1 <- stateRef) {
-        stateRef!(F0::(slot0), F1::(slot1)) |
-        ...
-      }
-    } |
-    ...
-  }
-}
-```
-
-
-<details><summary>Example: <a href="CountDownLatch.md">CountDownLatch</a></summary><p>
-  
-```
-???
-```
-</p></details><br/>
 
 ### Example
 - *state* value saved in channel *stateRef*
