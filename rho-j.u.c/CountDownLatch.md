@@ -62,6 +62,7 @@ count
 ```
 
 ### Impl
+[Sceleton](oop.md#contract--object) modification   
 ```
 1  contract CountDownLatch(@initCount, awaitOp, countDownOp) = {  
 2    new stateRef in {    
@@ -85,10 +86,9 @@ count
 20   }    
 21 }
 ```
-[Sceleton](oop.md#contract--object) modification   
 **1** - [contract/object](oop.md#contract--object) with [constructor arg](oop.md#initialization) *initCount*.    
 **2** - [atomic state](atomic-state.md) ([multifield](atomic-state.md#multislot-state) = Int × [WaitSet](wait-set.md)).     
-**4-5** - [initialization](oop.md#initialization) of atomic state with pair constructor-arg × ([new WaitSet](wait-set.md#initialization)) 
+**4-5** - [initialization](oop.md#initialization) of atomic state with pair constructor-arg × ([new WaitSet](wait-set.md#initialization))   
 **7** - await [contract/method](oop.md#contract--method): [sync void -> void](oop.md#sync-void---void)     
 **8-9** - [read-and-restore](???) atomic state  
 **10-11** - if gate closed - [add to waitSet](wait-set.md#wait) (modify waitSet in restored state by reference)  
