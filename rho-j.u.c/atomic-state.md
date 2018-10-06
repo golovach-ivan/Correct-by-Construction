@@ -21,19 +21,16 @@ contract MyPrimitive(@initState, ...) = {
 }
 ```
 
-Многие операции concurrency primitive можно представить как atomic update over state
+Многие операции concurrency primitive можно представить как atomic update over state  
+state × arg → state × ret    
+state × arg → F(state, arg) × G(state, arg)     
 ```
-contract op(@arg, out) = {
+contract op(@arg, ret) = {
   for (@state <- stateRef) {
-    stateRef!(F(state, arg)) | out!(G(state, arg))
+    stateRef!(F(state, arg)) | ret!(G(state, arg))
   }
 }  
 ```
-**arg** - аргумент операции, может отсутствовать (как у *get*), быть один (как у *set*) или будет ???множество (как у *???*).   
-**out** - обычно называется *ret* у возвращающих значение (```get(ret)```), *ack* у синхронных void (```set(arg, ack)```), отсутсвуют у асинхронных void (```set(arg)```).   
-**state** - ???.   
-**F** - ???.   
-**G** - ???.   
 
 ### Multislot State
 
