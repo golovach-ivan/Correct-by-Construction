@@ -25,15 +25,17 @@ public class CountDownLatch {
 
 ### Model
 
+CountDownLatch сделан как [One-off WaitSet](wait-set.md#one-off-waitset) с присоедененным counter.   
+await() - блокирует/помещает в waitSet, countDown() - декрементирует counter, когда тот достигает 0 - notifyAll().
+
 #### State
-[Atomic state](???) with [two slots](???) *{**count: Int**, **waitSet: [WaitSet](???)**}*.      
-[Initialized](???) with *{**count <- [constructor-arg](???)**, **waitSet <- [new WaitSet()](???)**}*.   
+[Atomic state](atomic-state.md) with [two slots](atomic-state.md#multislot-state) *{**count: Int**, **waitSet: [WaitSet](wait-set.md)**}*.      
+[Initialized](oop.md#initialization) with *{**count <- [constructor-arg](oop.md#initialization)**, **waitSet <- [new WaitSet()](???)**}*.   
+#### State update operations
+Каждое обращение к await - увеличивает waitSet на один елемент 
+Каждое обращение к countDown - уменьшает counter на еденицу   
 
-#### Operations
-await(ack) - [sync void(void)](???).   
-countDown(_) - [async void(void)](???).  
-
-#### State Trace example
+#### Model Trace example
 Operations order
 ```
 CountDownLatch!(2, await, countDown);
@@ -83,17 +85,18 @@ count
 20   }    
 21 }
 ```
-**1** - .    
-**2** - [atomic state](???).     
-**4-5** - ???.     
+[Sceleton](oop.md#contract--object) modification   
+**1** - [contract/object](oop.md#contract--object) with [constructor arg](oop.md#initialization) *initCount*.    
+**2** - [atomic state](atomic-state.md) ([multifield](atomic-state.md#multislot-state) = Int × [WaitSet](wait-set.md)).     
+**4-5** - [initialization](oop.md#initialization) of atomic state with pair constructor-arg × ([new WaitSet](wait-set.md#initialization)) 
 
-**7** - await method/contract: [sync void -> void](oop.md#sync-void---void)     
+**7** - await [contract/method](oop.md#contract--method): [sync void -> void](oop.md#sync-void---void)     
 **8-9** - [read-and-restore](???) atomic state
-**10-11** - if gate close - [add to waitSet](???) (modify by reference)
-**12-13** - else [notify](???) at the same moment     
+**10-11** - if gate closed - [add to waitSet](wait-set.md#wait) (modify waitSet in restored state by reference)
+**12-13** - else [notify](wait-set.md#notify) at the same moment     
 
-**15** - countDown method/contract: [async void -> void](oop.md#async-void---void)     
-**16-17** - [read-and-decrement](???) counter in atomic state      
+**15** - countDown [contract/method](oop.md#contract--method): [async void -> void](oop.md#async-void---void)     
+**16-17** - [Non-blocked read-and-decrement](atomic-state.md#non-blocked-update) ```counter``` in atomic state      
 **18** - if counter reach zero     
 **19** - then [notifyAll](wait-set.md#notifyAll) blocked waiters in waitSet    
 
