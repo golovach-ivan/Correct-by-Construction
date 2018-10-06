@@ -1,5 +1,31 @@
 ## Class/Object structures in RhoLang
 
+### Operations
+
+#### Async void -> void
+```
+contract countDown(_) = {...} |
+countDown!(Nil)
+```
+
+#### Async something -> void
+```
+contract unlock(key) = {...} |
+countDown!(Nil)
+```
+
+#### Sync void -> void
+```
+contract await(ack) = {ack!(Nil) | ... } |
+countDown!(Nil)
+```
+
+#### Sync void -> something
+```
+contract lock(ret) = {ret!(...) | ... } |
+countDown!(Nil)
+```
+
 ### Scala
 ```scala
 class C(field0: Any, field1: Any) {
