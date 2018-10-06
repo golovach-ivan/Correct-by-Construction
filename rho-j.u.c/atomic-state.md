@@ -184,6 +184,9 @@ contract AtomicInteger(@initState, set, incAndGet) = {
 
 ### Join State and Operations Channels
 
+#### Reduction core
+???
+
 ### Join equi-transformations
 ```
 new stateRef in {
