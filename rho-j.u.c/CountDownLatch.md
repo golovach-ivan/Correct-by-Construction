@@ -8,9 +8,21 @@ A *CountDownLatch* is initialized with a given count. The *await()* methods bloc
 - [Explanation](#explanation)
 - [Complete source code (with demo)](#complete-source-code-with-demo)
 - [Exercise](#exercise)
-
-<details><summary><b>java.util.concurrent.CountDownLatch.java</b></summary><p>
   
+**java.util.concurrent.CountDownLatch** (short version)   
+```java
+public class CountDownLatch {
+  public CountDownLatch(int count) {...}
+  
+  public void await() {...}
+  
+  public void countDown() {...}	  
+}
+
+```  
+
+<details><summary><b>java.util.concurrent.CountDownLatch</b> (long version)</summary><p>
+
 ```java
 public class CountDownLatch {
   // Constructs a CountDownLatch initialized with the given count.
@@ -20,7 +32,7 @@ public class CountDownLatch {
   public void await() {...}
   
   // Decrements the count of the latch, releasing all waiting threads if the count reaches zero.
-  public void countDown() {...}	
+  public void countDown() {...}
   
   // Returns the current count.
   public long getCount() {...}
