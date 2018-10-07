@@ -13,7 +13,7 @@ public interface ExecutorService {
   void execute(Runnable command);
   <T> Future<T> submit(Callable<T> task);
   <T> List<Future<T>> invokeAll(Collection<? extends Callable<T>> tasks);  
-  <T> T invokeAny(Collection<? extends Callable<T>> tasks)ж
+  <T> T invokeAny(Collection<? extends Callable<T>> tasks);
 }
 ```
 
