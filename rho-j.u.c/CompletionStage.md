@@ -2,11 +2,6 @@
 
 A stage of a possibly asynchronous computation, that performs an action or computes a value when another CompletionStage completes. A stage completes upon termination of its computation, but this may in turn trigger other dependent stages.([javadoc](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/CompletionStage.html)).
 
-- [State / Operations Model](#state--operations-model)
-- [Explanation](#explanation)
-- [Complete source code (with demo)](#complete-source-code-with-demo)
-- [Exercise](#exercise)
-
 **java.util.concurrent.CompletionStage** (short version)   
 ```java
 public interface CompletionStage<T> {
@@ -55,6 +50,11 @@ public interface CompletionStage<T> {
 }
 ```
 </p></details><br/>
+
+- [State / Operations Model](#state--operations-model)
+- [Explanation](#explanation)
+- [Complete source code (with demo)](#complete-source-code-with-demo)
+- [Exercise](#exercise)
 
 ### State / Operations Model
 TBD
