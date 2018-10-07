@@ -87,19 +87,7 @@ new Semaphore in {
               stateRef!(permits + 1, waitSet)
           }
         }
-      } |
-      
-      contract drainPermits(ret) = {
-        for (@permits, @waitSet <- stateRef) {
-          match waitSet {
-            [ack...waitSetTail] => { 
-              stateRef!(permits, waitSetTail) |
-              @ack!(Nil) }
-            [] => 
-              stateRef!(permits + 1, waitSet)
-          }          
-        }
-      }      
+      }    
     }
    } |
    
