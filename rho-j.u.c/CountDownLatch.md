@@ -4,9 +4,9 @@ A synchronization aid that allows one or more threads to wait until a set of ope
 
 A *CountDownLatch* is initialized with a given count. The *await()* methods block until the current count reaches zero due to invocations of the *countDown()* method, after which all waiting threads are released and any subsequent invocations of *await()* return immediately ([javadoc](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/CountDownLatch.html)). 
 
-- [Model](#model)
-- [Impl](#impl)
-- [Complete source code (with demo)](#complete-source-code-with-demo)  
+- [State / Operations Model](#state--operations-model)
+- [Explanation](#explanation)
+- [Complete source code (with demo)](#complete-source-code-with-demo)
 - [Exercise](#exercise)
 
 <details><summary><b>java.util.concurrent.CountDownLatch.java</b></summary><p>
@@ -28,7 +28,7 @@ public class CountDownLatch {
 ```
 </p></details><br/>
 
-### Model
+### State / Operations Model
 
 CountDownLatch сделан как [One-off WaitSet](wait-set.md#one-off-waitset) с присоедененным counter.   
 await() - блокирует/помещает в waitSet, countDown() - декрементирует counter, когда тот достигает 0 - notifyAll().
@@ -66,7 +66,7 @@ count
                                                                             ack2!(Nil)
 ```
 
-### Impl
+### Explanation
 [Sceleton](oop.md#contract--object) modification   
 ```
 1  contract CountDownLatch(@initCount, awaitOp, countDownOp) = {  
