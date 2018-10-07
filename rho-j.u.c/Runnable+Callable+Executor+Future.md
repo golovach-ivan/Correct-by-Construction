@@ -1,4 +1,4 @@
-## java.util.concurrent.{Callable&lt;T&gt;, Executor, Future&lt;T&gt;} in RhoLang
+## java.util.concurrent.{Callable, Executor, Future} in RhoLang
 
 ### Runnable
 ### Callable
