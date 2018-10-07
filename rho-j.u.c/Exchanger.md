@@ -8,8 +8,7 @@ A synchronization point at which threads can pair and swap elements within pairs
 - [Equivalent reduction core](#equivalent-reduction-core)  
 - [Exercise](#exercise)
 
-<details><summary><b>java.util.concurrent.Exchanger.java</b></summary><p>
-  
+**java.util.concurrent.Exchanger**  
 ```java
 public class Exchanger<V> {
   /** 
@@ -19,7 +18,6 @@ public class Exchanger<V> {
   public V exchange(V x) {...}
 }
 ```
-</p></details><br/>
 
 ### State / Operations Model
 
