@@ -19,3 +19,5 @@ public interface Condition {
   void signalAll();
 }
 ```
+
+### Exercise
