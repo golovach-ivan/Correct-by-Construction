@@ -14,11 +14,20 @@ TDD
 - [Version #2: linked-list with size (bounded LIFO)](#version-2-linked-list-with-size-bounded-lifo)
 - [Version #3: bounded LIFO/FIFO with backed array](#version-3-bounded-lifofifo-with-backed-array)
 
-<details><summary>public interface BlockingQueue&lt;E&gt;</summary>
-<p>
+**java.util.concurrent.???** (short version)   
+```java
+public interface BlockingQueue<E> {
+  
+  void put(E e);
+
+  E take();
+}
+```
+
+<details><summary><b>java.util.concurrent.???</b> (long version)</summary><p>
   
 ```java
-{
+public interface BlockingQueue<E> {
   // Inserts the specified element into this queue, waiting if necessary for space to become available.
   void put(E e);
 
@@ -35,8 +44,7 @@ TDD
   int remainingCapacity();
 }
 ```
-</p>
-</details><br/>
+</p></details><br/>
 
 ### Version #1: base linked-list (unbounded LIFO)
 Если нас интересует base (only *put* and *take* methods) unbounded LIFO queue, то мы можем реализовать простейший single-linked stack based on node as 2-elem list (\[elem, next\]) or 2-elem tuple ((elem, next)).
