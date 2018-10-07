@@ -2,11 +2,6 @@
 
 A Map providing thread safety and atomicity guarantees ([javadoc](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/ConcurrentMap.html)).
 
-- [State / Operations Model](#state--operations-model)
-- [Explanation](#explanation)
-- [Complete source code (with demo)](#complete-source-code-with-demo)
-- [Exercise](#exercise)
-
 **java.util.concurrent.ConcurrentMap** (short version)   
 ```java
 public interface ConcurrentMap<K, V> {
@@ -59,6 +54,11 @@ public interface ConcurrentMap<K, V> {
 }
 ```
 </p></details><br/>
+
+- [State / Operations Model](#state--operations-model)
+- [Explanation](#explanation)
+- [Complete source code (with demo)](#complete-source-code-with-demo)
+- [Exercise](#exercise)
 
 ### State / Operations Model
 TBD
