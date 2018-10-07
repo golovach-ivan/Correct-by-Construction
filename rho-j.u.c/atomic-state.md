@@ -41,6 +41,17 @@ contract op(@arg, ret) = {
 }  
 ```
 
+#### tryLock
+- Lock.[tryLock](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/locks/Lock.html#tryLock--)
+- Semaphore.[tryAcquire](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Semaphore.html#tryAcquire--)
+- BlockingQueue.[remove](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/BlockingQueue.html#remove-java.lang.Object-)/[poll](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/BlockingQueue.html#poll-long-java.util.concurrent.TimeUnit-) имеют неблокирующую семантику, [take](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/BlockingQueue.html#take--) - блокирующую.
+
+#### Explicit WaitSet
+size, isEmpty   
+- ReentrantLock.[getQueueLength](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/locks/ReentrantLock.html#getQueueLength--)
+notifyAll       
+size, isEmpty + notifyAll    
+
 ### Multislot State
 
 RhoLang is a **polyadic π-calculi** extension so multivalued channel for free    
