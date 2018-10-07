@@ -2,11 +2,6 @@
 
 A counting semaphore. Conceptually, a semaphore maintains a set of permits. Each acquire() blocks if necessary until a permit is available, and then takes it. Each release() adds a permit, potentially releasing a blocking acquirer. Semaphores are often used to restrict the number of threads than can access some (physical or logical) resource ([javadoc](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Semaphore.html)).
 
-- [State / Operations Model](#state--operations-model)
-- [Explanation](#explanation)
-- [Complete source code (with demo)](#complete-source-code-with-demo)
-- [Exercise](#exercise)
-
 **java.util.concurrent.Semaphore** (short version)   
 ```java
 public class Semaphore {
@@ -50,6 +45,11 @@ public class Semaphore {
 }
 ```
 </p></details><br/>
+
+- [State / Operations Model](#state--operations-model)
+- [Explanation](#explanation)
+- [Complete source code (with demo)](#complete-source-code-with-demo)
+- [Exercise](#exercise)
 
 ### State / Operations Model
 TBD
