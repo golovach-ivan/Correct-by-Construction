@@ -7,11 +7,6 @@ Conditions (also known as *condition queues* or *condition variables*) provide a
 
 A *Condition* instance is intrinsically bound to a lock. To obtain a *Condition* instance for a particular *Lock* instance use its *newCondition()* method ([javadoc](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/locks/Condition.html)).
 
-- [State / Operations Model](#state--operations-model)
-- [Explanation](#explanation)
-- [Complete source code (with demo)](#complete-source-code-with-demo)
-- [Exercise](#exercise)
-
 ```java
 public interface Condition {
   // Causes the current thread to wait until it is signalled.
@@ -24,6 +19,11 @@ public interface Condition {
   void signalAll();
 }
 ```
+
+- [State / Operations Model](#state--operations-model)
+- [Explanation](#explanation)
+- [Complete source code (with demo)](#complete-source-code-with-demo)
+- [Exercise](#exercise)
 
 ### State / Operations Model
 TBD
