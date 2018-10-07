@@ -2,6 +2,14 @@
 
 A synchronization point at which threads can pair and swap elements within pairs. Each thread presents some object on entry to the exchange method, matches with a partner thread, and receives its partner's object on return ([javadoc](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Exchanger.html)).
 
+- [Model](#model)
+- [Impl](#impl)
+- [Complete source code (with demo)](#complete-source-code-with-demo)  
+- [Equivalent reduction core](#equivalent-reduction-core)  
+- [Exercise](#exercise)
+
+<details><summary><b>java.util.concurrent.Exchanger.java</b></summary><p>
+  
 ```java
 public class Exchanger<V> {
   /** 
@@ -11,6 +19,7 @@ public class Exchanger<V> {
   public V exchange(V x) {...}
 }
 ```
+</p></details><br/>
 
 ```
 +-----> Nil--------+
@@ -75,37 +84,27 @@ exchange(itemD, retD)
 ```
 new Exchanger in {
   
-  contract Exchanger(input) = {
-    new stateRef in {
-    
-      // init state
+  contract Exchanger(exchangeOp) = {
+    new stateRef in {    
       stateRef!(Nil) |                         
       
-      // (state, input) -> (state, return) match cycle
-      for (@state <= stateRef; @itemA, @retA <= input) {
-        match state {
-          Nil => stateRef!([itemA, retA])        
-          [itemB, retB] => { stateRef!(Nil) |                 
-            @retB!(itemA) | @retA!(itemB) 
-          }
-        }
-      }     
+      contract exchangeOp(@itemA, @retA) = {
+        for (@state <- stateRef) {
+          match state {
+            Nil => stateRef!([itemA, retA])        
+            [itemB, retB] => { stateRef!(Nil) |                 
+              @retB!(itemA) | @retA!(itemB) } } } }
     }
   } |
 
-  // === DEMO
-  // for (i = 0; i < 6; i++) {
-  //   exchange!(i, ?j) | stdout("%i -> " %j)
-  // }
-  new exchange, k in {
+  new exchange in {
     Exchanger!(*exchange) |
-    k!(0) |
-    for (@i <= k) {
-      if (i < 6) {
+    
+    new n in {
+      n!(0) | n!(1) | n!(2) | n!(3) | n!(4) | n!(5) | for (@i <= n) { 
         new ret in {
           exchange!(i, *ret) | for (@j <- ret) {
-            stdout!([i, " -> ", j]) }} |  
-        k!(i + 1)
+            stdout!([i, " -> ", j]) } }
       }
     }
   }
@@ -160,6 +159,19 @@ for (@itemB, @retB <= input; @[itemA, retA] <= atomicRef) {
 }
 ```
 
+### Equivalent reduction cores
+
+[Reduction core](atomic-state.md#reduction-core) 
+```
+```
+
+can be rewritten to
+```
+```
+
+### Complete source code (with demo)
+<details><summary>Complete source code for Exchanger (with demo)</summary><p>
+  
 <details><summary>Complete source code</summary>
 <p>
   
@@ -213,3 +225,6 @@ new Exchanger in {
 ```
 </p>
 </details><br/>
+
+### Exercise
+Implement non-blocking method *tryExchange(item, ret)* for Exchanger in RhoLang with ```ret!([true, item])``` or ```ret!([false, Nil])```.
