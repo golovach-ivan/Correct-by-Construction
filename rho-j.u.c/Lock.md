@@ -146,3 +146,5 @@ unlock|                 |lock
       +-----{[key]} <---+   
             LOCKED
 ```
+
+### Exercise
