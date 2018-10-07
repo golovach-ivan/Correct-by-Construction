@@ -8,7 +8,17 @@ An *int* value that may be updated atomically ([javadoc](https://docs.oracle.com
 - [Equivalent reduction cores](#equivalent-reduction-cores)  
 - [Exercise](#exercise)
 
-<details><summary><b>java.util.concurrent.atomic.AtomicInteger.java</b></summary><p>
+**java.util.concurrent.AtomicInteger** (short version)   
+```java
+
+public class AtomicInteger {
+  public int get() {...}  
+  public void set(int newValue) {...}
+  public boolean compareAndSet(int expectedValue, int newValue) {...}
+}
+```
+
+<details><summary><b>java.util.concurrent.atomic.AtomicInteger</b> (long version)</summary><p>
 
 ```java
 public class AtomicInteger {
@@ -20,19 +30,33 @@ public class AtomicInteger {
   
   // Sets the value to newValue
   public void set(int newValue) {...}
-  
-  // Atomically sets the value to newValue if the current value, referred to as the witness value, == expectedValue
-  public int compareAndExchange(int expectedValue, int newValue) {...}
-  
+
   // Atomically sets the value to newValue if the current value == expectedValue
   public boolean compareAndSet(int expectedValue, int newValue) {...}
+
+  // Atomically sets the value to newValue if the current value, 
+  // referred to as the witness value, == expectedValue
+  public int compareAndExchange(int expectedValue, int newValue) {...}
   
+  // Atomically decrements the current value
   public int decrementAndGet() {...}
+  
+  // Atomically increments the current value
   public int incrementAndGet() {...}
+  
+  // Atomically decrements the current value
   public int getAndDecrement() {...}
+  
+  // Atomically increments the current value
   public int getAndIncrement() {...}
+  
+  // Atomically adds the given value to the current value
   public int getAndAdd(int delta) {...}
+  
+  // Atomically adds the given value to the current value
   public int addAndGet(int delta) {...}
+  
+  // Atomically sets the value to newValue and returns the old value
   public int getAndSet(int newValue) {...}
 }
 ```
