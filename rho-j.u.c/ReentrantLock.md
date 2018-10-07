@@ -10,11 +10,8 @@ A reentrant mutual exclusion *Lock* with the same basic behavior and semantics a
 **java.util.concurrent.locks.ReentrantLock** (short version)   
 ```java
 public class ReentrantLock implements Lock {
-
   public void lock() {...}
-
-  public void unlock() {...}  
-  
+  public void unlock() {...}   
   public Condition newCondition() {...}
 }
 
