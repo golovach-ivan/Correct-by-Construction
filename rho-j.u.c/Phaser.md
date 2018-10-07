@@ -6,4 +6,15 @@ A reusable synchronization barrier, similar in functionality to CyclicBarrier an
 
 **Synchronization**. Like a CyclicBarrier, a Phaser may be repeatedly awaited. Method arriveAndAwaitAdvance() has effect analogous to CyclicBarrier.await. Each generation of a phaser has an associated phase number. The phase number starts at zero, and advances when all parties arrive at the phaser [javadoc](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Phaser.html).
 
+- [State / Operations Model](#state--operations-model)
+- [Explanation](#explanation)
+- [Complete source code (with demo)](#complete-source-code-with-demo)
+- [Exercise](#exercise)
+
+### State / Operations Model
+
+### Explanation
+
+### Complete source code (with demo)
+
 ### Exercise
