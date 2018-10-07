@@ -14,7 +14,7 @@ TDD
 - [Version #2: linked-list with size (bounded LIFO)](#version-2-linked-list-with-size-bounded-lifo)
 - [Version #3: bounded LIFO/FIFO with backed array](#version-3-bounded-lifofifo-with-backed-array)
 
-**java.util.concurrent.???** (short version)   
+**java.util.concurrent.BlockingQueue** (short version)   
 ```java
 public interface BlockingQueue<E> {
   
@@ -24,7 +24,7 @@ public interface BlockingQueue<E> {
 }
 ```
 
-<details><summary><b>java.util.concurrent.???</b> (long version)</summary><p>
+<details><summary><b>java.util.concurrent.BlockingQueue</b> (long version)</summary><p>
   
 ```java
 public interface BlockingQueue<E> {
