@@ -4,7 +4,7 @@
   - [OOP](oop.md)   
   - [Loops](loops.md)   
   - [Atomic state](atomic-state.md)     
-  - [Wait Set](waitSet.md)   
+  - [Wait Set](wait-set.md)   
 ###  Concurrency Primitives
   - **Basic**: [Runnable](Runnable.md), [Callable](Callable.md), [Future](Future.md), [Executor](Executor.md), [ExecutorService](ExecutorService.md), [CompletableFuture](CompletableFuture.md)   
   - **Collections and data structures**: [AtomicInteger](AtomicInteger.md), [BlockingQueue](BlockingQueue.md), [ConcurrentMap](ConcurrentMap.md)   
