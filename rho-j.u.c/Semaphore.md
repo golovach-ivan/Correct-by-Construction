@@ -7,7 +7,21 @@ A counting semaphore. Conceptually, a semaphore maintains a set of permits. Each
 - [Complete source code (with demo)](#complete-source-code-with-demo)
 - [Exercise](#exercise)
 
-<details><summary><b>java.util.concurrent.Semaphore.java</b></summary><p>
+**java.util.concurrent.Semaphore** (short version)   
+```java
+public class Semaphore {
+  // Creates a Semaphore with the given number of permits.
+  public Semaphore(int permits) {...}
+  
+  // Acquires a permit from this semaphore, blocking until one is available.
+  public void acquire() {...}
+  
+  // Releases a permit, returning it to the semaphore.
+  public void release() {...}
+}
+```
+
+<details><summary><b>java.util.concurrent.Semaphore (long version)</b></summary><p>
   
 ```java
 public class Semaphore {
