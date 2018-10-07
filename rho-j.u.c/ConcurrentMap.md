@@ -33,7 +33,7 @@ public interface ConcurrentMap<K, V> {
 
   // Performs the given action for each entry in this map until all 
   // entries have been processed or the action throws an exception.
-  default void forEach(BiConsumer<? super K,? super V> action);  
+  default void forEach(BiConsumer<? super K,? super V> action) {...}
 
   // Returns the value to which the specified key is mapped, 
   // or null if this map contains no mapping for the key.
@@ -56,7 +56,7 @@ public interface ConcurrentMap<K, V> {
 
   // Replaces each entry's value with the result of invoking the given function 
   // on that entry until all entries have been processed or the function throws an exception.
-  default void replaceAll(BiFunction<? super K,? super V,? extends V> function);
+  default void replaceAll(BiFunction<? super K,? super V,? extends V> function) {...}
 }
 ```
 </p></details><br/>
