@@ -7,7 +7,7 @@ A reentrant mutual exclusion *Lock* with the same basic behavior and semantics a
 - [Complete source code (with demo)](#complete-source-code-with-demo)
 - [Exercise](#exercise)
 
-**java.util.concurrent.ReentrantLock** (short version)   
+**java.util.concurrent.locks.ReentrantLock** (short version)   
 ```java
 public class ReentrantLock implements Lock {
 
@@ -20,7 +20,7 @@ public class ReentrantLock implements Lock {
 
 ```
 
-<details><summary><b>java.util.concurrent.ReentrantLock</b> (long version)</summary><p>
+<details><summary><b>java.util.concurrent.locks.ReentrantLock</b> (long version)</summary><p>
   
 ```java
 public class ReentrantLock implements Lock {
