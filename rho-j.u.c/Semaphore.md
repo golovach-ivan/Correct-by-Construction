@@ -16,7 +16,8 @@ public class Semaphore {
   // Acquires a permit from this semaphore, only if one is available at the time of invocation.
   public boolean tryAcquire() {...}
   
-  // Acquires and returns all permits that are immediately available, or if negative permits are available, releases them.
+  // Acquires and returns all permits that are immediately available, 
+  // or if negative permits are available, releases them.
   public int drainPermits() {...}  
   
   // Releases a permit, returning it to the semaphore.
