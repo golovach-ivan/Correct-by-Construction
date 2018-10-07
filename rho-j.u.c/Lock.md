@@ -9,12 +9,9 @@ A *Lock* is a tool for controlling access to a shared resource by multiple threa
 
 **java.util.concurrent.locks.Lock** (short version)   
 ```java
-public interface Lock {
-  
+public interface Lock {  
   void lock();
-
   void unlock();
-
   Condition newCondition();
 }
 ```
