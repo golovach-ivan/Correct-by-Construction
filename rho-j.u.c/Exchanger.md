@@ -228,4 +228,4 @@ new Exchanger in {
 </p></details><br/>
 
 ### Exercise
-Implement non-blocking method *tryExchange(item, ret)* for Exchanger in RhoLang with ```ret!([true, item])``` or ```ret!([false, Nil])```.
+Implement non-blocking method *tryExchange(item, ret)* for Exchanger in RhoLang.
