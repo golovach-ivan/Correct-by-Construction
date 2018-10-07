@@ -2,8 +2,8 @@
 
 A synchronization point at which threads can pair and swap elements within pairs. Each thread presents some object on entry to the exchange method, matches with a partner thread, and receives its partner's object on return ([javadoc](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Exchanger.html)).
 
-- [Model](#model)
-- [Impl](#impl)
+- [State / Operations Model](#state--operations-model)
+- [Explanation](#explanation)
 - [Complete source code (with demo)](#complete-source-code-with-demo)  
 - [Equivalent reduction core](#equivalent-reduction-core)  
 - [Exercise](#exercise)
@@ -20,6 +20,8 @@ public class Exchanger<V> {
 }
 ```
 </p></details><br/>
+
+### State / Operations Model
 
 ```
 +-----> Nil--------+
@@ -50,6 +52,7 @@ exchange(itemD, retD)
 - [Version #1: one process do both transition](#version-1-one-process-do-both-transition)
 - [Version #2: two concurrent processes do one transition each](#version-2-two-concurrent-processes-do-one-transition-each)
 
+### Explanation
 
 ### Version #1: one process do both transition
 
@@ -77,6 +80,8 @@ exchange(itemD, retD)
 **8** - (Nil, (itemA, retA)) -> ((itemA, retA), _)  
 **9** - ((itemA, retA), (itemB, retB)) -> (Nil, Nil)   
 **10** - do two-way exchange.  
+
+### Complete source code (with demo)
 
 <details><summary>Complete source code</summary>
 <p>
@@ -170,10 +175,7 @@ can be rewritten to
 ```
 
 ### Complete source code (with demo)
-<details><summary>Complete source code for Exchanger (with demo)</summary><p>
-  
-<details><summary>Complete source code</summary>
-<p>
+<details><summary>Complete source code for Exchanger (with demo)</summary><p>  
   
 ```
 new Exchanger in {
@@ -223,8 +225,7 @@ new Exchanger in {
 >> [3, " -> ", 4]
 >> [4, " -> ", 3]
 ```
-</p>
-</details><br/>
+</p></details><br/>
 
 ### Exercise
 Implement non-blocking method *tryExchange(item, ret)* for Exchanger in RhoLang with ```ret!([true, item])``` or ```ret!([false, Nil])```.
