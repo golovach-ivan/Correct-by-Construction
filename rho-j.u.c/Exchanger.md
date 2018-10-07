@@ -2,12 +2,6 @@
 
 A synchronization point at which threads can pair and swap elements within pairs. Each thread presents some object on entry to the exchange method, matches with a partner thread, and receives its partner's object on return ([javadoc](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Exchanger.html)).
 
-- [State / Operations Model](#state--operations-model)
-- [Explanation](#explanation)
-- [Complete source code (with demo)](#complete-source-code-with-demo)  
-- [Equivalent reduction core](#equivalent-reduction-core)  
-- [Exercise](#exercise)
-
 **java.util.concurrent.Exchanger**  
 ```java
 public class Exchanger<V> {
@@ -18,6 +12,12 @@ public class Exchanger<V> {
   public V exchange(V x) {...}
 }
 ```
+
+- [State / Operations Model](#state--operations-model)
+- [Explanation](#explanation)
+- [Complete source code (with demo)](#complete-source-code-with-demo)  
+- [Equivalent reduction core](#equivalent-reduction-core)  
+- [Exercise](#exercise)
 
 ### State / Operations Model
 
