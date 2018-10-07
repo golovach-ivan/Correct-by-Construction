@@ -2,11 +2,6 @@
 
 A *Lock* is a tool for controlling access to a shared resource by multiple threads. Commonly, a lock provides exclusive access to a shared resource: only one thread at a time can acquire the lock and all access to the shared resource requires that the lock be acquired first ([javadoc](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/locks/Lock.html)). 
 
-- [State / Operations Model](#state--operations-model)
-- [Explanation](#explanation)
-- [Complete source code (with demo)](#complete-source-code-with-demo)
-- [Exercise](#exercise)
-
 **java.util.concurrent.locks.Lock** (short version)   
 ```java
 public interface Lock {  
@@ -34,6 +29,11 @@ public interface Lock {
 }
 ```
 </p></details><br/>
+
+- [State / Operations Model](#state--operations-model)
+- [Explanation](#explanation)
+- [Complete source code (with demo)](#complete-source-code-with-demo)
+- [Exercise](#exercise)
 
 ### State / Operations Model
 
