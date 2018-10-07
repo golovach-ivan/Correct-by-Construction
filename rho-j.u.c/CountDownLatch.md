@@ -12,10 +12,8 @@ A *CountDownLatch* is initialized with a given count. The *await()* methods bloc
 **java.util.concurrent.CountDownLatch** (short version)   
 ```java
 public class CountDownLatch {
-  public CountDownLatch(int count) {...}
-  
-  public void await() {...}
-  
+  public CountDownLatch(int count) {...}  
+  public void await() {...}  
   public void countDown() {...}	  
 }
 
