@@ -5,7 +5,7 @@ An *int* value that may be updated atomically ([javadoc](https://docs.oracle.com
 - [Model](#model)
 - [Impl](#impl)
 - [Complete source code (with demo)](#complete-source-code-with-demo)  
-- [Equivalent reduction cores](#equivalent-reduction-cores)  
+- [Equivalent reduction core](#equivalent-reduction-core)  
 - [Exercise](#exercise)
 
 <details><summary><b>java.util.concurrent.atomic.AtomicInteger.java</b></summary><p>
