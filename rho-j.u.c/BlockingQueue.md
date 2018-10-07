@@ -3,6 +3,13 @@
 A Queue that additionally supports operations that wait for the queue to become non-empty when retrieving an element, and wait for space to become available in the queue when storing an element. BlockingQueue implementations are designed to be used primarily for producer-consumer queues ([javadoc](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/BlockingQueue.html)). 
 
 BlockingQueue can be optionally-bounded. BlockingQueue can orders elements FIFO (first-in-first-out) or LIFO (least-in-first-out).
+
+- [State / Operations Model](#state--operations-model)
+- [Explanation](#explanation)
+- [Complete source code (with demo)](#complete-source-code-with-demo)
+- [Exercise](#exercise)
+
+TDD
 - [Version #1: base linked-list (unbounded LIFO)](#version-1-base-linked-list-unbounded-lifo)
 - [Version #2: linked-list with size (bounded LIFO)](#version-2-linked-list-with-size-bounded-lifo)
 - [Version #3: bounded LIFO/FIFO with backed array](#version-3-bounded-lifofifo-with-backed-array)
@@ -443,4 +450,14 @@ new BlockingQueue in {
 </p>
 </details><br/>
 
+### State / Operations Model
+TBD
+
+### Explanation
+TBD
+
+### Complete source code (with demo)
+TBD
+
 ### Exercise
+TBD
