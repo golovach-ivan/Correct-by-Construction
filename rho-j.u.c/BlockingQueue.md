@@ -4,11 +4,6 @@ A Queue that additionally supports operations that wait for the queue to become 
 
 BlockingQueue can be optionally-bounded. BlockingQueue can orders elements FIFO (first-in-first-out) or LIFO (least-in-first-out).
 
-- [State / Operations Model](#state--operations-model)
-- [Explanation](#explanation)
-- [Complete source code (with demo)](#complete-source-code-with-demo)
-- [Exercise](#exercise)
-
 TDD
 - [Version #1: base linked-list (unbounded LIFO)](#version-1-base-linked-list-unbounded-lifo)
 - [Version #2: linked-list with size (bounded LIFO)](#version-2-linked-list-with-size-bounded-lifo)
@@ -43,6 +38,11 @@ public interface BlockingQueue<E> {
 }
 ```
 </p></details><br/>
+
+- [State / Operations Model](#state--operations-model)
+- [Explanation](#explanation)
+- [Complete source code (with demo)](#complete-source-code-with-demo)
+- [Exercise](#exercise)
 
 ### Version #1: base linked-list (unbounded LIFO)
 Если нас интересует base (only *put* and *take* methods) unbounded LIFO queue, то мы можем реализовать простейший single-linked stack based on node as 2-elem list (\[elem, next\]) or 2-elem tuple ((elem, next)).
