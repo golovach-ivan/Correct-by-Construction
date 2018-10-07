@@ -21,7 +21,7 @@ public class Semaphore {
 }
 ```
 
-<details><summary><b>java.util.concurrent.Semaphore (long version)</b></summary><p>
+<details><summary><b>java.util.concurrent.Semaphore</b> (long version)</summary><p>
   
 ```java
 public class Semaphore {
