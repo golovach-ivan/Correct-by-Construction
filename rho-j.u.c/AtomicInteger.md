@@ -2,10 +2,10 @@
 
 An *int* value that may be updated atomically ([javadoc](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/atomic/AtomicInteger.html)).
 
-- [Model](#model)
-- [Impl](#impl)
+- [State / Operations Model](#state--operations-model)
+- [Explanation](#explanation)
 - [Complete source code (with demo)](#complete-source-code-with-demo)  
-- [Equivalent reduction core](#equivalent-reduction-core)  
+- [Equivalent reduction cores](#equivalent-reduction-cores)  
 - [Exercise](#exercise)
 
 <details><summary><b>java.util.concurrent.atomic.AtomicInteger.java</b></summary><p>
@@ -38,12 +38,12 @@ public class AtomicInteger {
 ```
 </p></details><br/>
 
-### Model
+### State / Operations Model
 AtomicInteger это [Atomic State](atomic-state.md) = *Int* with non-blocking operations      
 *get* - non-blocking [restore state](atomic-state.md#restore-state)      
 *set*, *getAndInc* - [non-blocking update](atomic-state.md#non-blocked-update)     
 
-### Impl
+### Explanation
 [Sceleton](oop.md#contract--object) modification   
 ```
 1  contract AtomicInteger(@initValue, getOp, setOp, getAndIncOp) = {
