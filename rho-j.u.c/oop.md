@@ -53,6 +53,15 @@ public class C {
 ???
 
 ### State
+Рассмотрим тип User с полями ```{name: String, age: Int, labels: Set<String>}```.
+Можно рассмотреть различные варианты выделения приватных каналов на поля.
+```
+contract User(@initAge, @initName, ...) = {
+  new age, name, labels in {
+    ...
+  }
+}
+```
 
 #### Initialization 
 
