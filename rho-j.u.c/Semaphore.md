@@ -1,7 +1,9 @@
-## Semaphore
+## java.util.concurrent.Semaphore in RhoLang
 
 A counting semaphore. Conceptually, a semaphore maintains a set of permits. Each acquire() blocks if necessary until a permit is available, and then takes it. Each release() adds a permit, potentially releasing a blocking acquirer. Semaphores are often used to restrict the number of threads than can access some (physical or logical) resource ([javadoc](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Semaphore.html)).
 
+<details><summary><b>java.util.concurrent.Semaphore.java</b></summary><p>
+  
 ```java
 public class Semaphore {
   // Creates a Semaphore with the given number of permits.
@@ -33,6 +35,7 @@ public class Semaphore {
   public final int getQueueLength() {...}  
 }
 ```
+</p></details><br/>
 
 <details><summary>Lets compare two (Model #1, Model #2) permits set models, see reaction on</summary>
 <p>
@@ -247,27 +250,36 @@ contract acquire(p /\ Int, ack) = {
   
 ```
 new Semaphore in {
-  contract Semaphore(@initPermits, acquire, release) = {
+  contract Semaphore(@initPermits, acquire, drainPermits, release, availablePermits) = {
     new permits in {
       permits!(initPermits) |        
       
       // Acquires a permit from this semaphore, blocking until one is available
       contract acquire(ack) = {
-        for (@(p /\ Int) <- permits) { 
+        for (@p /\ Int <- permits) { 
           ack!(Nil) |
           if (p == 1) { permits!(Nil) }
           else { permits!(p - 1) }
         }
       } |
 
-      // Returns the current number of permits available in this semaphore
-      contract availablePermits(ret) = {
-        for (@p <- permits) {
-          if (p == Nil) { ret!(0) }
-          else { ret!(p) } |
-          permits!(p)
+      // Acquires the given number of permits from this semaphore, blocking until all are available
+      contract acquire(@p /\ Int, ack) = {
+        if (p == 1) {
+          acquire!(*ack)
+        } else {
+          new ackL, ackR in {
+            acquire!(*ackL) | acquire!(p - 1, *ackR) | 
+            for (_ <- ackL; _ <- ackR) {
+              ack!(Nil)
+            }                      
+          }
         }
       } |
+
+      // *********************** 
+      // *********************** tryAcquire
+      // *********************** 
       
       // Acquires and returns all permits that are immediately available, or if negative permits are available, releases them.
       contract drainPermits(ret) = {
@@ -278,32 +290,35 @@ new Semaphore in {
         }
       } |
 
-      // Acquires the given number of permits from this semaphore, blocking until all are available
-      contract acquire(p /\ Int, ack) = {
-        if (p == 1) {
-          acquire!(*ack)
-        } else {
-          new ackL, ackR in {
-            acquire!(*ackL) | acquire!(p - 1, *ackR) | 
-            for (_ <- aclL; _ <- ackR) {
-              ack!(Nil)
-            }                      
-          }
-        }
-      } |
-
       // Releases a permit, returning it to the semaphore.
       contract release(_) = {
         for (@p <- permits) {
           if (p == Nil) { permits!(1) }
           else { permits!(p + 1) }
         }
+      } |
+      
+      // *********************** 
+      // *********************** release(int)
+      // ***********************       
+      
+      // Returns the current number of permits available in this semaphore
+      contract availablePermits(ret) = {
+        for (@p <- permits) {
+          if (p == Nil) { ret!(0) }
+          else { ret!(p) } |
+          permits!(p)
+        }
       } 
+      
+      // *********************** 
+      // *********************** getQueueLength
+      // ***********************       
     }
    } |
    
    new acquire, release in {
-     Semaphore!(3, *acquire, *release) |
+     Semaphore!(3, *acquire, Nil, *release, Nil) |
      
      new ack0, ack1 in {
        acquire!(*ack0) | acquire!(*ack1) | for (_ <- ack0; _ <- ack1) {
