@@ -2,11 +2,6 @@
 
 A reentrant mutual exclusion *Lock* with the same basic behavior and semantics as the implicit monitor lock accessed using *synchronized* methods and statements, but with extended capabilities. A ReentrantLock is owned by the thread last successfully locking, but not yet unlocking it. A thread invoking lock will return, successfully acquiring the lock, when the lock is not owned by another thread. The method will return immediately if the current thread already owns the lock ([javadoc](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/locks/ReentrantLock.html)).
 
-- [State / Operations Model](#state--operations-model)
-- [Explanation](#explanation)
-- [Complete source code (with demo)](#complete-source-code-with-demo)
-- [Exercise](#exercise)
-
 **java.util.concurrent.locks.ReentrantLock** (short version)   
 ```java
 public class ReentrantLock implements Lock {
@@ -44,6 +39,11 @@ public class ReentrantLock implements Lock {
 }
 ```
 </p></details><br/>
+
+- [State / Operations Model](#state--operations-model)
+- [Explanation](#explanation)
+- [Complete source code (with demo)](#complete-source-code-with-demo)
+- [Exercise](#exercise)
 
 ### State / Operations Model
 TBD
