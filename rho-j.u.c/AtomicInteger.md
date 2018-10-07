@@ -2,12 +2,6 @@
 
 An *int* value that may be updated atomically ([javadoc](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/atomic/AtomicInteger.html)).
 
-- [State / Operations Model](#state--operations-model)
-- [Explanation](#explanation)
-- [Complete source code (with demo)](#complete-source-code-with-demo)  
-- [Equivalent reduction cores](#equivalent-reduction-cores)  
-- [Exercise](#exercise)
-
 **java.util.concurrent.AtomicInteger** (short version)   
 ```java
 
@@ -61,6 +55,12 @@ public class AtomicInteger {
 }
 ```
 </p></details><br/>
+
+- [State / Operations Model](#state--operations-model)
+- [Explanation](#explanation)
+- [Complete source code (with demo)](#complete-source-code-with-demo)  
+- [Equivalent reduction cores](#equivalent-reduction-cores)  
+- [Exercise](#exercise)
 
 ### State / Operations Model
 AtomicInteger это [Atomic State](atomic-state.md) = *Int* with non-blocking operations      
