@@ -1,5 +1,22 @@
 ## java.util.concurrent.{Callable, Executor, Future} in RhoLang
 
+- [State / Operations Model](#state--operations-model)
+- [Explanation](#explanation)
+- [Complete source code (with demo)](#complete-source-code-with-demo)
+- [Exercise](#exercise)
+
+### State / Operations Model
+TBD
+
+### Explanation
+TBD
+
+### Complete source code (with demo)
+TBD
+
+### Exercise
+TBD
+
 ### Runnable
 ### Callable
 ### Future
