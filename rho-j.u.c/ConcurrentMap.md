@@ -10,12 +10,11 @@ A Map providing thread safety and atomicity guarantees ([javadoc](https://docs.o
 **java.util.concurrent.ConcurrentMap** (short version)   
 ```java
 public interface ConcurrentMap<K, V> {
-
   V put(K key, V value);
-
   V get(Object key);
-
   V remove(Object key);
+  Set<Map.Entry<K,V>> entrySet();
+  default void forEach(BiConsumer<? super K,? super V> action) {...}  
 }
 
 ```
