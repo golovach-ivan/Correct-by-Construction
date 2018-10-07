@@ -11,10 +11,21 @@ A reusable synchronization barrier, similar in functionality to CyclicBarrier an
 - [Complete source code (with demo)](#complete-source-code-with-demo)
 - [Exercise](#exercise)
 
+<details><summary><b>java.util.concurrent.Phaser.java</b></summary><p>
+  
+```
+TBD
+```
+</p></details><br/>
+
 ### State / Operations Model
+TBD
 
 ### Explanation
+TBD
 
 ### Complete source code (with demo)
+TBD
 
 ### Exercise
+TBD
