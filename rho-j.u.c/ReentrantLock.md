@@ -7,6 +7,21 @@ A reentrant mutual exclusion *Lock* with the same basic behavior and semantics a
 - [Complete source code (with demo)](#complete-source-code-with-demo)
 - [Exercise](#exercise)
 
+**java.util.concurrent.ReentrantLock** (short version)   
+```java
+public class ReentrantLock implements Lock {
+
+  public void lock() {...}
+
+  public void unlock() {...}  
+  
+  public Condition newCondition() {...}
+}
+
+```
+
+<details><summary><b>java.util.concurrent.ReentrantLock</b> (long version)</summary><p>
+  
 ```java
 public class ReentrantLock implements Lock {
   // Acquires the lock.
@@ -31,6 +46,7 @@ public class ReentrantLock implements Lock {
   public boolean isLocked() {...}
 }
 ```
+</p></details><br/>
 
 ### State / Operations Model
 TBD
