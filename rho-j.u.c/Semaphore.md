@@ -10,10 +10,8 @@ A counting semaphore. Conceptually, a semaphore maintains a set of permits. Each
 **java.util.concurrent.Semaphore** (short version)   
 ```java
 public class Semaphore {
-  public Semaphore(int permits) {...}
-  
-  public void acquire() {...}
-  
+  public Semaphore(int permits) {...}  
+  public void acquire() {...}  
   public void release() {...}
 }
 ```
