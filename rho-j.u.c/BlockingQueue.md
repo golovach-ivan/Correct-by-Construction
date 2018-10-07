@@ -16,10 +16,8 @@ TDD
 
 **java.util.concurrent.BlockingQueue** (short version)   
 ```java
-public interface BlockingQueue<E> {
-  
+public interface BlockingQueue<E> {  
   void put(E e);
-
   E take();
 }
 ```
