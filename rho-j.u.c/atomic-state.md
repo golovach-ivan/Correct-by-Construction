@@ -34,7 +34,9 @@ contract op(@arg, ret) = {
 
 ### Multislot State
 
-RhoLang is a **polyadic π-calculi** extension so multivalued channel for free ```stateRef!(slot0, slot1)``` + ```for (@slot0, @slot1 <- stateRef)```
+RhoLang is a **polyadic π-calculi** extension so multivalued channel for free    
+Read:```for (@slot0, @slot1, ... @slotN <- stateRef) {...}```   
+Write:```stateRef!(slot0, slot1, ... slotN)```     
 ```
 contract C(@initSlot0, @initSlot1, fooOp, ...) = {
   new stateRef in {
