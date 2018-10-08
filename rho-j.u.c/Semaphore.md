@@ -55,6 +55,8 @@ public class Semaphore {
 TBD
 
 ### Explanation
+<details><summary><b>Complete source code for Semaphore (with demo)</summary><p>
+
 ```
   contract Semaphore(@initPermits, acquireOp, releaseOp) = {
     new stateRef in {
@@ -85,12 +87,12 @@ TBD
 
 ```
 new Semaphore in {
-  contract Semaphore(@initPermits, acquire, release) = {
+  contract Semaphore(@initPermits, acquireOp, acquireNOp, releaseOp) = {
     new stateRef in {
     
       stateRef!(initPermits, []) |    
       
-      contract acquire(ack) = {
+      contract acquireOp(ack) = {
         for (@permits, @waitSet <- stateRef) { 
           if (permits > 0) {
             stateRef!(initPermits - 1, waitSet) |
@@ -101,7 +103,7 @@ new Semaphore in {
         }
       } |
 
-      contract release(_) = {
+      contract releaseOp(_) = {
         for (@permits, @waitSet <- stateRef) {
           match waitSet {
             [ack...waitSetTail] => { 
@@ -115,23 +117,32 @@ new Semaphore in {
     }
    } |
    
-   new acquire, release in {
-     Semaphore!(3, *acquire, *release) |
-     
-     new ack0, ack1 in {
+   new acquire, acquireN, release in {
+     Semaphore!(3, *acquire, *acquireN, *release) |
+          
+     new ack0, ack1, ack in {
        acquire!(*ack0) | acquire!(*ack1) | for (_ <- ack0; _ <- ack1) {
-         stdout!("I acquire 2 permits (A)!") | release!(Nil) | release!(Nil)
+         stdoutAck!("#0: I acquired 2 permits!", *ack) | for (_ <- ack) {
+           stdoutAck!("#0: I have 2 out of 3 permits!", *ack) | for (_ <- ack) {
+             release!(Nil) | release!(Nil)
+           }         
+         }                  
        }
      } |
      
-     new ack0, ack1 in {
+     new ack0, ack1, ack in {
        acquire!(*ack0) | acquire!(*ack1) | for (_ <- ack0; _ <- ack1) {
-         stdout!("I acquire 2 permits (B)!") | release!(Nil) | release!(Nil)
+         stdoutAck!("#1: I acquired 2 permits!", *ack) | for (_ <- ack) {
+           stdoutAck!("#1: I have 2 out of 3 permits!", *ack) | for (_ <- ack) {
+             release!(Nil) | release!(Nil)
+           }         
+         }                  
        }
-     }     
+     }      
    }
 }
 ```
+</p></details><br/>
 
 ### Exercise
 [Semaphore.getQueueLength](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Semaphore.html#getQueueLength--)
