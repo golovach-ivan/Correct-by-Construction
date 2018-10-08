@@ -55,7 +55,31 @@ public class Semaphore {
 TBD
 
 ### Explanation
-TBD
+```
+  contract Semaphore(@initPermits, acquireOp, releaseOp) = {
+    new stateRef in {
+    
+      stateRef!(initPermits, []) |    
+      
+      contract acquireOp(ack) = {
+        for (@permits, @waitSet <- stateRef) { 
+          if (permits > 0) {
+            stateRef!(initPermits - 1, waitSet) |
+            ack!(Nil)            
+          } else {
+            stateRef!(initPermits, waitSet ++ [*ack]) } } } |
+
+      contract releaseOp(_) = {
+        for (@permits, @waitSet <- stateRef) {
+          match waitSet {
+            [ack...waitSetTail] => { 
+              stateRef!(permits, waitSetTail) |
+              @ack!(Nil) }
+            [] => 
+              stateRef!(permits + 1, waitSet) } } } 
+     } 
+   } 
+```
 
 ### Complete source code (with demo)
 
