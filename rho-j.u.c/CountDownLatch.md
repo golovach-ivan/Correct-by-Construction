@@ -78,6 +78,7 @@ count
 
 ### Explanation
 [Sceleton](oop.md#contract--object) modification   
+TBD: explanation != complete sources
 ```
 1  contract CountDownLatch(@initCount, awaitOp, countDownOp) = {  
 2    new stateRef in {    
@@ -121,22 +122,29 @@ new CountDownLatch in {
   contract CountDownLatch(@initCount, awaitOp, countDownOp) = {  
     new stateRef in {    
     
-      new waitSet in {
-        stateRef!(initCount, *waitSet) } |
+      stateRef!(initCount, []) |
   
       contract awaitOp(ack) = {
-        for (@count, waitSet <- stateRef) {
-          stateRef!(count, *waitSet) |
+        for (@count, @waitSet <- stateRef) {          
           if (count > 0) {
-            waitSet!(*ack)            
+            stateRef!(count, waitSet ++ [*ack])
           } else {             
+            stateRef!(count, waitSet) |
             ack!(Nil) } } } |  
   
       contract countDownOp(_) = {
-        for (@count, waitSet <- stateRef) {
-          stateRef!(count - 1, *waitSet) |
+        for (@count, @waitSet <- stateRef) {          
           if (count - 1 == 0) {
-            for (ack <= waitSet) { ack!(Nil) } } } }                  
+            stateRef!(0, []) |            
+            new notifyAll in {            
+              notifyAll!(waitSet) |
+              contract notifyAll(@[head...tail]) = { @head!(Nil) | notifyAll!(tail) }  
+            }            
+          } else {
+            stateRef!(count - 1, waitSet)          
+          }
+        } 
+      }                  
     }    
   } |
   
