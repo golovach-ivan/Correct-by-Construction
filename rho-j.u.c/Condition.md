@@ -29,7 +29,44 @@ public interface Condition {
 TBD
 
 ### Explanation
-TBD
+```
+new Condition in {
+  contract Condition(awaitOp, signalOp, signalAllOp) = {
+    new stateRef in {
+     
+      stateRef!([]) |
+      
+      contract awaitOp(ack) = {
+        for (@waitSet <- stateRef) {
+          stateRef!(waitSet ++ [*ack])
+        }
+      } |
+    
+      contract signalOp(_) = {
+        for (@waitSet <- stateRef) {
+          match waitSet {
+            [head...tail] => { 
+              stateRef!(tail) |
+              @head!(Nil) }
+            [] => 
+              stateRef!(waitSet)
+          }
+        }
+      } |
+    
+      contract signalAllOp(_) = {
+        for (@waitSet <- stateRef) {
+          stateRef!([]) |
+          new notifyAll in {            
+            notifyAll!(waitSet) |
+            contract notifyAll(@[head...tail]) = { @head!(Nil) | notifyAll!(tail) }  
+          } 
+        }
+      }           
+    }  
+  }
+}
+```
 
 ### Complete source code (with demo)
 TBD
