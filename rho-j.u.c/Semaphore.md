@@ -85,6 +85,7 @@ TBD
 ### Complete source code (with demo)
 
 <details><summary><b>Complete source code for Semaphore (with demo)</summary><p>
+  
 ```
 new Semaphore in {
   contract Semaphore(@initPermits, acquireOp, acquireNOp, releaseOp) = {
