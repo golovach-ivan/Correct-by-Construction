@@ -47,7 +47,7 @@ new n in {
 ### Index array (unordered)
 ```
 new n in {
-  n!([0, 1, 2, 3, 4]) | for (@[i...tail] <= loopRange) { 
+  n!([0, 1, 2, 3, 4]) | for (@[i...tail] <= n) { 
     stdout!(i) | n!(tail)    
   }
 }
@@ -56,7 +56,7 @@ new n in {
 ### Index array (ordered)
 ```
 new n in {
-  n!([0, 1, 2, 3, 4]) | for (@[i...tail] <= loopRange) { 
+  n!([0, 1, 2, 3, 4]) | for (@[i...tail] <= n) { 
     new ack in {
       stdoutAck!(i, *ack) | for (_ <- ack) {
         n!(tail)
