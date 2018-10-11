@@ -123,10 +123,60 @@ new CountDownLatch in {
 ### Alternative implementations
 
 #### Sync *countDown*
+Возможно было бы реализовать не асинхронный *countDown*
+```
+contract countDownOp(_) = {
+  for (@{count /\ ~0} <- stateRef) {          
+    stateRef!(count - 1) } }
+```
+а синхронный (с подтверждением)
+```
+contract countDownOp(_, ack) = {
+  for (@count <- stateRef) {          
+    ack!(Nil) |
+    if (count == 0) {
+      stateRef!(0)                       
+    } else {
+      stateRef!(count - 1) } } }
+```
+давайте посмотрим - есть ли в этом смысл?
 ???
 
 #### Explicit *waitSet*
+Для реализации Java API у нас не было необходимости в explicit WaitSet, но мы можем его реализовать
+<details><summary>Complete source code for CountDownLatch (with demo)</summary><p>
+  
+```
+new CountDownLatch in {
+  contract CountDownLatch(@initCount, awaitOp, countDownOp) = {  
+    new stateRef in {    
+    
+      stateRef!(initCount, []) |
+  
+      contract awaitOp(ack) = {
+        for (@count, @waitSet <- stateRef) {          
+          if (count > 0) {
+            stateRef!(count, waitSet ++ [*ack])
+          } else {             
+            stateRef!(count, waitSet) |
+            ack!(Nil) } } } |  
+  
+      contract countDownOp(_) = {
+        for (@count, @waitSet <- stateRef) {          
+          if (count > 1) {
+            stateRef!(count - 1, waitSet)          
+          } else {
+            stateRef!(0, []) |            
+            new notifyAll in {            
+              notifyAll!(waitSet) |
+              contract notifyAll(@[head...tail]) = { @head!(Nil) | notifyAll!(tail) }  
+            } } } }                  
+    }    
+  }
+}
+```
+</p></details><br/>
 ???
 
 ### Exercise
-
+???
