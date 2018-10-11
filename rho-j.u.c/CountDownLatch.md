@@ -131,7 +131,7 @@ contract countDownOp(_) = {
 ```
 а синхронный (с подтверждением)
 ```
-contract countDownOp(_, ack) = {
+contract countDownOp(ack) = {
   for (@count <- stateRef) {          
     ack!(Nil) |
     if (count == 0) {
