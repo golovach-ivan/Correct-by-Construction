@@ -139,12 +139,12 @@ contract countDownOp(_, ack) = {
     } else {
       stateRef!(count - 1) } } }
 ```
-давайте посмотрим - есть ли в этом смысл?
+давайте посмотрим - есть ли в этом смысл?   
 ???
 
 #### Explicit *waitSet*
 Для реализации Java API у нас не было необходимости в explicit WaitSet, но мы можем его реализовать
-<details><summary>Complete source code for CountDownLatch (with demo)</summary><p>
+<details><summary>CountDownLatch with explicit WaitSet</summary><p>
   
 ```
 new CountDownLatch in {
