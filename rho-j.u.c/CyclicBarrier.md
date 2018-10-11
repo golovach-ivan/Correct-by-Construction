@@ -45,6 +45,48 @@ TBD
 TBD
 
 ### Complete source code (with demo)
+```
+new CyclicBarrier in {
+  contract CyclicBarrier(@initCount, awaitOp) = {  
+    new stateRef in {    
+    
+      stateRef!(initCount, []) |
+  
+      contract awaitOp(ret) = {
+        for (@count, @waitSet <- stateRef) {          
+          if (count > 1) {
+            stateRef!(count - 1, waitSet ++ [(*ret, count - 1)])
+          } else {             
+            stateRef!(initCount, []) |
+            new notifyAll in {            
+              notifyAll!(waitSet) |
+              contract notifyAll(@[(ret, index)...tail]) = { 
+                @ret!(index) | 
+                notifyAll!(tail) 
+              }  
+            } |            
+            ret!(0) 
+          } 
+        } 
+      } 
+    }    
+  } |
+  
+  new await in {
+    CyclicBarrier!(3, *await) |
+    
+    new threadId in {
+      threadId!("T0") | threadId!("T1") | threadId!("T2") |
+      for (@tId <= threadId) {
+        new stageId in {
+          stageId!(["0", "1", "2", "3", "4"]) | for (@[sId...tail] <= stageId) { 
+            new ret, ack in {
+              await!(*ret) | for (@index <- ret) {
+                stdoutAck!("thread #${t}, stage = ${s}, index = ${index}" %% {"t":tId, "s" : sId, "index": index}, *ack) | 
+                for (_ <- ack) { stageId!(tail) } } } } } } }   
+  }
+}
+```
 TBD
 
 ### Exercise
