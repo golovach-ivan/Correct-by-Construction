@@ -7,6 +7,7 @@ A CyclicBarrier supports an optional Runnable command that is run once per barri
 **java.util.concurrent.CyclicBarrier** (short version)   
 ```java
 public class CyclicBarrier {
+  CyclicBarrier(int parties) {...}
   int await() {...}
 }
 ```
@@ -15,7 +16,12 @@ public class CyclicBarrier {
   
 ```java
 public class CyclicBarrier {
+  // A new CyclicBarrier that will trip when the given number of parties are waiting upon it.
+  CyclicBarrier(int parties) {...}
+
   // Waits until all parties have invoked await on this barrier.
+  // Returns: the arrival index of the current thread, where index getParties() - 1 
+  // indicates the first to arrive and zero indicates the last to arrive
   int await() {...}
 
   // Returns the number of parties currently waiting at the barrier.
@@ -23,12 +29,6 @@ public class CyclicBarrier {
 
   // Returns the number of parties required to trip this barrier.
   int getParties() {...}
-
-  // Queries if this barrier is in a broken state.
-  boolean isBroken() {...}
-
-  // Resets the barrier to its initial state.
-  void reset() {...}
 }
 ```
 </p></details><br/>
