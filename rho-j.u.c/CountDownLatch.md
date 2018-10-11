@@ -37,6 +37,8 @@ public class CountDownLatch {
 - [Implementation with Explanation](#implementation-with-explanation)
 - [Complete source code (with demo)](#complete-source-code-with-demo)
 - [Alternative implementations](#alternative-implementations)
+  - [Sync *countDown*](#sync-countdown)
+  - [Explicit *waitSet*](#explicit-waitset)
 - [Exercise](#exercise)
 
 ### State / Operations Model
