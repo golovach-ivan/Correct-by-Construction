@@ -67,11 +67,7 @@ new CyclicBarrier in {
                 contract notifyAll(@[(ret, index)...tail]) = { 
                   @ret!(index) | 
                   notifyAll!(tail) 
-                }  
-              }                        
-            }
-          } 
-        } 
+                } } } } } 
       } 
     }    
   } |
