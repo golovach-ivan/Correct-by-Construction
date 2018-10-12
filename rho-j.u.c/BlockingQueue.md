@@ -4,11 +4,6 @@ A Queue that additionally supports operations that wait for the queue to become 
 
 BlockingQueue can be optionally-bounded. BlockingQueue can orders elements FIFO (first-in-first-out) or LIFO (least-in-first-out).
 
-TDD
-- [Version #1: base linked-list (unbounded LIFO)](#version-1-base-linked-list-unbounded-lifo)
-- [Version #2: linked-list with size (bounded LIFO)](#version-2-linked-list-with-size-bounded-lifo)
-- [Version #3: bounded LIFO/FIFO with backed array](#version-3-bounded-lifofifo-with-backed-array)
-
 **java.util.concurrent.BlockingQueue** (short version)   
 ```java
 public interface BlockingQueue<E> {  
@@ -51,14 +46,43 @@ public interface BlockingQueue<E> {
 - [State / Operations Model](#state--operations-model)
 - [Explanation](#explanation)
 - [Complete source code (with demo)](#complete-source-code-with-demo)
+- [Alternative implementations](#alternative-implementations)
 - [Exercise](#exercise)
 
 ### State / Operations Model
 TBD
 
 ### Explanation
-TBD
-
+```
+1  new BlockingQueue in {
+2    contract BlockingQueue(@maxSize, putOp, takeOp, sizeOp) = {
+3      new atomicRef in {
+4    
+5        atomicRef!([], 0) |
+6      
+7        contract putOp(@newElem, ack) = {
+8          for (@arr, @{size /\ ~maxSize} <- atomicRef) {
+9            atomicRef!(arr ++ [newElem], size + 1) | 
+10           ack!(Nil) } } |
+11      
+12       contract takeOp(ret) = {
+13         for (@[head...tail], @size <- atomicRef) {
+14           atomicRef!(tail, size - 1) | 
+15           ret!(head) } } |
+16      
+17       contract sizeOp(ret) = {
+18         for (@arr, @size <- atomicRef) {
+19           atomicRef!(arr, size) | 
+20           ret!(size) } } 
+21     }    
+22   }
+23 }
+```
+**1-3** - ???.    
+**5** - ???.    
+**7-10** - ???.    
+**12-15** - ???.    
+**17-20** - ???.    
 
 ### Complete source code (with demo)
 
@@ -66,40 +90,26 @@ TBD
 <p>
   
 ```
-???
-```
-```
-???
-```
-</p>
-</details><br/>
-
-### Exercise
-- add two explicit WaitSets (put-waiters, take-waiter) and two methods: ```int getPutWaitersCount()``` and ```int getTakeWaitersCount()```
-- implement BoundedBuffer with Lock/Condition from [???](???) and two methods: ```int getPutWaitersCount()``` and ```int getTakeWaitersCount()```
-
-
-```
 new BlockingQueue in {
   contract BlockingQueue(@maxSize, putOp, takeOp, sizeOp) = {
     new atomicRef in {
     
-      atomicRef!([], true) |
+      atomicRef!([], 0) |
       
       contract putOp(@newElem, ack) = {
-        for (@arr, @true <- atomicRef) {
-          atomicRef!(arr ++ [newElem], arr.length() + 1 < maxSize) | 
+        for (@arr, @{size /\ ~maxSize} <- atomicRef) {
+          atomicRef!(arr ++ [newElem], size + 1) | 
           ack!(Nil) } } |
       
       contract takeOp(ret) = {
-        for (@[head...tail], @notFull <- atomicRef) {
-          atomicRef!(tail, notFull) | 
+        for (@[head...tail], @size <- atomicRef) {
+          atomicRef!(tail, size - 1) | 
           ret!(head) } } |
       
       contract sizeOp(ret) = {
-        for (@arr, @notFull <- atomicRef) {
-          atomicRef!(arr, notFull) | 
-          ret!(arr.length()) } } 
+        for (@arr, @size <- atomicRef) {
+          atomicRef!(arr, size) | 
+          ret!(size) } } 
     }    
   }|
   
@@ -135,3 +145,59 @@ new BlockingQueue in {
   }
 }
 ```
+```
+???
+```
+</p>
+</details><br/>
+
+### Alternative implementations
+
+#### notFull:bool not size:int
+```
+new BlockingQueue in {
+  contract BlockingQueue(@maxSize, putOp, takeOp, sizeOp) = {
+    new atomicRef in {
+    
+      atomicRef!([], true) |
+      
+      contract putOp(@newElem, ack) = {
+        for (@arr, @true <- atomicRef) {
+          atomicRef!(arr ++ [newElem], arr.length() + 1 < maxSize) | 
+          ack!(Nil) } } |
+      
+      contract takeOp(ret) = {
+        for (@[head...tail], @notFull <- atomicRef) {
+          atomicRef!(tail, notFull) | 
+          ret!(head) } }
+    }    
+  }
+}
+```
+
+#### Only blocking take not put
+```
+new BlockingQueue in {
+  contract BlockingQueue(@maxSize, putOp, takeOp, sizeOp) = {
+    new atomicRef in {
+    
+      atomicRef!([]) |
+      
+      contract putOp(@newElem, ack) = {
+        for (@arr <- atomicRef) {
+          atomicRef!(arr ++ [newElem]) | 
+          ack!(Nil) } } |
+      
+      contract takeOp(ret) = {
+        for (@[head...tail] <- atomicRef) {
+          atomicRef!(tail) | 
+          ret!(head) } }
+    }    
+  }
+}
+```
+
+### Exercise
+- add two explicit WaitSets (put-waiters, take-waiter) and two methods: ```int getPutWaitersCount()``` and ```int getTakeWaitersCount()```
+- implement BoundedBuffer with Lock/Condition from [???](???) and two methods: ```int getPutWaitersCount()``` and ```int getTakeWaitersCount()```
+
