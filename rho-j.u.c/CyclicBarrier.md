@@ -46,6 +46,7 @@ TBD
 
 ### Complete source code (with demo)
 <details><summary><b>CyclicBarrier in Rholang (with demo)</b> (long version)</summary><p>
+  
 ```
 new CyclicBarrier in {
   contract CyclicBarrier(@initCount, @action, ack, awaitOp) = {  
