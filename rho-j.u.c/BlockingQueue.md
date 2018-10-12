@@ -75,7 +75,8 @@ TBD
 </details><br/>
 
 ### Exercise
-TBD
+- add two explicit WaitSets (put-waiters, take-waiter) and two methods: ```int getPutWaitersCount()``` and ```int getTakeWaitersCount()```
+- implement BoundedBuffer with Lock/Condition from [???](???) and two methods: ```int getPutWaitersCount()``` and ```int getTakeWaitersCount()```
 
 
 ```
