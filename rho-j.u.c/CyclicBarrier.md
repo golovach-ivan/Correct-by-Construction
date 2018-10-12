@@ -45,9 +45,10 @@ TBD
 TBD
 
 ### Complete source code (with demo)
+<details><summary><b>CyclicBarrier in Rholang (with demo)</b> (long version)</summary><p>
 ```
 new CyclicBarrier in {
-  contract CyclicBarrier(@initCount, awaitOp) = {  
+  contract CyclicBarrier(@initCount, @action, ack, awaitOp) = {  
     new stateRef in {    
     
       stateRef!(initCount, []) |
@@ -58,14 +59,16 @@ new CyclicBarrier in {
             stateRef!(count - 1, waitSet ++ [(*ret, count - 1)])
           } else {             
             stateRef!(initCount, []) |
-            new notifyAll in {            
-              notifyAll!(waitSet) |
-              contract notifyAll(@[(ret, index)...tail]) = { 
-                @ret!(index) | 
-                notifyAll!(tail) 
-              }  
-            } |            
-            ret!(0) 
+            action | for (_ <- ack) {
+              ret!(0) |
+              new notifyAll in {                          
+                notifyAll!(waitSet) |
+                contract notifyAll(@[(ret, index)...tail]) = { 
+                  @ret!(index) | 
+                  notifyAll!(tail) 
+                }  
+              }                        
+            }
           } 
         } 
       } 
@@ -73,21 +76,44 @@ new CyclicBarrier in {
   } |
   
   new await in {
-    CyclicBarrier!(3, *await) |
+    new ack in {
+      CyclicBarrier!(3, stdoutAck!("---", *ack), *ack, *await)
+    } |
     
     new threadId in {
-      threadId!("T0") | threadId!("T1") | threadId!("T2") |
+      threadId!(0) | threadId!(1) | threadId!(2) |
       for (@tId <= threadId) {
         new stageId in {
-          stageId!(["0", "1", "2", "3", "4"]) | for (@[sId...tail] <= stageId) { 
+          stageId!([0, 1, 2, 3, 4]) | for (@[sId...tail] <= stageId) { 
             new ret, ack in {
               await!(*ret) | for (@index <- ret) {
                 stdoutAck!("thread #${t}, stage = ${s}, index = ${index}" %% {"t":tId, "s" : sId, "index": index}, *ack) | 
                 for (_ <- ack) { stageId!(tail) } } } } } } }   
   }
-}
 ```
-TBD
+```
+>> ---
+>> thread #0, stage = 0, index = 1
+>> thread #2, stage = 0, index = 2
+>> thread #1, stage = 0, index = 0
+>> ---
+>> thread #1, stage = 1, index = 1
+>> thread #0, stage = 1, index = 2
+>> thread #2, stage = 1, index = 0
+>> ---
+>> thread #2, stage = 2, index = 1
+>> thread #0, stage = 2, index = 0
+>> thread #1, stage = 2, index = 2
+>> ---
+>> thread #1, stage = 3, index = 2
+>> thread #2, stage = 3, index = 1
+>> thread #0, stage = 3, index = 0
+>> ---
+>> thread #1, stage = 4, index = 1
+>> thread #2, stage = 4, index = 2
+>> thread #0, stage = 4, index = 0
+```
+</p></details><br/>
 
 ### Exercise
 TBD
