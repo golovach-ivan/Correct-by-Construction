@@ -42,7 +42,32 @@ public class CyclicBarrier {
 TBD
 
 ### Explanation
-TBD
+```
+1  new CyclicBarrier in {
+2    contract CyclicBarrier(@initCount, @action, ack, awaitOp) = {  
+3      new stateRef in {    
+4     
+5        stateRef!(initCount, []) |
+6  
+7        contract awaitOp(ret) = {
+8          for (@count, @waitSet <- stateRef) {          
+9            if (count > 1) {
+10             stateRef!(count - 1, waitSet ++ [(*ret, count - 1)])
+11           } else {             
+12             stateRef!(initCount, []) |
+13             action | for (_ <- ack) {
+14               ret!(0) |
+15               new notifyAll in {                          
+16                 notifyAll!(waitSet) |
+17                 contract notifyAll(@[(ret, index)...tail]) = { 
+18                   @ret!(index) | 
+19                   notifyAll!(tail) 
+20                 } } } } } 
+21       } 
+22     }    
+23   }
+24 }
+```
 
 ### Complete source code (with demo)
 <details><summary><b>CyclicBarrier in Rholang (with demo)</b> (long version)</summary><p>
