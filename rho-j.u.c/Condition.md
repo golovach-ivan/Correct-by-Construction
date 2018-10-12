@@ -30,7 +30,101 @@ TBD
 
 ### Explanation
 ```
-new Condition in {
+new Condition, OneOffValve in {
+
+  // ********** Condition **********
+  contract Condition(awaitOp, signalOp, signalAllOp) = {
+    new stateRef in {
+     
+      stateRef!([]) |
+      
+      contract awaitOp(ack, ackWakeUp) = {
+        for (@waitSet <- stateRef) {
+          stateRef!(waitSet ++ [*ackWakeUp]) |
+          ack!(Nil) } } |
+    
+      contract signalOp(ack) = {
+        for (@waitSet <- stateRef) {
+          match waitSet {
+            [head...tail] => { 
+              stateRef!(tail) |
+              @head!(Nil) }
+            [] => 
+              stateRef!(waitSet)
+          } |
+          ack!(Nil) } } |
+    
+      contract signalAllOp(ack) = {
+        for (@waitSet <- stateRef) {
+          stateRef!([]) |
+          new notifyAll in {            
+            notifyAll!(waitSet) |
+            contract notifyAll(@[head...tail]) = { @head!(Nil) | notifyAll!(tail) }  
+          } |
+          ack!(Nil) } }           
+    }  
+  } |
+  
+  // ********** OneOffValve **********
+  contract OneOffValve(leanOp, openOp) = {  
+    new stateRef, await, signal, signalAll in {
+    
+      Condition!(*await,  *signal,  *signalAll) |    
+      stateRef!(true) |
+  
+      contract leanOp(ack) = {
+        for (@isClose <- stateRef) {                    
+          if (isClose) {
+            new awaitCallAck, awaitWakeUpAck in {
+              await!(*awaitCallAck, *awaitWakeUpAck) | for (_ <- awaitCallAck) {             
+                stateRef!(isClose) | 
+                for (_ <- awaitWakeUpAck) {
+                  leanOp!(*ack)
+                }
+              }
+            }            
+          } else {
+            stateRef!(isClose) | 
+            ack!(Nil) 
+          } } } |  
+
+      contract openOp(_) = {
+        for (@isClose <- stateRef) {                    
+          if (isClose) {
+            new ack in {
+              signalAll!(*ack) | for (_ <- ack) {
+                stateRef!(false)
+              }
+            }
+          } else {
+            stateRef!(isClose)
+          } } } 
+    }
+  } |
+  
+  // ********** Demo **********
+  new await, open in {
+    OneOffValve!(*await, *open) |
+    new ack in {
+      await!(*ack) | for (_ <- ack) {
+        stdout!("Im free!")
+      }
+    } |
+    open!(Nil) 
+  }          
+  
+}
+```
+Always reduce to
+```
+>> Im free!
+```
+
+#### Why async methods - wrong decision?
+```
+new Condition, OneOffValve in {
+
+  // ********** Condition **********
   contract Condition(awaitOp, signalOp, signalAllOp) = {
     new stateRef in {
      
@@ -38,9 +132,7 @@ new Condition in {
       
       contract awaitOp(ack) = {
         for (@waitSet <- stateRef) {
-          stateRef!(waitSet ++ [*ack])
-        }
-      } |
+          stateRef!(waitSet ++ [*ack]) } } |
     
       contract signalOp(_) = {
         for (@waitSet <- stateRef) {
@@ -49,10 +141,7 @@ new Condition in {
               stateRef!(tail) |
               @head!(Nil) }
             [] => 
-              stateRef!(waitSet)
-          }
-        }
-      } |
+              stateRef!(waitSet) } } } |
     
       contract signalAllOp(_) = {
         for (@waitSet <- stateRef) {
@@ -60,13 +149,57 @@ new Condition in {
           new notifyAll in {            
             notifyAll!(waitSet) |
             contract notifyAll(@[head...tail]) = { @head!(Nil) | notifyAll!(tail) }  
-          } 
-        }
-      }           
+          } } }           
     }  
-  }
+  } |
+  
+  contract OneOffValve(leanOp, openOp) = {  
+    new stateRef, await, signal, signalAll in {
+    
+      Condition!(*await,  *signal,  *signalAll) |    
+      stateRef!(true) |
+  
+      contract leanOp(ack) = {
+        for (@isClose <- stateRef) {          
+          stateRef!(isClose) | 
+          if (isClose) {
+            new awaitAck in {
+              await!(*awaitAck) | for (_ <- awaitAck) {
+                leanOp!(*ack)
+              }
+            }            
+          } else {
+            ack!(Nil)
+          } } } |  
+
+      contract openOp(_) = {
+        for (@isClose <- stateRef) {          
+          stateRef!(false) |
+          if (isClose) {
+            signalAll!(Nil) } } } 
+      
+    }
+  } |
+  
+  // ********** Demo **********
+  new await, open in {
+    OneOffValve!(*await, *open) |
+    new ack in {
+      await!(*ack) | for (_ <- ack) {
+        stdout!("Im free!")
+      }
+    } |
+    open!(Nil) 
+  }          
+  
 }
 ```
+Due to reduction race
+```
+>> Im free!
+```
+**OR**  
+**NOTHING!**
 
 ### Complete source code (with demo)
 TBD
