@@ -9,6 +9,8 @@ No time in RhoLang - no time limiting methods
 
 ### Exceptions
 
-### Happens-before relation
+### Happens-before relation -> reduction order
 
 ### By-value/by-ref
+
+### No spurious wakeups
