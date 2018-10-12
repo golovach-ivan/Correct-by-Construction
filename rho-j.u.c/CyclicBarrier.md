@@ -70,7 +70,7 @@ TBD
 ```
 
 ### Complete source code (with demo)
-<details><summary><b>CyclicBarrier in Rholang (with demo)</b> (long version)</summary><p>
+<details><summary><b>CyclicBarrier in Rholang (with demo)</b></summary><p>
   
 ```
 new CyclicBarrier in {
