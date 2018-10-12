@@ -35,6 +35,15 @@ public interface BlockingQueue<E> {
   
   // Returns the number of additional elements that this queue can accept without blocking.  
   int remainingCapacity();
+  
+  // Returns an array containing all of the elements in this collection.
+  Object[] toArray();
+  
+  // Returns a sequential Stream with this collection as its source.
+  Stream<E> stream();
+  
+  // Returns an iterator over the elements in this collection.
+  Iterator<E> iterator();
 }
 ```
 </p></details><br/>
@@ -43,6 +52,46 @@ public interface BlockingQueue<E> {
 - [Explanation](#explanation)
 - [Complete source code (with demo)](#complete-source-code-with-demo)
 - [Exercise](#exercise)
+
+### State / Operations Model
+TBD
+
+### Explanation
+TBD
+
+
+```
+new BlockingQueue in {
+  contract BlockingQueue(@maxSize, putOp, takeOp, sizeOp) = {
+    new atomicRef in {
+    
+      atomicRef!([], true) |
+      
+      contract putOp(@newElem, ack) = {
+        for (@arr, @true <- atomicRef) {
+          atomicRef!(arr ++ [newElem], arr.length() + 1 < maxSize) | 
+          ack!(Nil) } } |
+      
+      contract takeOp(ret) = {
+        for (@[head...tail], @notFull <- atomicRef) {
+          atomicRef!(tail, notFull) | 
+          ret!(head) } } |
+      
+      contract sizeOp(ret) = {
+        for (@arr, @notFull <- atomicRef) {
+          atomicRef!(arr, notFull) | 
+          ret!(arr.length()) } } 
+    }    
+  }
+}
+```
+
+### Complete source code (with demo)
+TBD
+
+
+
+
 
 ### Version #1: base linked-list (unbounded LIFO)
 Если нас интересует base (only *put* and *take* methods) unbounded LIFO queue, то мы можем реализовать простейший single-linked stack based on node as 2-elem list (\[elem, next\]) or 2-elem tuple ((elem, next)).
@@ -455,15 +504,6 @@ new BlockingQueue in {
 ```
 </p>
 </details><br/>
-
-### State / Operations Model
-TBD
-
-### Explanation
-TBD
-
-### Complete source code (with demo)
-TBD
 
 ### Exercise
 TBD
