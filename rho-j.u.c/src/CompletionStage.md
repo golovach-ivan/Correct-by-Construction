@@ -2,6 +2,8 @@
 
 A stage of a possibly asynchronous computation, that performs an action or computes a value when another CompletionStage completes. A stage completes upon termination of its computation, but this may in turn trigger other dependent stages.([javadoc](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/CompletionStage.html)).
 
+A Future that may be explicitly completed, and may be used as a CompletionStage, supporting dependent functions and actions that trigger upon its completion. ([javadoc](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/CompletableFuture.html)).
+
 **java.util.concurrent.CompletionStage** (short version)   
 ```java
 public interface CompletionStage<T> {
@@ -29,7 +31,7 @@ public class CompletableFuture<T> implements Future<T>, CompletionStage<T> {
 }
 ```
 
-<details><summary><b>java.util.concurrent.CompletableFuture</b> (long version)</summary><p>
+<details><summary><b>java.util.concurrent.CompletionStage</b> (long version)</summary><p>
   
 ```java
 public interface CompletionStage<T> {
@@ -64,6 +66,25 @@ public interface CompletionStage<T> {
   // Returns a new CompletionStage that, when either this or the other given stage 
   // complete normally, executes the given action.
   CompletionStage<Void> runAfterEither(CompletionStage<?> other, Runnable action);
+}
+```
+</p></details><br/>
+<details><summary><b>java.util.concurrent.CompletableFuture</b> (long version)</summary><p>
+  
+```java
+public class CompletableFuture<T> implements Future<T>, CompletionStage<T> {
+  // Creates a new incomplete CompletableFuture.
+  public CompletableFuture() {...}
+  
+  public static <U> CompletionStage<U> completedStage(U value) {...}
+  public static <U> CompletableFuture<U> completedFuture(U value) {...}
+  
+  public static CompletableFuture<Void> runAsync(Runnable runnable) {...}  
+  public static <U> CompletableFuture<U> supplyAsync(Supplier<U> supplier) {...}  
+  
+  // ---
+  public static CompletableFuture<Void> allOf(CompletableFuture<?>... cfs) {...}
+  public static CompletableFuture<Object> anyOf(CompletableFuture<?>... cfs) {...}    
 }
 ```
 </p></details><br/>
