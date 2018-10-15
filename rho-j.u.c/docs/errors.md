@@ -56,15 +56,4 @@ contract signalAll(_) = {
       contract notifyAll(@[head...tail]) = { @head!(Nil) | notifyAll!(tail) } } } }            
 ```
 
-### lazy evaluating: if/else = proc not value
 
-```
-stateRef!(if (x > 0) x else 0)
-```
-!=
-```
-if (x > 0) 
-  stateRef!(x) 
-else 
-  stateRef!(0)
-```
