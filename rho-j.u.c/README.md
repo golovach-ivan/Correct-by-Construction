@@ -2,34 +2,34 @@
 
 Most popular [JVM concurrency primitives](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/package-summary.html) rewritten in Rholang with explanation. 
 
-New [Atomic State](docs/atomic-state.md) Rholang concurrency pattern proposed. [WaitSet](wait-set.md) (with wait/notify/notifyAll) or [Condition](with await/signal/signalAll) implementation demonstrated. Multiple WaitSets [can be attached](???) to one Atomic State.
+New [Atomic State](docs/atomic-state.md) Rholang concurrency pattern proposed. [WaitSet](docs/wait-set.md) (with wait/notify/notifyAll) or [Condition](src/Condition.md)(with await/signal/signalAll) implementation demonstrated. Multiple WaitSets [can be attached](???) to one Atomic State.
 
-Concurrency primitives is a way to partially [order events](events-ordering.md). RhoLang and Java concurrency environments [compared](compare.md).
+Concurrency primitives is a way to partially [order events](docs/events-ordering.md). RhoLang and Java concurrency environments [compared](docs/compare.md).
 
-Different ways to implement [loops](loops.md) descrideb. Value and pattern [conditional](branches.md)  ???.
-Base [Object-Oriented practices ???](oop.md).    
+[Loops](docs/loops.md) and [conditionals](docs/conditionals.md) showed.
+Contract vs Object/Class [comparison](docs/oop.md) proposed.    
   
 ###  Concurrency Primitives
-  - **Basic**: [Runnable](Runnable+Callable+Executor+Future.md#runnable), [Callable](Runnable+Callable+Executor+Future.md#callable), [Future](Runnable+Callable+Executor+Future.md#future), [Executor](Runnable+Callable+Executor+Future.md#executor), [ExecutorService](ExecutorService.md), [CompletionStage](CompletionStage.md)   
-  - **Collections and data structures**: [AtomicInteger](AtomicInteger.md), [BlockingQueue](BlockingQueue.md), [ConcurrentMap](ConcurrentMap.md)   
-  - **Locks**: [Lock](Lock.md), [Condition](Condition.md), [ReentrantLock](ReentrantLock.md), [ReadWriteLock](ReadWriteLock.md)   
-  - **Synchronizers**: [Semaphore](Semaphore.md), [Exchanger](Exchanger.md), [CountDownLatch](CountDownLatch.md), [CyclicBarrier](CyclicBarrier.md), [Phaser](Phaser.md) 
+  - **Basic**: [Runnable](src/Runnable.md), [Callable](src/Callable.md), [Future](src/Future.md), [Executor](src/Executor.md), [ExecutorService](src/ExecutorService.md), [CompletionStage](src/CompletionStage.md)   
+  - **Collections and data structures**: [AtomicInteger](src/AtomicInteger.md), [BlockingQueue](src/BlockingQueue.md), [ConcurrentMap](src/ConcurrentMap.md)   
+  - **Locks**: [Lock](src/Lock.md), [Condition](src/Condition.md), [ReentrantLock](src/ReentrantLock.md), [ReadWriteLock](src/ReadWriteLock.md)   
+  - **Synchronizers**: [Semaphore](src/Semaphore.md), [Exchanger](src/Exchanger.md), [CountDownLatch](src/CountDownLatch.md), [CyclicBarrier](src/CyclicBarrier.md), [Phaser](src/Phaser.md) 
 ###  Exercises   
 - Easy
-  - [Implement method ??? for CompletionStage](CompletionStage.md#exercise)   
-  - [Implement method ??? for ExecutorService](ExecutorService.md#exercise)     
-  - [Implement method ??? for AtomicInteger](AtomicInteger.md#exercise)   
-  - [Implement method ??? for BlockingQueue](BlockingQueue.md#exercise)   
-  - [Implement method ??? for ConcurrentMap](ConcurrentMap.md#exercise)   
+  - [Implement method ??? for CompletionStage](src/CompletionStage.md#exercise)   
+  - [Implement method ??? for ExecutorService](src/ExecutorService.md#exercise)     
+  - [Implement method ??? for AtomicInteger](src/AtomicInteger.md#exercise)   
+  - [Implement method ??? for BlockingQueue](src/BlockingQueue.md#exercise)   
+  - [Implement method ??? for ConcurrentMap](src/ConcurrentMap.md#exercise)   
 - Mid
-  - [Implement method ??? for Lock](Lock.md#exercise)   
-  - [Implement method ??? for Condition](Condition.md#exercise)   
-  - [Implement method ??? for ReentrantLock](ReentrantLock.md#exercise)   
-  - [Implement method ??? for ReadWriteLock](ReadWriteLock.md#exercise)     
-  - [Implement method ??? for Exchanger](Exchanger.md#exercise)   
+  - [Implement method ??? for Lock](src/Lock.md#exercise)   
+  - [Implement method ??? for Condition](src/Condition.md#exercise)   
+  - [Implement method ??? for ReentrantLock](src/ReentrantLock.md#exercise)   
+  - [Implement method ??? for ReadWriteLock](src/ReadWriteLock.md#exercise)     
+  - [Implement method ??? for Exchanger](src/Exchanger.md#exercise)   
 - Hard
-  - [Implement method ??? for Semaphore](Semaphore.md#exercise)   
-  - [Implement method ??? for Phaser](Phaser.md#exercise)   
-  - [Implement method ??? for CyclicBarrier](CyclicBarrier.md#exercise)   
-  - [Implement method ```int getCount()``` for CountDownLatch.](CountDownLatch.md#exercise)       
+  - [Implement method ??? for Semaphore](src/Semaphore.md#exercise)   
+  - [Implement method ??? for Phaser](src/Phaser.md#exercise)   
+  - [Implement method ??? for CyclicBarrier](src/CyclicBarrier.md#exercise)   
+  - [Implement method ??? for CountDownLatch.](src/CountDownLatch.md#exercise)       
 
