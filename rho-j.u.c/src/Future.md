@@ -1,2 +1,2 @@
-## java.util.concurrent.Future in RhoLang
+## java.util.concurrent.Future&lt;T&gt; in RhoLang
 
