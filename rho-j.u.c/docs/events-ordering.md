@@ -1,4 +1,4 @@
-## Event ordering in Rholang
+## Events ordering in Rholang
 
 ### waitSet by-reference
 **Incorrect**
