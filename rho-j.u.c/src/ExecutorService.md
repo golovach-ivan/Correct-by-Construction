@@ -20,19 +20,16 @@ public interface ExecutorService {
   // Executes the given command at some time in the future.
   void execute(Runnable command);
 
+  // Submits a value-returning task for execution and returns 
+  // a Future representing the pending results of the task.
+  <T> Future<T> submit(Callable<T> task);
+
   // Executes the given tasks, returning a list of Futures 
   // holding their status and results when all complete.
   <T> List<Future<T>> invokeAll(Collection<? extends Callable<T>> tasks);
   
   // Executes the given tasks, returning the result of one that has completed.  
-  <T> T invokeAny(Collection<? extends Callable<T>> tasks)ж
-  
-  // Submits a Runnable task for execution and returns a Future representing that task.  
-  Future<?>submit(Runnable task);	
-  
-  // Submits a value-returning task for execution and returns 
-  // a Future representing the pending results of the task.
-  <T> Future<T> submit(Callable<T> task);
+  <T> T invokeAny(Collection<? extends Callable<T>> tasks)ж 
 }
 ```
 </p></details><br/>
