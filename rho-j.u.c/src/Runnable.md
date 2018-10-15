@@ -7,6 +7,9 @@ public interface Runnable {
 }
 ```
 
+- [Asynchronous Runnable](#asynchronous-runnable)  
+- [Synchronous Runnable](#synchronous-runnable)  
+
 ### Asynchronous Runnable
 Runnable может быть использован в асинхронном режиме, т.е.
 ```java
