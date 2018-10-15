@@ -49,9 +49,7 @@ t.start();
 t.join();
 ```
 
-так он используется в [CyclicBarrier](CyclicBarrier.md) - action
-
-в таком случае его можно представить в виде пары Process + AckChannel
+в таком случае его можно представить в виде пары Process + AckChannel, так реализован **barrier action** в [CyclicBarrier](CyclicBarrier.md).
 ```
 new tasks in {
   new ack in { tasks!(stdoutAck!(0, *ack)) } |
