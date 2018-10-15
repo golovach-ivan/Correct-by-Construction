@@ -13,10 +13,12 @@ public interface Runnable {
 ### Asynchronous Runnable
 Runnable может быть использован в асинхронном режиме, т.е.
 ```java
+// run in new thread
 Runnable task = ...
 new Thread(task).start();
 ```
 ```java
+// send to thread pool
 Runnable task = ...
 Executor exec = ...
 exec.execute(task);
@@ -42,10 +44,12 @@ contract allInPar(tasks) = {
 ### Synchronous Runnable
 Runnable может быть использован в синхронном режиме, т.е.
 ```java
+// run task "in place"
 Runnable task = ...
 task.run();
 ```
 ```java
+// join to another thread
 Runnable task = ...
 Thread t = new Thread(task);
 t.start();
