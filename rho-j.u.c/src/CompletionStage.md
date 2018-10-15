@@ -11,6 +11,23 @@ public interface CompletionStage<T> {
   CompletionStage<Void> runAfterEither(CompletionStage<?> other, Runnable action);
 }
 ```
+**java.util.concurrent.CompletableFuture** (short version)   
+```java
+public class CompletableFuture<T> implements Future<T>, CompletionStage<T> {
+  // Creates a new incomplete CompletableFuture.
+  public CompletableFuture() {...}
+  
+  public static <U> CompletionStage<U> completedStage(U value) {...}
+  public static <U> CompletableFuture<U> completedFuture(U value) {...}
+  
+  public static CompletableFuture<Void> runAsync(Runnable runnable) {...}  
+  public static <U> CompletableFuture<U> supplyAsync(Supplier<U> supplier) {...}  
+  
+  // ---
+  public static CompletableFuture<Void> allOf(CompletableFuture<?>... cfs) {...}
+  public static CompletableFuture<Object> anyOf(CompletableFuture<?>... cfs) {...}    
+}
+```
 
 <details><summary><b>java.util.concurrent.CompletableFuture</b> (long version)</summary><p>
   
