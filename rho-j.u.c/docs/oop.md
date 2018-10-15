@@ -69,6 +69,8 @@ contract User(@initAge, @initName, ...) = {
 
 ### Operations: sync/async, void/something
 
+??? [Akka: Ask pattern](https://doc.akka.io/docs/akka/2.5/actors.html#ask-send-and-receive-future)    
+
 **ack** - channel for acknowledge (add synchrony).   
 **ret** - channel for sync result.   
 **Nil** - process for send in *ack*-channel.  
