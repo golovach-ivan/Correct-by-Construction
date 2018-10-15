@@ -3,6 +3,7 @@
 Most popular [JVM concurrency primitives](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/package-summary.html) rewritten in Rholang with explanation. 
 
 New [Atomic State](atomic-state.md) Rholang concurrency pattern proposed. [WaitSet](wait-set.md) (with wait/notify/notifyAll) or [Condition](with await/signal/signalAll) implementation demonstrated. Multiple WaitSets [can be attached](???) to one Atomic State.
+
 Concurrency primitives is a way to partially [order events](events-ordering.md). RhoLang and Java concurrency environments [compared](compare.md).
 
 Different ways to implement [loops](loops.md) descrideb. Value and pattern [conditional](branches.md)  ???.
