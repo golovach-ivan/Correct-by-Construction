@@ -131,6 +131,11 @@ W.unlock     =>>             ?           ?          ?           ?
 **38-42** - ???.   
 
 #### ??? Non-blocked/ignore unlock operations
+
+- [ReentrantReadWriteLock.ReadLock.unlock()](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/locks/ReentrantReadWriteLock.ReadLock.html#unlock--) - "If the current thread does not hold this lock then IllegalMonitorStateException is thrown".
+- [ReentrantReadWriteLock.WriteLock.unlock()](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/locks/ReentrantReadWriteLock.WriteLock.html#unlock--) - "If the current thread is not the holder of this lock then IllegalMonitorStateException is thrown".
+
+
 <details><summary>???src</summary><p>
 
 ```
