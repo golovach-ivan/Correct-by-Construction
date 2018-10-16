@@ -42,7 +42,17 @@ public class CountDownLatch {
 - [Exercise](#exercise)
 
 ### State / Operations Model
-???
+
+AtomicState = Int with one one-off implicit WaitSet.
+
+```
+await         ack    block   block   block
+countDown    ignore   <<=     <<=     <<=
+
+             +---+   +---+   +---+   +---+
+             | 0 |<--| 1 |<--| 2 |<--| 3 |<--  ...
+             +---+   +---+   +---+   +---+
+```
 
 ### Implementation with Explanation
 ```
