@@ -17,6 +17,11 @@ No time in RhoLang - no time limiting methods
 
 ### Exceptions
 
+### No InterruptedException
+- [Lock.lockInterruptibly() throws InterruptedException](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/locks/Lock.html#lockInterruptibly--)
+- [Semaphore.acquire() throws InterruptedException](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Semaphore.html#acquire--)
+- [CountDownLatch.await() throws InterruptedException](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/CountDownLatch.html#await--)
+
 ### By-value/by-ref
 
 
