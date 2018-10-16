@@ -42,6 +42,8 @@ W.unlock     =>>             ?           ?          ?           ?
 - remove = key
 
 ### Explanation
+<details><summary>???src</summary><p>
+  
 ```
 1  new ReadWriteLock in {
 2    contract ReadWriteLock(readLockOp, writeLockOp) = {
@@ -91,7 +93,8 @@ W.unlock     =>>             ?           ?          ?           ?
 46   }
 47 }
 ```
-**1-2** - ???.   
+</p></details><br/>   
+**1-2** - ???.    
 **4-6** - ???.   
 **8-9** - ???.   
 **11** - ???.   
@@ -104,6 +107,8 @@ W.unlock     =>>             ?           ?          ?           ?
 **38-42** - ???.   
 
 #### ??? Non-blocked/ignore unlock operations
+<details><summary>???src</summary><p>
+
 ```
 contract readLock(lockOp, unlockOp, tryLockOp) = {
   ... |
@@ -128,11 +133,66 @@ contract writeLock(lockOp, unlockOp, tryLockOp) = {
   } 
 }
 ```
+</p></details><br/>
 
 or you can add **alert**-functionality: ```other => stateRef!(other) | stdout!("Alert!")```
 
+#### Add lock keys
+
 ### Complete source code (with demo)
-TBD
+
+<details><summary>???src</summary><p>
+  
+```
+new ReadWriteLock in {
+  contract ReadWriteLock(readLockOp, writeLockOp) = {
+  
+    new readLock, writeLock in {
+      contract readLockOp(ret) = {ret!(readLock)} |
+      contract writeLockOp(ret) = {ret!(writeLock)} |
+      
+      new stateRef in {      
+        stateRef!([0]) |
+        
+        contract readLock(lockOp, unlockOp, tryLockOp) = {
+        
+          contract lockOp(ack) = {          
+            for (@([count]) <- stateRef) {
+                stateRef!([count + 1]) | ack!(Nil) } } |                          
+                
+          contract unlockOp(ack) = {
+            for (@[count /\ ~0] <- stateRef) {
+              stateRef!([count - 1]) | ack!(Nil) } } |   
+          
+          contract tryLockOp(ret) = {
+            for (@state <- stateRef) {
+              match state {
+                "W_LOCK" => stareRef!(state) | ret!(false)                
+                [count] => stateRef!([count + 1]) | ret!(true) } } }
+        } |
+        
+        contract writeLock(lockOp, unlockOp, tryLockOp) = {
+        
+          contract lockOp(ack) = {
+            for (@[0] <- stateRef) { 
+              stateRef!("W_LOCK") | ack!(Nil) } } |
+            
+          contract unlockOp(ack) = {
+            for (@"W_LOCK" <- stateRef) { 
+              stateRef!([0]) | ack!(Nil) } } |
+            
+          contract tryLockOp(ret) = {
+            for (@state <- stateRef) {
+              match state {
+                [0] => stateRef!("W_LOCK") | ret!(true)
+                ~[0] /\ other  => stateRef!(other) | ret!(false) } } }
+        }
+      }
+    }
+  }
+}
+```
+</p></details><br/>
 
 ### Exercise
 TBD
