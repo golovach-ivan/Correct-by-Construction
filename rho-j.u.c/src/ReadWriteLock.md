@@ -22,6 +22,8 @@ public interface ReadWriteLock {
 - [Exercise](#exercise)
 
 ### State / Operations Model
+
+AtomicState = "W_LOCK" + Int\[N\] without explicit WaitSets.     
 - \[0\] - free
 - \[count > 0\] - read lock held count
 - "W_LOCK" - write lock held
@@ -138,7 +140,9 @@ contract writeLock(lockOp, unlockOp, tryLockOp) = {
 
 or you can add **alert**-functionality: ```other => stateRef!(other) | stdout!("Alert!")```
 
-#### Add lock keys
+#### ??? Write has highest priority over Read
+
+#### ??? Add lock keys
 
 ### Complete source code (with demo)
 
