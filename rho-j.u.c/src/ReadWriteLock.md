@@ -27,10 +27,109 @@ public interface ReadWriteLock {
 - "W_LOCK" - write lock held
 ```
 "W_LOCK" <-> [0] <-> [1] <-> [2] <-> [3]  <-> ...
+
+R.lock        B            =>>          =>>        =>>         =>>
+R.unlock      ?              ?          <<=        <<=         <<=
+W.lock        B            <<=           B          B           B
+W.unlock     =>>             ?           ?          ?           ?
+
+           "W_LOCK"   <->   [0]   <->   [1]   <->   [2]   <->   [3]    <->   ...
 ```
 
+#### Strategies
+- block
+- ignore / ignore + alert
+- remove = key
+
 ### Explanation
-TBD
+```
+1  new ReadWriteLock in {
+2    contract ReadWriteLock(readLockOp, writeLockOp) = {
+3  
+4      new readLock, writeLock in {
+5        contract readLockOp(ret) = {ret!(readLock)} |
+6        contract writeLockOp(ret) = {ret!(writeLock)} |
+7       
+8        new stateRef in {      
+9          stateRef!([0]) |
+10        
+11         contract readLock(lockOp, unlockOp, tryLockOp) = {
+12        
+13           contract lockOp(ack) = {          
+14             for (@([count]) <- stateRef) {
+15               stateRef!([count + 1]) | ack!(Nil) } } |                          
+16                
+17           contract unlockOp(ack) = {
+18             for (@[count /\ ~0] <- stateRef) {
+19               stateRef!([count - 1]) | ack!(Nil) } } |   
+20          
+21           contract tryLockOp(ret) = {
+22             for (@state <- stateRef) {
+23               match state {
+24                 "W_LOCK" => stareRef!(state) | ret!(false)                
+25                 [count] => stateRef!([count + 1]) | ret!(true) } } }
+26         } |
+27        
+28         contract writeLock(lockOp, unlockOp, tryLockOp) = {
+29        
+30           contract lockOp(ack) = {
+31             for (@[0] <- stateRef) { 
+32               stateRef!("W_LOCK") | ack!(Nil) } } |
+33            
+34           contract unlockOp(ack) = {
+35             for (@"W_LOCK" <- stateRef) { 
+36               stateRef!([0]) | ack!(Nil) } } |
+37            
+38           contract tryLockOp(ret) = {
+39             for (@state <- stateRef) {
+40               match state {
+41                 [0] => stateRef!("W_LOCK") | ret!(true)
+42                 ~[0] /\ other  => stateRef!(other) | ret!(false) } } }
+43         }
+44       }
+45     }
+46   }
+47 }
+```
+**1-2** - ???.   
+**4-6** - ???.   
+**8-9** - ???.   
+**11** - ???.   
+**13-15** - ???.   
+**17-19** - ???.   
+**21-25** - ???.   
+**28** - ???.   
+**30-32** - ???.   
+**34-36** - ???.   
+**38-42** - ???.   
+
+#### ??? Non-blocked/ignore unlock operations
+```
+contract readLock(lockOp, unlockOp, tryLockOp) = {
+  ... |
+  contract unlockOp(ack) = {
+    for (@state <- stateRef) {
+      ack!(Nil) |
+      match state {
+        [count] /\ ~[0] => stateRef!([count - 1]) // UPDATE STATE
+        other => stateRef!(other) }               // RESTORE STATE + IGNORE  
+    } 
+  } 
+} |        
+contract writeLock(lockOp, unlockOp, tryLockOp) = {        
+  ... |
+  contract unlockOp(ack) = {
+    for (@state <- stateRef) { 
+      ack!(Nil) |
+      match state {
+        "W_LOCK" => stateRef!([0])                // UDPATE STATE
+        other => stateRef!(other) }               // RESTORE STATE + IGNORE
+    } 
+  } 
+}
+```
+
+or you can add **alert**-functionality: ```other => stateRef!(other) | stdout!("Alert!")```
 
 ### Complete source code (with demo)
 TBD
