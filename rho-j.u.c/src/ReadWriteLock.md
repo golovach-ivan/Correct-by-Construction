@@ -141,8 +141,10 @@ contract writeLock(lockOp, unlockOp, tryLockOp) = {
 or you can add **alert**-functionality: ```other => stateRef!(other) | stdout!("Alert!")```
 
 #### ??? Write has highest priority over Read
+???
 
 #### ??? Add lock keys
+???
 
 ### Complete source code (with demo)
 
