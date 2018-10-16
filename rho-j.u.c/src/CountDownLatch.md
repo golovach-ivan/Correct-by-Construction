@@ -188,5 +188,59 @@ new CountDownLatch in {
 </p></details><br/>
 ???
 
+#### Explicit *waitSet* as Condition
+???
+<details><summary>CountDownLatch with explicit WaitSet as Condition</summary><p>
+  
+```
+new CountDownLatch in {
+
+  contract Condition(awaitOp, signalOp, signalAllOp) = { ... } |
+
+  contract CountDownLatch(@initCount, awaitOp, countDownOp) = {  
+    new stateRef, await, signal, signalAll in {
+    
+      Condition!(*await,  *signal, *signalAll) |    
+      stateRef!(initCount) |
+  
+      contract awaitOp(ack) = {
+        for (@count <- stateRef) {                    
+          if (count == 0) {
+            stateRef!(count) | ack!(Nil)             
+          } else {
+            new ackCall, ackWakeUp in {
+              await!(*ackCall, *ackWakeUp) | for (_ <- ackCall) {
+                stateRef!(count) | 
+                for (_ <- ackWakeUp) {
+                  awaitOp!(*ack) } } }                            
+          }
+        } 
+      } |  
+
+      contract countDownOp(_) = {
+        for (@count <- stateRef) {          
+          if (count > 1) {
+            stateRef!(count - 1)         // k  ->  k - 1
+          } else {
+            if (count == 1) {    
+              new ack in {              
+                signalAll!(*ack) | for (_ <- ack) {
+                  stateRef!(count - 1)   // 1  ->  0 
+                }
+              }
+            } else {
+              stateRef!(count)           // 0  ->  0
+            }     
+          }          
+        } 
+      } 
+ 
+    }    
+  }
+}
+```
+</p></details><br/>
+???
+
 ### Exercise
 ???
