@@ -22,7 +22,12 @@ public interface ReadWriteLock {
 - [Exercise](#exercise)
 
 ### State / Operations Model
-TBD
+- \[0\] - free
+- \[count > 0\] - read lock held count
+- "W_LOCK" - write lock held
+```
+"W_LOCK" <-> [0] <-> [1] <-> [2] <-> [3]  <-> ...
+```
 
 ### Explanation
 TBD
