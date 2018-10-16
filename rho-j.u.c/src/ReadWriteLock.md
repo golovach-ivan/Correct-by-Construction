@@ -6,8 +6,29 @@ The read lock may be held simultaneously by multiple reader threads, so long as 
 All *ReadWriteLock* implementations must guarantee that the memory synchronization effects of *writeLock* operations (as specified in the *Lock* interface) also hold with respect to the associated *readLock*. 
 That is, a thread successfully acquiring the read lock will see all updates made upon previous release of the write lock ([javadoc](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/locks/ReadWriteLock.html)).
 
+Although the basic operation of a read-write lock is straight-forward, there are many policy decisions that an implementation must make, which may affect the effectiveness of the read-write lock in a given application. Examples of these policies include:
+- Determining whether to grant the read lock or the write lock, when both readers and writers are waiting, at the time that a writer releases the write lock. 
+- Determining whether readers that request the read lock while a reader is active and a writer is waiting, are granted the read lock. 
+- Determining whether the locks are reentrant: can a thread with the write lock reacquire it? Can it acquire a read lock while holding the write lock? Is the read lock itself reentrant?
+- Can the write lock be downgraded to a read lock without allowing an intervening writer? Can a read lock be upgraded to a write lock, in preference to other waiting readers or writers?
+
+You should consider all of these things when evaluating the suitability of a given implementation for your application.
+
 ```java
 public interface ReadWriteLock {
+  // Returns the lock used for reading.
+  Lock readLock();
+
+  // Returns the lock used for writing.
+  Lock writeLock();
+}
+```
+
+An implementation of ReadWriteLock supporting similar semantics to ReentrantLock. This class has the following properties:
+- Acquisition order. This class does not impose a reader or writer preference ordering for lock access.
+
+```java
+public interface ReentrantReadWriteLock {
   // Returns the lock used for reading.
   Lock readLock();
 
