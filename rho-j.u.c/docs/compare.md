@@ -7,6 +7,8 @@ No time in RhoLang - no time limiting methods
 - [Semaphore.tryAcquire(long timeout, TimeUnit unit)](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Semaphore.html#tryAcquire-long-java.util.concurrent.TimeUnit-)
 - etc
 
+### Fair / Unfair mode
+
 ### Ordering: Happens-before relation -> reduction order
 
 ### No spurious wakeups
