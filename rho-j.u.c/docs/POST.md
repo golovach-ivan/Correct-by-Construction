@@ -94,6 +94,8 @@ class CountDownLatch {
 
 или реализуем его на основе explicit monitor
 ```java
+import java.util.concurrent.locks.*;
+
 class CountDownLatch {
     private final Lock lock = new ReentrantLock();
     private final Condition countZero = lock.newCondition();
@@ -191,6 +193,97 @@ new CountDownLatch in {
 >> [2, "I woke up!"]
 ```
 </p></details><br/>
+
+### Пример #2: BlockingQueue
+
+Java
+```java
+class BlockingQueue<T> {
+    private final Lock lock = new ReentrantLock();
+    private final Condition notFull = lock.newCondition();
+    private final Condition notEmpty = lock.newCondition();
+
+    private final int maxSize;
+    private final Queue<T> queue = new LinkedList<>(); // ???
+
+    public BlockingQueue(int maxSize) {
+        this.maxSize = maxSize;
+    }
+
+    public void put(T item) throws InterruptedException {
+        lock.lock();
+        try {
+            while (queue.size() == maxSize) {
+                notFull.await();
+            }
+            notEmpty.signal();
+            queue.add(item);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public T take() throws InterruptedException {
+        lock.lock();
+        try {
+            while (queue.size() == 0) {
+                notEmpty.await();
+            }
+            notFull.signal();
+            return queue.remove();
+        } finally {
+            lock.unlock();
+        }
+    }
+}
+```
+
+RhoLang
+```
+1  new BlockingQueue in {
+2    contract BlockingQueue(@maxSize, putOp, takeOp) = {
+3      new stateRef in {
+4    
+5        stateRef!([], true) |
+6      
+7        contract putOp(@newElem, ack) = {
+8          for (@arr, @true <- stateRef) {
+9            stateRef!(arr ++ [newElem], arr.length() + 1 < maxSize) | 
+10           ack!(Nil) } } |
+11      
+12       contract takeOp(ret) = {
+13         for (@[head...tail], @notFull <- stateRef) {
+14           stateRef!(tail, true) | 
+15           ret!(head) } }
+16     }    
+17   }
+18 }
+```
+
+Если бы нам нужно было блокирование исключительно на пустоте, то
+```
+      stateRef!([], true) |
+    
+      contract putOp(@newElem, ack) = {
+        for (@arr, @true <- stateRef) {
+          stateRef!(arr ++ [newElem], arr.length() + 1 < maxSize) | 
+          ack!(Nil) } } |
+     
+      contract takeOp(ret) = {
+        for (@[head...tail], @notFull <- stateRef) {
+          stateRef!(tail, true) | 
+          ret!(head) } }
+    }    
+  }
+}
+```
+
+### Когда нужен явный wait set?
+- необходимы работать с ожидающими 
+  - методы мониторинга (количество)
+  - мы работаем c waiters (Semaphore.drain for negative permits)
+- мы попадаем в ситуацию, когда данные считаны, но не подходят, надо заблокироваться
+- ??? неописываемый паттерн
 
 ### Как сделать явный wait set в RhoLang?
 
@@ -414,9 +507,3 @@ new Condition, CountDownLatch in {
 }
 ```
 </p></details><br/>
-
-### Когда нужен явный wait set?
-- необходимы методы мониторинга (количество)
-- мы работаем c waiters (Semaphore.drain for negative permits)
-- ??? неописываемый паттерн
-
