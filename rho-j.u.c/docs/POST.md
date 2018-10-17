@@ -13,8 +13,57 @@ Monitor - это концепция изобретенная hansen/Hoare и и�
 
 Давайте посмотрим на такой примитив синхронизации как CountDownLatch:
 ```java
-???
+import java.util.concurrent.CountDownLatch;
+
+CountDownLatch latch = new CountDownLatch(3);
+
+for (int k = 0; k < 5; k++) {
+  new Thread(() -> {
+    try {
+      latch.await();
+    } catch (InterruptedException e) {/*NOP*/}
+    print("I woke up!");
+  }).start();
+}
+
+print("knock-knock"); latch.countDown();
+print("KNOCK-KNOCK"); latch.countDown();
+print("WAKE UP !!!"); latch.countDown();
 ```
+<details><summary>Complete source code for CountDownLatch (with demo)</summary><p>
+  
+```java
+import java.util.concurrent.CountDownLatch;
+
+public class Demo {
+
+    public static void main(String[] args) {
+        CountDownLatch latch = new CountDownLatch(3);
+
+        for (int k = 0; k < 5; k++) {
+            new Thread(() -> {
+                try {
+                    latch.await();
+                } catch (InterruptedException e) {/*NOP*/}
+                print("I woke up!");
+            }).start();
+        }
+
+        print("knock-knock");
+        latch.countDown();
+        print("KNOCK-KNOCK");
+        latch.countDown();
+        print("WAKE UP !!!");
+        latch.countDown();
+    }
+
+    static synchronized void print(Object msg) {
+        System.out.println(msg);
+    }
+}
+```
+</p></details><br/>
+
 
 и реализуем его на основе implicit monitor
 ```java
