@@ -47,7 +47,11 @@ public interface BlockingQueue<E> {
 - [Explanation](#explanation)
 - [Complete source code (with demo)](#complete-source-code-with-demo)
 - [Alternative implementations](#alternative-implementations)
-- [Exercise](#exercise)
+  - [notFull:bool not size:int](#notfullbool-not-sizeint)
+  - [Only blocking take not put](#only-blocking-take-not-put)
+  - [Two explicit WaitSets](#two-explicit-waitsets)
+  - [Two explicit WaitSets as Condition](#two-explicit-waitsets-as-condition)  
+- [Exercises](#exercises)
 
 ### State / Operations Model
 TBD
@@ -61,7 +65,7 @@ TBD
 5        atomicRef!([], 0) |
 6      
 7        contract putOp(@newElem, ack) = {
-8          for (@arr, @{size /\ ~maxSize} <- atomicRef) {
+8          for (@arr, @{size /\ ~maxSize} <- atomicRef) {   // ??? 'maxSize' - free var not previously bounded
 9            atomicRef!(arr ++ [newElem], size + 1) | 
 10           ack!(Nil) } } |
 11      
@@ -95,9 +99,9 @@ new BlockingQueue in {
     new atomicRef in {
     
       atomicRef!([], 0) |
-      
+        
       contract putOp(@newElem, ack) = {
-        for (@arr, @{size /\ ~maxSize} <- atomicRef) {
+        for (@arr, @{size /\ ~maxSize} <- atomicRef) {   
           atomicRef!(arr ++ [newElem], size + 1) | 
           ack!(Nil) } } |
       
@@ -155,49 +159,71 @@ new BlockingQueue in {
 
 #### notFull:bool not size:int
 ```
-new BlockingQueue in {
-  contract BlockingQueue(@maxSize, putOp, takeOp, sizeOp) = {
-    new atomicRef in {
-    
-      atomicRef!([], true) |
-      
-      contract putOp(@newElem, ack) = {
-        for (@arr, @true <- atomicRef) {
-          atomicRef!(arr ++ [newElem], arr.length() + 1 < maxSize) | 
-          ack!(Nil) } } |
-      
-      contract takeOp(ret) = {
-        for (@[head...tail], @notFull <- atomicRef) {
-          atomicRef!(tail, notFull) | 
-          ret!(head) } }
-    }    
-  }
-}
+1  new BlockingQueue in {
+2    contract BlockingQueue(@maxSize, putOp, takeOp) = {
+3      new atomicRef in {
+4    
+5        atomicRef!([], true) |
+6      
+7        contract putOp(@newElem, ack) = {
+8          for (@arr, @true <- atomicRef) {
+9            atomicRef!(arr ++ [newElem], arr.length() + 1 < maxSize) | 
+10           ack!(Nil) } } |
+11      
+12       contract takeOp(ret) = {
+13         for (@[head...tail], @notFull <- atomicRef) {
+14           atomicRef!(tail, true) | 
+15           ret!(head) } }
+16     }    
+17   }
+18 }
 ```
+**5** - ???.   
+**8** - ???.   
+**9** - ???.   
+**10** - ???.   
+**13** - ???.   
+**14** - ???.   
+**15** - ???.    
 
 #### Only blocking take not put
 ```
-new BlockingQueue in {
-  contract BlockingQueue(@maxSize, putOp, takeOp, sizeOp) = {
-    new atomicRef in {
-    
-      atomicRef!([]) |
-      
-      contract putOp(@newElem, ack) = {
-        for (@arr <- atomicRef) {
-          atomicRef!(arr ++ [newElem]) | 
-          ack!(Nil) } } |
-      
-      contract takeOp(ret) = {
-        for (@[head...tail] <- atomicRef) {
-          atomicRef!(tail) | 
-          ret!(head) } }
-    }    
-  }
-}
+1  new BlockingQueue in {
+2    contract BlockingQueue(@maxSize, putOp, takeOp, sizeOp) = {
+3      new stateRef in {
+4    
+5        stateRef!([]) |
+6       
+7        contract putOp(@newElem, ack) = {
+8          for (@arr <- stateRef) {
+9            stateRef!(arr ++ [newElem]) | 
+10           ack!(Nil) } } |
+11      
+12       contract takeOp(ret) = {
+13         for (@[head...tail] <- stateRef) {
+14           stateRef!(tail) | 
+15           ret!(head) } }
+16     }    
+17   }
+18 }
 ```
+**5** - Set initial state (empty array).    
+**8** - State non-blocking read.    
+**9** - Update state with new elem.    
+**10** - Сonfirm the completion of the operation.
+**13** - ???.    
+**14** - ???.    
+**15** - ???.    
 
-### Exercise
-- add two explicit WaitSets (put-waiters, take-waiter) and two methods: ```int getPutWaitersCount()``` and ```int getTakeWaitersCount()```
-- implement BoundedBuffer with Lock/Condition from [???](???) and two methods: ```int getPutWaitersCount()``` and ```int getTakeWaitersCount()```
+#### Two explicit WaitSets
+???
+
+#### Two explicit WaitSets as Condition
+???
+
+### Exercises
+**BQ.1**
+implement BoundedBuffer with state = data array + two explicit handmade WaitSets (put-waiters, take-waiter) and two methods: ```int getPutWaitersCount()``` and ```int getTakeWaitersCount()```   
+**BQ.2**    
+implement BoundedBuffer with Lock/Condition from [???](???) and two methods: ```int getPutWaitersCount()``` and ```int getTakeWaitersCount()```
 
