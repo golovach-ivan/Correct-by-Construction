@@ -54,7 +54,7 @@ public interface BlockingQueue<E> {
 - [Exercises](#exercises)
 
 ### State / Operations Model
-TBD
+AtomicState with data (array) and additional slot (size /\ Int)
 
 ### Explanation
 ```
