@@ -154,6 +154,38 @@ contract countDownOp(ack) = {
 
 #### Explicit *waitSet*
 Для реализации Java API у нас не было необходимости в explicit WaitSet, но мы можем его реализовать
+
+```
+```
+new CountDownLatch in {
+  contract CountDownLatch(@initCount, awaitOp, countDownOp) = {  
+    new stateRef in {    
+    
+      stateRef!(initCount, []) |
+  
+      contract awaitOp(ack) = {
+        for (@count, @waitSet <- stateRef) {          
+          if (count > 0) {
+            stateRef!(count, waitSet ++ [*ack])
+          } else {             
+            stateRef!(count, waitSet) |
+            ack!(Nil) } } } |  
+  
+      contract countDownOp(_) = {
+        for (@count, @waitSet <- stateRef) {          
+          if (count > 1) {
+            stateRef!(count - 1, waitSet)          
+          } else {
+            stateRef!(0, []) |            
+            new notifyAll in {            
+              notifyAll!(waitSet) |
+              contract notifyAll(@[head...tail]) = { @head!(Nil) | notifyAll!(tail) }
+              } } } }
+    }    
+  }
+}
+```
+
 <details><summary>CountDownLatch with explicit WaitSet</summary><p>
   
 ```
@@ -179,9 +211,26 @@ new CountDownLatch in {
             stateRef!(0, []) |            
             new notifyAll in {            
               notifyAll!(waitSet) |
-              contract notifyAll(@[head...tail]) = { @head!(Nil) | notifyAll!(tail) }  
-            } } } }                  
+              contract notifyAll(@[head...tail]) = { @head!(Nil) | notifyAll!(tail) }
+              } } } }
     }    
+  } |
+  
+  new countDown, await in {
+    CountDownLatch!(3, *await, *countDown) |
+    
+    new n in {
+      n!(0) | n!(1) | n!(2) | n!(3) | n!(4) | for (@i <= n) { 
+        new ack in { 
+          await!(*ack) | for (_ <- ack) { stdout!([i, "I woke up!"]) } } } } | 
+    
+    new ack in { 
+      stdoutAck!("knock-knock", *ack) | for (_ <- ack) {
+        countDown!(Nil) |
+        stdoutAck!("KNOCK-KNOCK", *ack) | for (_ <- ack) {
+          countDown!(Nil) |
+          stdoutAck!("WAKE UP !!!", *ack) | for (_ <- ack) { 
+            countDown!(Nil) } } } }    
   }
 }
 ```
