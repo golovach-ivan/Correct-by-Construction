@@ -222,8 +222,8 @@ new BlockingQueue in {
 ???
 
 ### Exercises
-**BQ.1**
+**BQ.1**    
 implement BoundedBuffer with state = data array + two explicit handmade WaitSets (put-waiters, take-waiter) and two methods: ```int getPutWaitersCount()``` and ```int getTakeWaitersCount()```   
-**BQ.2**    
+**BQ.2**      
 implement BoundedBuffer with Lock/Condition from [???](???) and two methods: ```int getPutWaitersCount()``` and ```int getTakeWaitersCount()```
 
