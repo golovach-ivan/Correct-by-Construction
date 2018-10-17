@@ -74,7 +74,50 @@ public class Demo {
 
 и реализуем его на основе implicit monitor
 ```java
-???
+class CountDownLatch {
+    private int count;
+
+    public CountDownLatch(int count) { 
+        this.count = count; 
+    }
+
+    public synchronized void await() throws InterruptedException {
+        while (count != 0) { wait(); }
+    }
+
+    public synchronized void countDown() {
+        if (count == 1) { notifyAll(); }
+        if (count > 0) { count--; }
+    }
+}
+```
+
+или реализуем его на основе explicit monitor
+```java
+class CountDownLatch {
+    private final Lock lock = new ReentrantLock();
+    private final Condition countZero = lock.newCondition();
+    private int count;
+
+    public CountDownLatch(int count) {
+        this.count = count;
+    }
+
+    public void await() throws InterruptedException {
+        lock.lock();
+        try {
+            while (count != 0) { countZero.await(); }
+        } finally { lock.unlock(); }
+    }
+
+    public synchronized void countDown() {
+        lock.lock();
+        try {
+            if (count == 1) { countZero.signalAll(); }
+            if (count > 0) { count--; }
+        } finally { lock.unlock(); }
+    }
+}
 ```
 
 ### Релизуем CDL на RhoLang
