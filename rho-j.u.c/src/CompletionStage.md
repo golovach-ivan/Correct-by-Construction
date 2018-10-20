@@ -105,3 +105,35 @@ TBD
 
 ### Exercise
 TBD
+
+```
+new thenApply, thenCombine, thenAccept, inc, add in { 
+
+  new futureA, futureB in { 
+    futureA!(0) |
+    futureB!(0) |
+  
+    new futureAA, futureBB, futureAABB in {
+      thenApply!(*futureA, *inc, *futureAA) |
+      thenApply!(*futureB, *inc, *futureBB) |
+      thenCombine!(*futureAA, *futureBB, *add, *futureAABB) |
+      thenAccept!(*futureAABB, *stdout) } } |  
+  
+  contract thenApply(future, fun, ret) = {
+    for (@arg <- future) {
+      fun!(arg, *ret) } } |  
+  
+  contract thenAccept(future, consumer) = {
+    for (@arg <- future) {
+      consumer!(arg) } } |  
+  
+  contract thenCombine(futureA, futureB, fun, ret) = {
+    for (@x <- futureA; @y <- futureB) {
+      fun!(x, y, *ret) } } |  
+  
+  contract inc(@{x /\ Int}, ret) = { ret!(x + 1) } |    
+  
+  contract add(@{x /\ Int}, @{y /\ Int}, ret) = { ret!(x + y) } 
+}
+
+```
